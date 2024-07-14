@@ -13,5 +13,10 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  "import/resolver": {
+    "typescript": {
+      "project": "./tsconfig.json"
+    }
+  }
 }
