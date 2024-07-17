@@ -1,7 +1,12 @@
 import { createRoot } from 'react-dom/client';
 
-import Home from '@/pages/home';
 import '../index.css';
+import { Provider } from './provider';
+import { Router } from './router';
 
 const root = createRoot(document.querySelector('#app'));
-root.render(<Home />);
+root.render(
+  <Provider>
+    <Router />
+  </Provider>,
+);
