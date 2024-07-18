@@ -3,20 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { PATH } from '@/shared/lib/constants';
 import { Button } from '@/shared/ui/button';
 
-const Home = () => {
+const Second = () => {
   const navigate = useNavigate();
+
   return (
     <div>
-      <h1>home</h1>
+      <h1>second</h1>
       <Button
         onClick={() => {
-          navigate(PATH.SECOND);
+          navigate(PATH.HOME);
         }}
       >
-        second 페이지로 가기
+        홈으로 가기
       </Button>
     </div>
   );
 };
 
-export default Home;
+export default Second;
