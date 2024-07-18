@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom';
+
+import { PATH } from '@/shared/lib/constants';
 import { Button } from '@/shared/ui/button';
 import { Carousel, CarouselContent, CarouselItem, useCarousel } from '@/shared/ui/carousel';
 
@@ -14,7 +17,7 @@ const Onboarding = () => {
 
 const OnboardingContent = () => {
   const { api, scrollNext, scrollPrev, canScrollNext, canScrollPrev } = useCarousel();
-
+  const navigate = useNavigate();
   return (
     <div className="flex-grow flex flex-col gap-4">
       <CarouselContent>
@@ -43,7 +46,7 @@ const OnboardingContent = () => {
         <Button disabled={!canScrollNext} onClick={() => api?.scrollTo(5)}>
           skip
         </Button>
-        <Button disabled={canScrollNext} onClick={() => alert('TODO: navigate to home')}>
+        <Button disabled={canScrollNext} onClick={() => navigate(PATH.HOME)}>
           start
         </Button>
       </div>
