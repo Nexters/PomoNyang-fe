@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from '@/pages/home';
 import Second from '@/pages/second';
-import { PATH } from '@/shared/lib/constants';
+import { PATH } from '@/shared/constants';
 
 export const Router = () => {
   return (
