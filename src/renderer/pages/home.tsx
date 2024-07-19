@@ -15,6 +15,13 @@ const Home = () => {
       >
         second 페이지로 가기
       </Button>
+      <Button
+        onClick={() => {
+          navigate(PATH.ONBOARDING);
+        }}
+      >
+        온보딩 페이지로 가기
+      </Button>
     </div>
   );
 };
