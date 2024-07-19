@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { PATH } from '@/shared/lib/constants';
+import { PATH } from '@/shared/constants';
 import { Button } from '@/shared/ui/button';
 import { Carousel, CarouselContent, CarouselItem, useCarousel } from '@/shared/ui/carousel';
 
@@ -19,12 +19,12 @@ const OnboardingContent = () => {
   const { api, scrollNext, scrollPrev, canScrollNext, canScrollPrev } = useCarousel();
   const navigate = useNavigate();
   return (
-    <div className="flex-grow flex flex-col gap-4">
+    <div className="flex flex-col flex-grow gap-4">
       <CarouselContent>
         {Array.from({ length: 5 }).map((_, index) => (
           <CarouselItem key={index}>
-            <div className="p-1 select-none border rounded">
-              <div className="flex aspect-square items-center justify-center p-6">
+            <div className="p-1 border rounded select-none">
+              <div className="flex items-center justify-center p-6 aspect-square">
                 <span className="text-4xl font-semibold">{index + 1}</span>
               </div>
             </div>
