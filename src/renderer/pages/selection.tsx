@@ -1,28 +1,11 @@
-import { useState } from 'react';
-
-import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
+import { useRive } from '@rive-app/react-canvas';
 
 import riveFile from '@/shared/assets/rivs/skills.riv';
+import { useRiveStateMachineInput } from '@/shared/hooks';
 import { Button } from '@/shared/ui/button';
 
 const STATE_MACHINE_NAME = 'State Machine ';
 const INPUT_NAME = 'Level';
-
-// @note: useStateMachineInput의 반환값에 value를 할당해도 리렌더링이 일어나지 않아 커스텀 훅을 만듬
-const useRiveStateMachineInput = (...args: Parameters<typeof useStateMachineInput>) => {
-  const [rive, stateMachineName, inputName, initialValue] = args;
-  const [value, _setValue] = useState(initialValue);
-  const input = useStateMachineInput(rive, stateMachineName, inputName, value);
-
-  const setValue = (newValue: number) => {
-    if (input && value !== newValue) {
-      input.value = newValue;
-      _setValue(newValue);
-    }
-  };
-
-  return [value, setValue, input] as const;
-};
 
 // @see: https://rive-app.github.io/rive-react/?path=/docs/react-runtime-state-machines--number-input
 // 위의 예제를 그대로 가져와서 일부만 수정함
@@ -42,7 +25,9 @@ const Selection = () => {
     const { clientWidth, clientHeight } = e.currentTarget;
     const x = offsetX / clientWidth;
     const y = offsetY / clientHeight;
+
     console.log(e, x, y);
+
     if (y > 0.78 && y < 0.82) {
       if (x > 0.28 && x < 0.42) {
         // click level 0
