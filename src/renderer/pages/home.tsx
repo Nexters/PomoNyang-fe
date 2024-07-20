@@ -22,6 +22,13 @@ const Home = () => {
       >
         온보딩 페이지로 가기
       </Button>
+      <Button
+        onClick={() => {
+          navigate(PATH.SELECTION);
+        }}
+      >
+        선택 페이지로 가기
+      </Button>
     </div>
   );
 };
