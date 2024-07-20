@@ -7,13 +7,7 @@ export const usePomodoroMutation = (
 ) => {
   const queryClient = useQueryClient();
 
-  // 오프라인 상황에서 mutation을 저장하고, 온라인 상황에서 다시 실행
-  queryClient.setMutationDefaults(pomodoroQueries.all(), {
-    mutationFn: updatePomodoro,
-  });
-
   return useMutation({
-    mutationKey: pomodoroQueries.all(),
     mutationFn: ({ title, id }: { title: string; id: number }) => updatePomodoro({ title, id }),
     onError: (error, variables) => {
       queryClient.invalidateQueries({
