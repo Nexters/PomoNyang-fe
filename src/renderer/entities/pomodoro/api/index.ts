@@ -1,5 +1,3 @@
-import { queryOptions } from '@tanstack/react-query';
-
 import { httpClient } from '@/shared/api';
 
 export type TResponse = {
@@ -21,7 +19,7 @@ export type TTimer = {
 };
 
 // 임시 api
-const fetchPomodoro = async (id: number): Promise<TTimer> => {
+export const fetchPomodoro = async (id: number): Promise<TTimer> => {
   const response = await httpClient.get<TTimer>(`https://jsonplaceholder.typicode.com/todos/${id}`);
   return response;
 };
@@ -33,14 +31,4 @@ export const updatePomodoro = async ({ title, id }: { title: string; id: number 
       title,
     },
   );
-};
-
-export const pomodoroQueries = {
-  all: () => ['pomodoro'],
-  lists: () => [...pomodoroQueries.all(), 'list'],
-  detail: (id: number) =>
-    queryOptions({
-      queryKey: [...pomodoroQueries.all(), 'detail', id],
-      queryFn: () => fetchPomodoro(id),
-    }),
 };
