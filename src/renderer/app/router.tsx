@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
 
 import Home from '@/pages/home';
 import Onboarding from '@/pages/onboarding';
@@ -7,7 +7,7 @@ import { PATH } from '@/shared/lib/constants';
 
 export const Router = () => {
   return (
-    <BrowserRouter>
+    <ReactRouter>
       <Routes>
         <Route>
           <Route path={PATH.HOME} element={<Home />} />
@@ -15,6 +15,6 @@ export const Router = () => {
           <Route path={PATH.ONBOARDING} element={<Onboarding />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </ReactRouter>
   );
 };
