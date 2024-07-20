@@ -1,21 +1,42 @@
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
-import { PATH } from '@/shared/lib/constants';
-import { Button } from '@/shared/ui/button';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { pomodoroQueries } from '@/entities/pomodoro';
+import { UpdatePomodoroButton } from '@/features/update-pomodoro/ui/button';
+import { Button } from '@/shared/ui';
 
 const Second = () => {
-  const navigate = useNavigate();
+  const [todoId, setTodoId] = useState(1);
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery(pomodoroQueries.detail(todoId));
+  const [title, setTitle] = useState('');
 
   return (
     <div>
-      <h1>second</h1>
+      <Button onClick={() => setTodoId((prev) => Math.max(1, prev - 1))}>이전</Button>
+      <Button onClick={() => setTodoId((prev) => prev + 1)}>다음</Button>
       <Button
         onClick={() => {
-          navigate(PATH.HOME);
+          queryClient.invalidateQueries({
+            queryKey: ['todo', todoId],
+          });
         }}
       >
-        홈으로 가기
+        invalidate!
       </Button>
+      <label>title 입력: </label>
+      <input
+        onChange={(e) => {
+          setTitle(e.target.value);
+        }}
+      />
+      <UpdatePomodoroButton title={title} id={todoId} />
+      {isLoading && <div>로딩 중...</div>}
+      {error && <div>에러 발생: {error.message}</div>}
+      <h3>
+        {todoId} : {data?.title}
+      </h3>
     </div>
   );
 };

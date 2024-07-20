@@ -4,7 +4,7 @@ import Home from '@/pages/home';
 import Onboarding from '@/pages/onboarding';
 import Second from '@/pages/second';
 import Selection from '@/pages/selection';
-import { PATH } from '@/shared/lib/constants';
+import { PATH } from '@/shared/constants';
 
 export const Router = () => {
   return (
