@@ -26,5 +26,6 @@ export default defineConfig((env) => {
       },
     },
     clearScreen: false,
+    assetsInclude: ['**/*.riv'],
   } as UserConfig;
 });
