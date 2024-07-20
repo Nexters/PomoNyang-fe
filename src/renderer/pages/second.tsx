@@ -1,30 +1,16 @@
 import React, { useState } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { DEFAULT_KEY, useTimerMutation } from '@/entities/timer';
-import { useTimerQuery } from '@/entities/timer/api/query/useTimerQuery';
-import { Button } from '@/shared/ui/button';
+import { pomodoroQueries } from '@/entities/pomodoro';
+import { UpdatePomodoroButton } from '@/features/update-pomodoro/ui/button';
+import { Button } from '@/shared/ui';
 
 const Second = () => {
   const [todoId, setTodoId] = useState(1);
   const queryClient = useQueryClient();
-  const { data, isLoading, error } = useTimerQuery(todoId);
+  const { data, isLoading, error } = useQuery(pomodoroQueries.detail(todoId));
   const [title, setTitle] = useState('');
-
-  const { mutate } = useTimerMutation({
-    onSuccess: () => {
-      queryClient.setQueryData([DEFAULT_KEY, todoId], { ...data, title });
-      // queryClient.invalidateQueries({
-      //   queryKey: [DEFAULT_KEY, todoId],
-      // });
-    },
-    onError: () => {
-      queryClient.invalidateQueries({
-        queryKey: [DEFAULT_KEY, todoId],
-      });
-    },
-  });
 
   return (
     <div>
@@ -45,14 +31,7 @@ const Second = () => {
           setTitle(e.target.value);
         }}
       />
-      <Button
-        onClick={() => {
-          mutate({ title, id: todoId });
-          queryClient.setQueryData([DEFAULT_KEY, todoId], { ...data, title });
-        }}
-      >
-        update todo
-      </Button>
+      <UpdatePomodoroButton title={title} id={todoId} />
       {isLoading && <div>로딩 중...</div>}
       {error && <div>에러 발생: {error.message}</div>}
       <h3>

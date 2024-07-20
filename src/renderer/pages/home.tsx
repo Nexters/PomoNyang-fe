@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
-import { Button } from '@/shared/ui/button';
+import { Button } from '@/shared/ui';
 
 const Home = () => {
   const navigate = useNavigate();

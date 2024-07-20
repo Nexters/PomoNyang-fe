@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
-import { Button } from '@/shared/ui/button';
-import { Carousel, CarouselContent, CarouselItem, useCarousel } from '@/shared/ui/carousel';
+import { Button, Carousel, CarouselContent, CarouselItem, useCarousel } from '@/shared/ui';
 
 const Onboarding = () => {
   return (
