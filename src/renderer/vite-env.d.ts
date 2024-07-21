@@ -6,6 +6,6 @@ declare module '*.riv';
 // electron api
 declare global {
   interface Window {
-    electronAPI: IElectronAPI;
+    electronAPI: import('../shared/type').IElectronAPI;
   }
 }
