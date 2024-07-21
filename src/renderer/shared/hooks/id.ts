@@ -1,13 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 export const useMachineId = () => {
-  const [machineId, setMachineId] = useState<string>();
-
-  useEffect(() => {
-    if (window.electronAPI) {
-      window.electronAPI.getMachineId().then((id) => setMachineId(id));
-    }
-  }, []);
+  const { data: machineId } = useQuery({
+    queryKey: ['machineId'],
+    queryFn: () => window.electronAPI.getMachineId(),
+  });
 
   return machineId;
 };
