@@ -1,13 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
+import { useMachineId } from '@/shared/hooks';
 import { Button } from '@/shared/ui';
 
 const Home = () => {
   const navigate = useNavigate();
+  const machineId = useMachineId();
   return (
     <div>
       <h1>home</h1>
+      <p>your machine id: {machineId}</p>
       <Button
         onClick={() => {
           navigate(PATH.SECOND);
