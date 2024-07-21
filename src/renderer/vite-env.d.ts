@@ -1,5 +1,3 @@
-import { IElectronAPI } from '../shared/type';
-
 /// <reference types="vite/client" />
 
 // modules
