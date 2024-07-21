@@ -1,0 +1,35 @@
+import { useNavigate } from 'react-router-dom';
+
+import { PATH } from '@/shared/constants';
+import { useTimer } from '@/shared/hooks';
+import { Button } from '@/shared/ui';
+
+const INITIAL_TIME = 60 * 25;
+
+const Pomodoro = () => {
+  const navigate = useNavigate();
+  const { time, isRunning, start, stop, pause } = useTimer({
+    initialTime: INITIAL_TIME,
+  });
+
+  return (
+    <div>
+      {' '}
+      <Button
+        onClick={() => {
+          navigate(PATH.HOME);
+        }}
+      >
+        홈 페이지로 가기
+      </Button>
+      <h1>뽀모도로 타이머</h1>
+      {time} : {INITIAL_TIME}
+      <div>isRunning: {isRunning ? 'true' : 'false'}</div>
+      <Button onClick={start}>START</Button>
+      <Button onClick={pause}>PAUSE</Button>
+      <Button onClick={stop}>STOP</Button>
+    </div>
+  );
+};
+
+export default Pomodoro;
