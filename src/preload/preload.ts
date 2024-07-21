@@ -2,7 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import { contextBridge, ipcRenderer } from 'electron';
 
-import { IElectronAPI } from '../renderer/vite-env.d';
+import { IElectronAPI } from '../shared/type';
 
 const electronAPI: IElectronAPI = {
   getMachineId: () => ipcRenderer.invoke('get-machine-id'),
