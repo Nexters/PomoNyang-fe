@@ -1,2 +1,2 @@
 export * from './rive';
-export * from './id';
+export * from './machine-id';
