@@ -1,15 +1,18 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-
 type TUseTimer = {
   initialTime: number;
   mode?: 'up' | 'down';
   onStart?: () => void;
   onStop?: () => void;
   onPause?: () => void;
+  onFinish?: () => void;
 };
 
+/**
+ * @returns time: 초 단위
+ */
 export const useTimer = (props: TUseTimer) => {
-  const { initialTime, mode = 'down', onStart, onStop, onPause } = props;
+  const { initialTime, mode = 'down', onStart, onStop, onPause, onFinish } = props;
 
   const [time, setTime] = useState(initialTime);
   const timerRef = useRef<number | null>(null);
@@ -27,6 +30,7 @@ export const useTimer = (props: TUseTimer) => {
       } else {
         const newTime = prevTime - 1;
         if (newTime <= 0) {
+          onFinish?.();
           stop();
           return 0;
         }

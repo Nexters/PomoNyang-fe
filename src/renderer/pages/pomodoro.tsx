@@ -10,11 +10,15 @@ const Pomodoro = () => {
   const navigate = useNavigate();
   const { time, isRunning, start, stop, pause } = useTimer({
     initialTime: INITIAL_TIME,
+    onFinish: () => {
+      new Notification('모하냥', {
+        body: '수고했다냥',
+      });
+    },
   });
 
   return (
     <div>
-      {' '}
       <Button
         onClick={() => {
           navigate(PATH.HOME);
