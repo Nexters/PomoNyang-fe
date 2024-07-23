@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
-import { useTimer } from '@/shared/hooks';
+import { useStopwatch } from '@/shared/hooks';
 import { Button } from '@/shared/ui';
 
 const INITIAL_TIME = 60 * 25;
 
 const Pomodoro = () => {
   const navigate = useNavigate();
-  const { time, isRunning, start, stop, pause } = useTimer(INITIAL_TIME, {
+  const { time, isRunning, start, stop, pause } = useStopwatch(INITIAL_TIME, {
     onFinish: () => {
       new Notification('모하냥', {
         body: '수고했다냥',

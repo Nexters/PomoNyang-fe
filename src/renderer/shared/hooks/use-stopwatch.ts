@@ -10,7 +10,7 @@ type THandler = {
 /**
  * @returns time: 초 단위
  */
-export const useTimer = (initialTime: number, handler: THandler) => {
+export const useStopwatch = (initialTime: number, handler: THandler) => {
   const { onStart, onStop, onPause, onFinish } = handler;
 
   const [time, setTime] = useState(initialTime);
@@ -43,7 +43,7 @@ export const useTimer = (initialTime: number, handler: THandler) => {
     timerRef.current = window.setInterval(tick, 1000);
     setIsRunning(true);
     onStart?.();
-  }, [tick, onStart]);
+  }, [tick, onStart, isRunning]);
 
   const stop = useCallback(() => {
     if (!isRunning) {
@@ -53,7 +53,7 @@ export const useTimer = (initialTime: number, handler: THandler) => {
     _clearInterval();
     setIsRunning(false);
     onStop?.();
-  }, [onStop]);
+  }, [onStop, isRunning]);
 
   const pause = useCallback(() => {
     if (!isRunning) {
@@ -63,7 +63,7 @@ export const useTimer = (initialTime: number, handler: THandler) => {
     setIsRunning(false);
 
     onPause?.();
-  }, [stop, onPause]);
+  }, [stop, onPause, isRunning]);
 
   const _clearInterval = () => {
     if (timerRef.current === null) return;
