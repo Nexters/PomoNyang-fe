@@ -46,9 +46,6 @@ export const useStopwatch = (initialTime: number, handler: THandler) => {
   }, [tick, onStart, isRunning]);
 
   const stop = useCallback(() => {
-    if (!isRunning) {
-      return;
-    }
     setTime(initialTime);
     _clearInterval();
     setIsRunning(false);
