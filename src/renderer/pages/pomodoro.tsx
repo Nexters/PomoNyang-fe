@@ -8,8 +8,7 @@ const INITIAL_TIME = 60 * 25;
 
 const Pomodoro = () => {
   const navigate = useNavigate();
-  const { time, isRunning, start, stop, pause } = useTimer({
-    initialTime: INITIAL_TIME,
+  const { time, isRunning, start, stop, pause } = useTimer(INITIAL_TIME, {
     onFinish: () => {
       new Notification('모하냥', {
         body: '수고했다냥',

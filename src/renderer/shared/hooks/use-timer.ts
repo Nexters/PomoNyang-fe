@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-type TUseTimer = {
-  initialTime: number;
-  mode?: 'up' | 'down';
+
+type THandler = {
   onStart?: () => void;
   onStop?: () => void;
   onPause?: () => void;
@@ -11,48 +10,58 @@ type TUseTimer = {
 /**
  * @returns time: 초 단위
  */
-export const useTimer = (props: TUseTimer) => {
-  const { initialTime, mode = 'down', onStart, onStop, onPause, onFinish } = props;
+export const useTimer = (initialTime: number, handler: THandler) => {
+  const { onStart, onStop, onPause, onFinish } = handler;
 
   const [time, setTime] = useState(initialTime);
   const timerRef = useRef<number | null>(null);
+  const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     return () => {
       _clearInterval();
+      setIsRunning(false);
     };
   }, []);
 
   const tick = useCallback(() => {
     setTime((prevTime) => {
-      if (mode === 'up') {
-        return prevTime + 1;
-      } else {
-        const newTime = prevTime - 1;
-        if (newTime <= 0) {
-          onFinish?.();
-          stop();
-          return 0;
-        }
-        return newTime;
+      const newTime = prevTime - 1;
+      if (newTime <= 0) {
+        onFinish?.();
+        stop();
+        return 0;
       }
+      return newTime;
     });
-  }, [mode]);
+  }, []);
 
   const start = useCallback(() => {
-    if (timerRef.current !== null) return;
+    if (isRunning) {
+      return;
+    }
     timerRef.current = window.setInterval(tick, 1000);
+    setIsRunning(true);
     onStart?.();
   }, [tick, onStart]);
 
   const stop = useCallback(() => {
+    if (!isRunning) {
+      return;
+    }
     setTime(initialTime);
     _clearInterval();
+    setIsRunning(false);
     onStop?.();
   }, [onStop]);
 
   const pause = useCallback(() => {
+    if (!isRunning) {
+      return;
+    }
     _clearInterval();
+    setIsRunning(false);
+
     onPause?.();
   }, [stop, onPause]);
 
@@ -64,7 +73,7 @@ export const useTimer = (props: TUseTimer) => {
 
   return {
     time,
-    isRunning: timerRef.current !== null,
+    isRunning,
     start,
     stop,
     pause,
