@@ -10,7 +10,7 @@ type THandler = {
 /**
  * @returns time: 초 단위
  */
-export const useStopwatch = (initialTime: number, handler: THandler) => {
+export const useTimer = (initialTime: number, handler: THandler) => {
   const { onStart, onStop, onPause, onFinish } = handler;
 
   const [time, setTime] = useState(initialTime);
@@ -26,7 +26,7 @@ export const useStopwatch = (initialTime: number, handler: THandler) => {
 
   const tick = useCallback(() => {
     setTime((prevTime) => {
-      const newTime = prevTime - 1;
+      const newTime = prevTime - 1000;
       if (newTime <= 0) {
         onFinish?.();
         stop();
