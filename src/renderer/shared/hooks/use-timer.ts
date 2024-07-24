@@ -8,7 +8,7 @@ type THandler = {
 };
 
 /**
- * @returns time: 초 단위
+ * @returns time: ms 단위
  */
 export const useTimer = (initialTime: number, handler: THandler) => {
   const { onStart, onStop, onPause, onFinish } = handler;
