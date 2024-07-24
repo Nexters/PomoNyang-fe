@@ -19,7 +19,7 @@ export const useTimer = (initialTime: number, handler: THandler) => {
   const [isRunning, setIsRunning] = useState(false);
 
   const startTimeRef = useRef<number | null>(null);
-  const pausedTimeRef = useRef<number>(0);
+  const pausedTimeRef = useRef(0);
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
