@@ -57,12 +57,12 @@ export const useTimer = (initialTime: number, handler: THandler) => {
   const start = useCallback(() => {
     run();
     onStart?.();
-  }, [run, onStart, isRunning]);
+  }, [run, onStart]);
 
   const resume = useCallback(() => {
     run();
     onResume?.();
-  }, [tick, onResume, isRunning]);
+  }, [run, onResume]);
 
   const stop = useCallback(() => {
     setIsRunning(false);
