@@ -19,7 +19,7 @@ export const useTimer = (initialTime: number, handler: THandler) => {
   const [isRunning, setIsRunning] = useState(false);
 
   const startTimeRef = useRef<number | null>(null);
-  const pausedTimeRef = useRef(0);
+  const accumulatedTimeRef = useRef(0);
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export const useTimer = (initialTime: number, handler: THandler) => {
     if (startTimeRef.current === null) return;
 
     const now = Date.now();
-    const elapsedTime = now - startTimeRef.current + pausedTimeRef.current;
+    const elapsedTime = now - startTimeRef.current + accumulatedTimeRef.current;
     const newTime = Math.max(0, initialTime - elapsedTime); // clamp
 
     setTime(newTime);
@@ -60,7 +60,7 @@ export const useTimer = (initialTime: number, handler: THandler) => {
 
     _clearInterval();
     startTimeRef.current = null;
-    pausedTimeRef.current = 0;
+    accumulatedTimeRef.current = 0;
 
     onStop?.();
   }, [initialTime, onStop]);
@@ -69,21 +69,21 @@ export const useTimer = (initialTime: number, handler: THandler) => {
     if (!isRunning) return;
 
     _clearInterval();
-    // @note: 타이머가 시작된 적이 있다면, 현재까지 경과된 시간을 계산하여 누적
+    // @note: 현재까지 경과된 시간을 계산하여 누적
     if (startTimeRef.current !== null) {
-      pausedTimeRef.current += Date.now() - startTimeRef.current;
+      accumulatedTimeRef.current += Date.now() - startTimeRef.current;
     }
 
     setIsRunning(false);
     onPause?.();
   }, [onPause, isRunning]);
 
-  const _clearInterval = () => {
+  const _clearInterval = useCallback(() => {
     if (timerRef.current === null) return;
 
     clearInterval(timerRef.current);
     timerRef.current = null;
-  };
+  }, []);
 
   return {
     time,
