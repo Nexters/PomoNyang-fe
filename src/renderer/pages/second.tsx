@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 import { pomodoroQueries } from '@/entities/pomodoro';
-import { UpdatePomodoroButton } from '@/features/update-pomodoro/ui/button';
+import { UpdatePomodoroButton } from '@/features/update-pomodoro';
+import { PATH } from '@/shared/constants';
 import { Button } from '@/shared/ui';
 
 const Second = () => {
@@ -11,9 +13,17 @@ const Second = () => {
   const queryClient = useQueryClient();
   const { data, isLoading, error } = useQuery(pomodoroQueries.detail(todoId));
   const [title, setTitle] = useState('');
+  const navigate = useNavigate();
 
   return (
     <div>
+      <Button
+        onClick={() => {
+          navigate(PATH.HOME);
+        }}
+      >
+        홈 페이지로 가기
+      </Button>
       <Button onClick={() => setTodoId((prev) => Math.max(1, prev - 1))}>이전</Button>
       <Button onClick={() => setTodoId((prev) => prev + 1)}>다음</Button>
       <Button

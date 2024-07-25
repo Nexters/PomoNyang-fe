@@ -32,6 +32,13 @@ const Home = () => {
       >
         선택 페이지로 가기
       </Button>
+      <Button
+        onClick={() => {
+          navigate(PATH.POMODORO);
+        }}
+      >
+        뽀모도로 페이지로 가기
+      </Button>
     </div>
   );
 };
