@@ -8,7 +8,7 @@ const INITIAL_TIME = 1000 * 60 * 25;
 
 const Pomodoro = () => {
   const navigate = useNavigate();
-  const { time, isRunning, start, stop, pause } = useTimer(INITIAL_TIME, {
+  const { time, isRunning, start, resume, stop, pause } = useTimer(INITIAL_TIME, {
     onFinish: () => {
       new Notification('모하냥', {
         body: '수고했다냥',
@@ -29,6 +29,7 @@ const Pomodoro = () => {
       {Math.floor(time / 1000)} : {INITIAL_TIME / 1000}
       <div>isRunning: {isRunning ? 'true' : 'false'}</div>
       <Button onClick={start}>START</Button>
+      <Button onClick={resume}>RESUME</Button>
       <Button onClick={pause}>PAUSE</Button>
       <Button onClick={stop}>STOP</Button>
     </div>
