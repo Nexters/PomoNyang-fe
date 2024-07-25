@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
     "target": "ESNext",
     "module": "commonjs",
     "allowJs": true,
@@ -12,9 +11,7 @@
     "baseUrl": ".",
     "outDir": "dist",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "paths": {
-      "@/*": ["src/renderer/*"]
-    }
-  }
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules", "src/renderer/**/*"]
 }

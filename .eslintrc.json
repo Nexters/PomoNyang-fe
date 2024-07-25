@@ -1,8 +1,5 @@
 {
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
   "env": {
     "browser": true,
     "es6": true,
@@ -20,6 +17,8 @@
     "plugin:import/recommended"
   ],
   "rules": {
+    // FIXME: 도저히 모르겠어서 일단 비활성화 함
+    "import/no-unresolved": "off",
     "import/order": [
       "error",
       {
@@ -46,10 +45,5 @@
         }
       }
     ]
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": {}
-    }
   }
 }

@@ -7,6 +7,7 @@ import { Button } from '@/shared/ui';
 const Home = () => {
   const navigate = useNavigate();
   const machineId = useMachineId();
+  console.log('from env:', import.meta.env.VITE_SAMPLE);
   return (
     <div>
       <h1>home</h1>
