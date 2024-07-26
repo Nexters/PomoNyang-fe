@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
-import { QueryClient } from '@tanstack/react-query';
+import { Mutation, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   // PersistedClient,
@@ -45,16 +45,48 @@ const queryClient = new QueryClient({
 
 const persister = createSyncStoragePersister({
   storage: window.localStorage,
-  // serialize: (client) => {
-  //   const optimizedClient = keepLatestMutations({
-  //     persistedClient: client as PersistedClient,
-  //     error: new Error(),
-  //     errorCount: 0,
-  //   });
+  serialize: (client) => {
+    const optimizedClient = {
+      ...client,
+      clientState: {
+        ...client.clientState,
+        mutations: client.clientState.mutations.reduceRight<typeof client.clientState.mutations>(
+          (mutations, mutation) => {
+            const key = JSON.stringify(mutation.mutationKey);
+            if (mutations.some((m) => JSON.stringify(m.mutationKey) === key)) {
+              return mutations;
+            }
+            return [...mutations, mutation];
+          },
+          [],
+        ),
+      },
+    };
+    const mutationCache = queryClient.getMutationCache();
+    const pausedMutations = mutationCache.getAll().filter((mutation) => mutation.state.isPaused);
+    // 가장 최신의 mutation만 map으로 저장
+    const latestMutationMap = new Map<string, Mutation>();
+    pausedMutations.forEach((mutation) => {
+      const key = JSON.stringify(mutation.options.mutationKey);
+      if (!latestMutationMap.has(key)) {
+        return latestMutationMap.set(key, mutation);
+      }
+      const latestMutation = latestMutationMap.get(key) as Mutation;
+      if (mutation.state.submittedAt > latestMutation.state.submittedAt) {
+        return latestMutationMap.set(key, mutation);
+      }
+    });
+    // 최신이 아닌 mutation은 mutationCache에서 제거
+    pausedMutations.forEach((mutation) => {
+      const key = JSON.stringify(mutation.options.mutationKey);
+      if (latestMutationMap.get(key) !== mutation) {
+        return mutationCache.remove(mutation);
+      }
+    });
 
-  //   console.log('serialize: ', optimizedClient || client);
-  //   return JSON.stringify(optimizedClient || client);
-  // },
+    console.log('serialize: ', optimizedClient, mutationCache.getAll());
+    return JSON.stringify(optimizedClient);
+  },
 });
 
 export const Provider = ({ children }: PropsWithChildren) => {
