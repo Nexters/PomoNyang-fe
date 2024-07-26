@@ -1,13 +1,9 @@
 import { PropsWithChildren } from 'react';
 
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
-import { Mutation, QueryClient } from '@tanstack/react-query';
+import { dehydrate, Mutation, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import {
-  // PersistedClient,
-  PersistQueryClientProvider,
-  // PersistRetryer,
-} from '@tanstack/react-query-persist-client';
+import { PersistedClient, PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,50 +14,9 @@ const queryClient = new QueryClient({
   },
 });
 
-// 가장 최신의 mutation만 유지하는 함수
-// const keepLatestMutations: PersistRetryer = ({ persistedClient }) => {
-//   const mutations = [...persistedClient.clientState.mutations];
-//   const queries = [...persistedClient.clientState.queries];
-
-//   // mutationKey를 기준으로 가장 최신의 mutation만 유지
-//   const latestMutations = mutations.reduce(
-//     (acc, mutation) => {
-//       const key = JSON.stringify(mutation.mutationKey);
-//       acc[key] = mutation;
-//       return acc;
-//     },
-//     {} as Record<string, (typeof mutations)[0]>,
-//   );
-
-//   const client: PersistedClient = {
-//     ...persistedClient,
-//     clientState: {
-//       mutations: Object.values(latestMutations),
-//       queries,
-//     },
-//   };
-//   return client;
-// };
-
 const persister = createSyncStoragePersister({
   storage: window.localStorage,
-  serialize: (client) => {
-    const optimizedClient = {
-      ...client,
-      clientState: {
-        ...client.clientState,
-        mutations: client.clientState.mutations.reduceRight<typeof client.clientState.mutations>(
-          (mutations, mutation) => {
-            const key = JSON.stringify(mutation.mutationKey);
-            if (mutations.some((m) => JSON.stringify(m.mutationKey) === key)) {
-              return mutations;
-            }
-            return [...mutations, mutation];
-          },
-          [],
-        ),
-      },
-    };
+  serialize: (persistedClient) => {
     const mutationCache = queryClient.getMutationCache();
     const pausedMutations = mutationCache.getAll().filter((mutation) => mutation.state.isPaused);
     // 가장 최신의 mutation만 map으로 저장
@@ -92,8 +47,18 @@ const persister = createSyncStoragePersister({
       (mutation.state.variables as { title: string; id: number }).title = 'modified';
     });
 
-    console.log('serialize: ', optimizedClient, mutationCache.getAll());
-    return JSON.stringify(optimizedClient);
+    // queryClient로 persistedClient 새로 생성하기...
+    // @see: https://github.com/TanStack/query/blob/v5.51.4/packages/query-persist-client-core/src/persist.ts#L117-L121
+    const newPersistClient: PersistedClient = {
+      buster: persistedClient.buster,
+      timestamp: persistedClient.timestamp,
+      // note: 두번째 인자인 DehydrateOptions은 PersistQueryClientProvider > persistOptions 에 준 값으로 할당해야함
+      // 여기선 할당하지 않았으니, undefined로 할당함
+      clientState: dehydrate(queryClient, undefined),
+    };
+    console.log('serialize: ', newPersistClient, mutationCache.getAll());
+
+    return JSON.stringify(newPersistClient);
   },
 });
 
