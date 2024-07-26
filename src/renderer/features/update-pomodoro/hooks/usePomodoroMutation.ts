@@ -9,7 +9,10 @@ export const usePomodoroMutation = (
 
   return useMutation({
     mutationKey: ['updatePomodoro'],
-    mutationFn: ({ title, id }: { title: string; id: number }) => updatePomodoro({ title, id }),
+    mutationFn: ({ title, id }: { title: string; id: number }) => {
+      console.log('mutationFn: ', title, id);
+      return updatePomodoro({ title, id });
+    },
     onError: (error, variables) => {
       queryClient.invalidateQueries({
         queryKey: pomodoroQueries.detail(variables.id).queryKey,

@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 0,
-      staleTime: 1000 * 60 * 60, // 60분
+      // staleTime: 1000 * 60 * 60, // 60분
     },
   },
 });
@@ -82,6 +82,14 @@ const persister = createSyncStoragePersister({
       if (latestMutationMap.get(key) !== mutation) {
         return mutationCache.remove(mutation);
       }
+    });
+    // 최신 Mutation들의 variables 수정
+    latestMutationMap.forEach((mutation) => {
+      // const prevVariables = mutation.state.variables as { title: string; id: number };
+      // const nextVariables = { ...prevVariables, title: 'modified' };
+      // @note: 객체를 직접 수정하면 수정된 데이터가 보내짐.
+      // 그러나 새로운 객체를 할당하면 수정전 원본 데이터가 보내진다.
+      (mutation.state.variables as { title: string; id: number }).title = 'modified';
     });
 
     console.log('serialize: ', optimizedClient, mutationCache.getAll());
