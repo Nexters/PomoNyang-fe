@@ -6,6 +6,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import type { PersistedClient } from '@tanstack/react-query-persist-client';
 
+import { usePushNotification } from '@/features/push-notification';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -72,6 +74,8 @@ const persister = createSyncStoragePersister({
 });
 
 export const Provider = ({ children }: PropsWithChildren) => {
+  usePushNotification();
+
   return (
     <PersistQueryClientProvider
       client={queryClient}
