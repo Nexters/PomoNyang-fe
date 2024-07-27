@@ -8,6 +8,7 @@ export const usePomodoroMutation = (
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ['updatePomodoro'],
     mutationFn: ({ title, id }: { title: string; id: number }) => updatePomodoro({ title, id }),
     onError: (error, variables) => {
       queryClient.invalidateQueries({
