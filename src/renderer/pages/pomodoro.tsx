@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
 import { useTimer } from '@/shared/hooks';
-import { Button, Drawer, DrawerContent, DrawerFooter, DrawerTitle } from '@/shared/ui';
+import { Button, Drawer, DrawerContent, DrawerFooter, DrawerTitle, useToast } from '@/shared/ui';
 
 const INITIAL_TIME = 1000 * 60 * 25;
 
 const Pomodoro = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { time, isRunning, start, resume, stop, pause } = useTimer(INITIAL_TIME, {
     onFinish: () => {
       new Notification('모하냥', {
@@ -49,7 +50,15 @@ const Pomodoro = () => {
             </div>
           </div>
           <DrawerFooter>
-            <Button size="lg" onClick={() => setIsOpenDrawer(false)}>
+            <Button
+              size="lg"
+              onClick={() => {
+                setIsOpenDrawer(false);
+                toast({
+                  title: '오키 5분 추가했엉 다음 집중때 해바',
+                });
+              }}
+            >
               완료
             </Button>
           </DrawerFooter>

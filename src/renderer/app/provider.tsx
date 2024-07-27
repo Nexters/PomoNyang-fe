@@ -9,6 +9,8 @@ import {
   // PersistRetryer,
 } from '@tanstack/react-query-persist-client';
 
+import { Toaster } from '@/shared/ui';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -67,6 +69,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }}
     >
       {children}
+      <Toaster />
       <ReactQueryDevtools buttonPosition="bottom-left" initialIsOpen={false} />
     </PersistQueryClientProvider>
   );
