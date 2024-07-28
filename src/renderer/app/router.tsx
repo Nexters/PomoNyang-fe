@@ -1,5 +1,7 @@
 import { HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
 
+import RootLayout from './_layout';
+
 import Home from '@/pages/home';
 import Onboarding from '@/pages/onboarding';
 import Pomodoro from '@/pages/pomodoro';
@@ -11,7 +13,7 @@ export const Router = () => {
   return (
     <ReactRouter>
       <Routes>
-        <Route>
+        <Route element={<RootLayout />}>
           <Route path={PATH.HOME} element={<Home />} />
           <Route path={PATH.POMODORO} element={<Pomodoro />} />
           <Route path={PATH.SECOND} element={<Second />} />
