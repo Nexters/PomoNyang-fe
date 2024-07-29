@@ -47,7 +47,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
     "@rive-app/react-canvas": "^4.13.3",
     "@tanstack/query-sync-storage-persister": "^5.51.9",
     "@tanstack/react-query": "^5.51.4",
@@ -63,6 +65,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.0",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "vaul": "^0.9.1"
   }
 }
