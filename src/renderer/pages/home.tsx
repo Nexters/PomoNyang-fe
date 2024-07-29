@@ -1,13 +1,18 @@
+import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
-import { useMachineId } from '@/shared/hooks';
+import { useAuthToken, useMachineId } from '@/shared/hooks';
 import { Button } from '@/shared/ui';
 
 const Home = () => {
   const navigate = useNavigate();
   const machineId = useMachineId();
+  const [enable, setEnable] = useState(false);
+  const authToken = useAuthToken(enable);
   console.log('from env:', import.meta.env.VITE_SAMPLE);
+  console.log('authToken:', authToken.data, authToken.error, authToken.isLoading);
   return (
     <div>
       <h1>home</h1>
@@ -40,6 +45,7 @@ const Home = () => {
       >
         뽀모도로 페이지로 가기
       </Button>
+      <Button onClick={() => setEnable(!enable)}>{enable ? 'disable' : 'enable'}</Button>
     </div>
   );
 };
