@@ -3,6 +3,8 @@ import path from 'path';
 
 import { machineId } from 'node-machine-id';
 
+import { ignoreCors } from './cors';
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -17,6 +19,9 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
+
+  // set up
+  ignoreCors(mainWindow);
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
