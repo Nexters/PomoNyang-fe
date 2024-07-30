@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { httpClient } from '../api';
-import { API_SERVER_URL } from '../constants';
-import { __localStorage, resolveUrl } from '../utils';
+import { __localStorage } from '../utils';
 
 import { useMachineId } from './machine-id';
 
@@ -93,14 +92,12 @@ export const useAuthToken = (enabled?: boolean) => {
   return authTokenQuery;
 };
 
-const fetchAuthToken = async (deviceId: string): Promise<AuthToken> => {
-  const url = resolveUrl(API_SERVER_URL, '/papi/v1/tokens');
-  return httpClient.post<AuthToken>(url, { deviceId });
+const fetchAuthToken = (deviceId: string): Promise<AuthToken> => {
+  return httpClient.post<AuthToken>('/papi/v1/tokens', { deviceId });
 };
 
-const refreshAuthToken = async (refreshToken: string): Promise<AuthToken> => {
-  const url = resolveUrl(API_SERVER_URL, '/papi/v1/tokens/refresh');
-  return await httpClient.post<AuthToken>(url, { refreshToken });
+const refreshAuthToken = (refreshToken: string): Promise<AuthToken> => {
+  return httpClient.post<AuthToken>('/papi/v1/tokens/refresh', { refreshToken });
 };
 
 const getDiffFromNow = (date: Date) => {

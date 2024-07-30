@@ -1,7 +1,6 @@
 import { resolveUrl } from '@/shared/utils';
 
-// FIXME
-export const BASE_URL = '';
+export const BASE_URL = import.meta.env.VITE_API_SERVER_URL ?? '';
 
 export const httpClient = {
   get: <T = unknown>(url: string) => __fetch<T, void>('get', url),
