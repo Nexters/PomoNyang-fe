@@ -1,6 +1,6 @@
 import { HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
 
-import RootLayout from './_layout';
+import RootLayout from './layout';
 
 import Home from '@/pages/home';
 import Onboarding from '@/pages/onboarding';
