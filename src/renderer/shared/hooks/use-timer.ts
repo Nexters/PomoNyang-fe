@@ -6,6 +6,7 @@ type THandler = {
   onStop?: () => void;
   onPause?: () => void;
   onFinish?: () => void;
+  onRunning?: (ms: number) => void;
 };
 
 const INTERVAL_MS = 100;
@@ -13,14 +14,14 @@ const INTERVAL_MS = 100;
 /**
  * @returns time: ms 단위
  */
-export const useTimer = (initialTime: number, handler: THandler) => {
-  const { onStart, onResume, onStop, onPause, onFinish } = handler;
+export const useTimer = (initialTime: number, duration: number, handler: THandler) => {
+  const { onStart, onResume, onStop, onPause, onFinish, onRunning } = handler;
 
   const [time, setTime] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
 
   const startTimeRef = useRef<number | null>(null);
-  const accumulatedTimeRef = useRef(0);
+  const accumulatedTimeRef = useRef(Math.max(0, duration - initialTime));
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -35,9 +36,10 @@ export const useTimer = (initialTime: number, handler: THandler) => {
 
     const now = Date.now();
     const elapsedTime = now - startTimeRef.current + accumulatedTimeRef.current;
-    const newTime = Math.max(0, initialTime - elapsedTime); // clamp
+    const newTime = Math.max(0, duration - elapsedTime); // clamp
 
     setTime(newTime);
+    onRunning?.(newTime);
 
     if (newTime <= 0) {
       onFinish?.();
@@ -66,7 +68,7 @@ export const useTimer = (initialTime: number, handler: THandler) => {
 
   const stop = useCallback(() => {
     setIsRunning(false);
-    setTime(initialTime);
+    setTime(duration);
 
     _clearInterval();
     startTimeRef.current = null;

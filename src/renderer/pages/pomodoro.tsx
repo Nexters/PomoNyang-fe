@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
+import { usePomodoro } from '@/features/update-pomodoro';
 import { PATH } from '@/shared/constants';
-import { useTimer } from '@/shared/hooks';
 import { Button, Drawer, DrawerContent, DrawerFooter, DrawerTitle, useToast } from '@/shared/ui';
 
 const INITIAL_TIME = 1000 * 60 * 25;
@@ -11,13 +11,7 @@ const INITIAL_TIME = 1000 * 60 * 25;
 const Pomodoro = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { time, isRunning, start, resume, stop, pause } = useTimer(INITIAL_TIME, {
-    onFinish: () => {
-      new Notification('모하냥', {
-        body: '수고했다냥',
-      });
-    },
-  });
+  const { time, isRunning, start, resume, stop, pause } = usePomodoro();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
   return (
