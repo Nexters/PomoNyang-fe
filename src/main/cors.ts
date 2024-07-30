@@ -4,7 +4,7 @@ import { BrowserWindow, WebRequestFilter } from 'electron';
 export const ignoreCors = (mainWindow: BrowserWindow) => {
   const reqFilters: WebRequestFilter = {
     // @see: https://www.electronjs.org/docs/latest/api/structures/web-request-filter
-    urls: [`${process.env.VITE_SERVER_API_URL}/*`],
+    urls: [`${process.env.VITE_API_SERVER_URL}/*`],
   };
 
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(reqFilters, (details, callback) => {
