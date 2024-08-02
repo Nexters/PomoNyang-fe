@@ -1,13 +1,13 @@
-import { forwardRef, ElementRef, ComponentPropsWithoutRef, ReactElement } from 'react';
+import { forwardRef, ElementRef, ComponentPropsWithoutRef } from 'react';
 
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import { X } from 'lucide-react';
 
 import { cn } from '@/shared/utils';
 
-const ToastProvider = ToastPrimitives.Provider;
+export const ToastProvider = ToastPrimitives.Provider;
 
-const ToastViewport = forwardRef<
+export const ToastViewport = forwardRef<
   ElementRef<typeof ToastPrimitives.Viewport>,
   ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
 >(({ className, ...props }, ref) => (
@@ -22,7 +22,9 @@ const ToastViewport = forwardRef<
 ));
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
-const Toast = forwardRef<
+export type ToastProps = ComponentPropsWithoutRef<typeof Toast>;
+
+export const Toast = forwardRef<
   ElementRef<typeof ToastPrimitives.Root>,
   ComponentPropsWithoutRef<typeof ToastPrimitives.Root>
 >(({ className, ...props }, ref) => {
@@ -43,22 +45,7 @@ const Toast = forwardRef<
 });
 Toast.displayName = ToastPrimitives.Root.displayName;
 
-const ToastAction = forwardRef<
-  ElementRef<typeof ToastPrimitives.Action>,
-  ComponentPropsWithoutRef<typeof ToastPrimitives.Action>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Action
-    ref={ref}
-    className={cn(
-      'inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive',
-      className,
-    )}
-    {...props}
-  />
-));
-ToastAction.displayName = ToastPrimitives.Action.displayName;
-
-const ToastClose = forwardRef<
+export const ToastClose = forwardRef<
   ElementRef<typeof ToastPrimitives.Close>,
   ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
 >(({ className, ...props }, ref) => (
@@ -77,7 +64,7 @@ const ToastClose = forwardRef<
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;
 
-const ToastTitle = forwardRef<
+export const ToastTitle = forwardRef<
   ElementRef<typeof ToastPrimitives.Title>,
   ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
 >(({ className, ...props }, ref) => (
@@ -92,31 +79,3 @@ const ToastTitle = forwardRef<
   />
 ));
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
-
-const ToastDescription = forwardRef<
-  ElementRef<typeof ToastPrimitives.Description>,
-  ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Description
-    ref={ref}
-    className={cn('text-sm opacity-90', className)}
-    {...props}
-  />
-));
-ToastDescription.displayName = ToastPrimitives.Description.displayName;
-
-type ToastProps = ComponentPropsWithoutRef<typeof Toast>;
-
-type ToastActionElement = ReactElement<typeof ToastAction>;
-
-export {
-  type ToastProps,
-  type ToastActionElement,
-  ToastProvider,
-  ToastViewport,
-  Toast,
-  ToastTitle,
-  ToastDescription,
-  ToastClose,
-  ToastAction,
-};

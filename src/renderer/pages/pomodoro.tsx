@@ -55,7 +55,7 @@ const Pomodoro = () => {
               onClick={() => {
                 setIsOpenDrawer(false);
                 toast({
-                  title: '오키 5분 추가했엉 다음 집중때 해바',
+                  message: '오키 5분 추가했엉 다음 집중때 해바',
                 });
               }}
             >
