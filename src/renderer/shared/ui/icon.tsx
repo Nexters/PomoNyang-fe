@@ -25,7 +25,6 @@ export default function Icon({
   name = 'placeholder',
   size = 'xs',
   className,
-  style,
   ...restProps
 }: IconProps): JSX.Element {
   const icon = icons[name];
@@ -34,7 +33,8 @@ export default function Icon({
     <img
       src={icon}
       className={cn('icon', className)}
-      style={{ ...style, width: sizeValue, height: sizeValue }}
+      width={sizeValue}
+      height={sizeValue}
       {...restProps}
     />
   );
