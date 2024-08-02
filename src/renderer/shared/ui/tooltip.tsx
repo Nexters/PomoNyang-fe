@@ -24,12 +24,14 @@ export const Tooltip = ({
         <TooltipPrimitive.Trigger>{children}</TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
           sideOffset={sideOffset}
+          // @see: https://github.com/shadcn-ui/ui/issues/2753
+          // TooltipPrimitive.Content에 overflow: hidden을 적용하면 arrow가 뒤늦게 보여지는 버그가 있어 제거
           className={cn(
             color === 'black' && 'text-white bg-gray-900',
             color === 'white' && 'text-gray-600 bg-white',
             // TODO: typography 적용
             'text-base font-semibold leading-[22px] tracking-[-0.02em]',
-            'z-50 overflow-hidden rounded-xs px-lg py-md shadow-xs',
+            'z-50 rounded-xs px-lg py-md shadow-xs',
             'animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
             className,
           )}
