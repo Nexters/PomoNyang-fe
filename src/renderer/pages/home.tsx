@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
 import { useMachineId } from '@/shared/hooks';
-import { Button } from '@/shared/ui';
+import { Button, Tooltip } from '@/shared/ui';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -10,7 +10,9 @@ const Home = () => {
   console.log('from env:', import.meta.env.VITE_SAMPLE);
   return (
     <div>
-      <h1>home</h1>
+      <h1>
+        <Tooltip content="welcome!">home</Tooltip>
+      </h1>
       <p>your machine id: {machineId}</p>
       <Button
         onClick={() => {
