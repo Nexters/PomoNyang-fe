@@ -6,15 +6,15 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/shared/utils';
 
 const buttonVariants = cva(
-  'inline-flex gap-sm items-center justify-center whitespace-nowrap ring-offset-background transition-colors active:opacity-95 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:bg-background-secondary disabled:text-text-disabled',
+  'inline-flex gap-sm items-center justify-center whitespace-nowrap ring-offset-background transition-colors active:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:bg-background-secondary disabled:text-text-disabled',
   {
     variants: {
       variant: {
-        default: 'bg-background-accent-1 text-text-inverse', // primary
-        secondary: 'bg-background-inverse text-text-inverse',
-        tertiary: 'bg-background-secondary text-text-tertiary',
-        'text-primary': 'bg-transparent text-text-secondary',
-        'text-secondary': 'bg-transparent text-text-tertiary',
+        default: 'bg-background-accent-1 text-text-inverse hover:opacity-90', // primary
+        secondary: 'bg-background-inverse text-text-inverse hover:opacity-90',
+        tertiary: 'bg-background-secondary text-text-tertiary hover:opacity-90',
+        'text-primary': 'bg-transparent active:bg-black/5 text-text-secondary',
+        'text-secondary': 'bg-transparent active:bg-black/5 text-text-tertiary',
       },
       size: {
         default: 'rounded-sm p-lg body-sb', // md
