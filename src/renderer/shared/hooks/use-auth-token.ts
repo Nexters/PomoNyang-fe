@@ -16,6 +16,7 @@ type AuthToken = {
 type AuthTokenMeta = {
   command: 'refresh-all' | 'refresh-access';
   refreshToken: string;
+  retryCount: number;
 };
 
 export const AUTH_TOKEN_QUERY_KEY = ['authToken'];
@@ -51,8 +52,14 @@ export const useAuthToken = (enabled?: boolean) => {
     refetchInterval: (query) => {
       const currAuthToken = query.state.data;
       // 만약 auth token 이 없다면, 1초 뒤에 다시 시도
-      // TODO: 1초 뒤에 다시 시도하는 것은 너무 빠를 수 있음. 더 늘리거나, exponential backoff 적용
-      if (!currAuthToken) return 1000;
+      if (!currAuthToken) {
+        const retryCount = (query.options.meta as AuthTokenMeta).retryCount;
+        query.options.meta = {
+          ...query.options.meta,
+          retryCount: retryCount + 1,
+        };
+        return getExponentialBackoff(retryCount);
+      }
 
       // 다음 access token, refresh token 만료 시점까지 남은 시간 계산
       const accessTokenDiff = getDiffFromNow(new Date(currAuthToken.accessTokenExpiredAt));
@@ -60,11 +67,13 @@ export const useAuthToken = (enabled?: boolean) => {
 
       // 만약 access token, refresh token 둘 중 하나라도 만료 시점이 지났다면, 모두 갱신
       if (accessTokenDiff <= 0 || refreshTokenDiff <= 0) {
+        const retryCount = (query.options.meta as AuthTokenMeta).retryCount;
         query.options.meta = {
           ...query.options.meta,
           command: 'refresh-all',
+          retryCount: retryCount + 1,
         };
-        return 1000;
+        return getExponentialBackoff(retryCount);
       }
 
       // 만약 access token 만료가 더 가깝다면, access token 갱신
@@ -73,6 +82,7 @@ export const useAuthToken = (enabled?: boolean) => {
           ...query.options.meta,
           command: 'refresh-access',
           refreshToken: currAuthToken.refreshToken,
+          retryCount: 0,
         };
         return accessTokenDiff;
       }
@@ -81,12 +91,14 @@ export const useAuthToken = (enabled?: boolean) => {
       query.options.meta = {
         ...query.options.meta,
         command: 'refresh-all',
+        retryCount: 0,
       };
       return refreshTokenDiff;
     },
     meta: {
       command: 'refresh-all',
       refreshToken: '',
+      retryCount: 0,
     } as AuthTokenMeta,
     enabled: !!deviceId && enabled,
   });
@@ -111,4 +123,8 @@ const refreshAuthToken = (refreshToken: string): Promise<AuthToken> => {
 const getDiffFromNow = (date: Date) => {
   const now = new Date();
   return date.getTime() - now.getTime();
+};
+
+const getExponentialBackoff = (retryCount = 0) => {
+  return Math.pow(2, retryCount + 1) * 1000;
 };
