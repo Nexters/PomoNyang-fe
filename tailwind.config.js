@@ -57,10 +57,6 @@ module.exports = {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',
         },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
@@ -88,6 +84,18 @@ module.exports = {
           tertiary: '#8F867E',
           disabled: '#B8AFA8',
           inverse: '#FFFFFF',
+        },
+
+        icon: {
+          DEFAULT: '#524A44', // primary
+          secondary: '#8F867E',
+          tertiary: '#B8AFA8',
+          disabled: '#DFD8D2',
+          inverse: '#FFFFFF',
+        },
+
+        accent: {
+          red: '#FF7E65',
         },
 
         gray: {
