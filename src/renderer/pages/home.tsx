@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
 import { useMachineId } from '@/shared/hooks';
-import { Button } from '@/shared/ui';
+import { Button, SelectGroup, SelectGroupItem } from '@/shared/ui';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -80,6 +80,22 @@ const Home = () => {
           O
         </Button>
       </div>
+      <SelectGroup className="p-2">
+        <SelectGroupItem
+          title="title1"
+          subTitle="subTitle1"
+          leftIcon={<div>O</div>}
+          rightIcon={<div>X</div>}
+          className="p-4"
+        />
+        <SelectGroupItem
+          title="title2"
+          subTitle="subTitle2"
+          leftIcon={<div>O</div>}
+          rightIcon={<div>X</div>}
+          className="p-4"
+        />
+      </SelectGroup>
     </div>
   );
 };
