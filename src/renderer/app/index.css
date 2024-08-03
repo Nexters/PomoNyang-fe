@@ -91,18 +91,18 @@
     @apply text-[16px] font-semibold leading-[22px];
   }
   .body-r {
-    @apply text-[16px] font-medium leading-[22px];
+    @apply text-[16px] font-normal leading-[22px];
   }
   .subBody-sb {
     @apply text-[14px] font-semibold leading-[21px];
   }
   .subBody-r {
-    @apply text-[14px] font-medium leading-[21px];
+    @apply text-[14px] font-normal leading-[21px];
   }
   .caption-sb {
     @apply text-[12px] font-semibold leading-[16px];
   }
   .caption-r {
-    @apply text-[12px] font-medium leading-[16px];
+    @apply text-[12px] font-normal leading-[16px];
   }
 }
