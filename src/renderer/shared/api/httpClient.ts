@@ -3,19 +3,27 @@ import { resolveUrl } from '@/shared/utils';
 export const BASE_URL = import.meta.env.VITE_API_SERVER_URL ?? '';
 
 export const httpClient = {
-  get: <T = unknown>(url: string) => __fetch<T, void>('get', url),
-  post: <T = unknown, D = unknown>(url: string, body: D) => __fetch<T, D>('post', url, body),
-  put: <T = unknown, D = unknown>(url: string, body: D) => __fetch<T, D>('put', url, body),
-  delete: <T = unknown>(url: string) => __fetch<T, void>('delete', url),
+  get: <T = unknown>(url: string, headers?: object) => __fetch<T, void>('get', url, { headers }),
+  post: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
+    __fetch<T, D>('post', url, { body, headers }),
+  put: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
+    __fetch<T, D>('put', url, { body, headers }),
+  delete: <T = unknown>(url: string, headers?: object) =>
+    __fetch<T, void>('delete', url, { headers }),
 };
 
-const __fetch = async <T = unknown, D = unknown>(method: string, path: string, body?: D) => {
+const __fetch = async <T = unknown, D = unknown>(
+  method: string,
+  path: string,
+  init?: { body?: D; headers?: object },
+) => {
   const response = await fetch(resolveUrl(BASE_URL, path), {
     method,
     // @note: body가 undefined이면, stringify 된 값도 undefined이므로 body는 전송되지 않는다.
-    body: JSON.stringify(body),
+    body: JSON.stringify(init?.body),
     headers: {
       'Content-Type': 'application/json',
+      ...init?.headers,
     },
   });
 
