@@ -67,3 +67,46 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .time {
+    @apply font-pretendard text-[64px] font-bold leading-[77px];
+  }
+
+  .header-1 {
+    @apply font-pretendard text-[48px] font-bold leading-[58px];
+  }
+  .header-2 {
+    @apply font-pretendard text-[34px] font-bold leading-[41px];
+  }
+  .header-3 {
+    @apply font-pretendard text-[24px] font-bold leading-[28px];
+  }
+  .header-4 {
+    @apply font-pretendard text-[20px] font-bold leading-[25px];
+  }
+  .header-5 {
+    @apply font-pretendard text-[18px] font-semibold leading-[22px];
+  }
+
+  .body-sb {
+    @apply font-pretendard text-[16px] font-semibold leading-[22px];
+  }
+  .body-r {
+    @apply font-pretendard text-[16px] font-medium leading-[22px];
+  }
+
+  .subBody-sb {
+    @apply font-pretendard text-[14px] font-semibold leading-[21px];
+  }
+  .subBody-r {
+    @apply font-pretendard text-[14px] font-medium leading-[21px];
+  }
+
+  .caption-sb {
+    @apply font-pretendard text-[12px] font-semibold leading-[16px];
+  }
+  .caption-r {
+    @apply font-pretendard text-[12px] font-medium leading-[16px] tracking-[-1%];
+  }
+}
