@@ -16,13 +16,12 @@ const buttonVariants = cva(
         tertiary: 'bg-bg-secondary text-text-tertiary',
         'text-primary': 'bg-transparent text-text-secondary',
         'text-secondary': 'bg-transparent text-text-tertiary',
-        icon: 'bg-bg-inverse',
       },
       size: {
         default: 'rounded-sm p-[16px] body-sb', // md
         sm: 'rounded-xs px-[12px] py-[8px] subBody-sb',
         lg: 'rounded-sm p-[20px] header-5',
-        round: 'rounded-full p-[28px] w-fit h-fit',
+        icon: 'rounded-full p-[28px] w-fit h-fit',
       },
     },
     defaultVariants: {

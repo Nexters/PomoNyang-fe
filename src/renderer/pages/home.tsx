@@ -76,7 +76,7 @@ const Home = () => {
           text secondary - disabled
         </Button>
         <Button variant="tertiary">tertiary - default</Button>
-        <Button variant="icon" size="round" className="w-12 h-12 text-white">
+        <Button variant="secondary" size="icon" className="w-12 h-12 text-white">
           O
         </Button>
       </div>
