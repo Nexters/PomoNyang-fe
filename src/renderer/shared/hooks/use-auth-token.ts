@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { useQuery } from '@tanstack/react-query';
 
 import { httpClient } from '../api';
@@ -89,7 +91,13 @@ export const useAuthToken = (enabled?: boolean) => {
     enabled: !!deviceId && enabled,
   });
 
-  return authTokenQuery;
+  const isValid = useMemo(() => {
+    const authToken = authTokenQuery.data;
+    if (!authToken) return false;
+    return getDiffFromNow(new Date(authToken.accessTokenExpiredAt)) > 0;
+  }, [authTokenQuery.data]);
+
+  return { ...authTokenQuery, isValid };
 };
 
 const fetchAuthToken = (deviceId: string): Promise<AuthToken> => {
