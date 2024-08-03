@@ -6,13 +6,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/shared/utils';
 
 const buttonVariants = cva(
-  'inline-flex gap-[8px] items-center justify-center whitespace-nowrap ring-offset-background transition-colors active:opacity-95 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:bg-bg-secondary disabled:text-text-disabled',
+  'inline-flex gap-[8px] items-center justify-center whitespace-nowrap ring-offset-background transition-colors active:opacity-95 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:bg-background-secondary disabled:text-text-disabled',
   {
     variants: {
       variant: {
-        default: 'bg-bg-accent-1 text-text-inverse', // primary
-        secondary: 'bg-bg-inverse text-text-inverse',
-        tertiary: 'bg-bg-secondary text-text-tertiary',
+        default: 'bg-background-accent-1 text-text-inverse', // primary
+        secondary: 'bg-background-inverse text-text-inverse',
+        tertiary: 'bg-background-secondary text-text-tertiary',
         'text-primary': 'bg-transparent text-text-secondary',
         'text-secondary': 'bg-transparent text-text-tertiary',
       },

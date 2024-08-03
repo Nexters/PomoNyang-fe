@@ -26,7 +26,7 @@ const selectVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-bg-secondary hover:bg-bg-secondary data-[state=on]:bg-bg-accent-2 data-[state=on]:border-bg-accent-1 border-bg-secondary border data-[state=on]:text-text-primary text-text-secondary hover:text-text-secondary',
+          'bg-background-secondary hover:bg-background-secondary data-[state=on]:bg-background-accent-2 data-[state=on]:border-background-accent-1 border-background-secondary border data-[state=on]:text-text-primary text-text-secondary hover:text-text-secondary',
       },
       size: {
         default: 'h-fit w-fit',

@@ -40,7 +40,6 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
@@ -72,9 +71,8 @@ module.exports = {
         },
 
         // 커스텀
-
-        bg: {
-          primary: '#FAF6F3',
+        background: {
+          DEFAULT: '#FAF6F3', // primary
           secondary: '#F3EEEB',
           tertiary: '#A39A93',
           inverse: '#292621',
@@ -85,7 +83,7 @@ module.exports = {
         },
 
         text: {
-          primary: '#3D3732',
+          DEFAULT: '#3D3732', // primary
           secondary: '#665E57',
           tertiary: '#8F867E',
           disabled: '#B8AFA8',
