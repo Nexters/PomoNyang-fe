@@ -13,11 +13,6 @@ declare const CustomSingleSelectGroup: React__default.ForwardRefExoticComponent<
     React__default.RefAttributes<HTMLDivElement>
 >;
 
-declare const CustomSingleSelectGroupItem: React__default.ForwardRefExoticComponent<
-  Omit<ToggleGroupPrimitive.ToggleGroupItemProps, 'value'> &
-    React__default.RefAttributes<HTMLButtonElement>
->;
-
 const selectVariants = cva(
   'flex-col items-center justify-center rounded-xs ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ',
   {
@@ -64,21 +59,15 @@ const SelectGroup = React.forwardRef<
 SelectGroup.displayName = ToggleGroupPrimitive.Root.displayName;
 
 const SelectGroupItem = React.forwardRef<
-  React.ElementRef<typeof CustomSingleSelectGroupItem>,
-  React.ComponentPropsWithoutRef<typeof CustomSingleSelectGroupItem> &
-    VariantProps<typeof selectVariants> & {
-      title: string;
-      subTitle?: string;
-      leftIcon?: React.ReactNode;
-      rightIcon?: React.ReactNode;
-    }
->(({ className, title, subTitle, leftIcon, rightIcon, variant, size, ...props }, ref) => {
+  React.ElementRef<typeof ToggleGroupPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &
+    VariantProps<typeof selectVariants>
+>(({ className, variant, size, ...props }, ref) => {
   const context = React.useContext(ToggleGroupContext);
 
   return (
     <ToggleGroupPrimitive.Item
       ref={ref}
-      value={title}
       className={cn(
         selectVariants({
           variant: context.variant || variant,
@@ -87,14 +76,7 @@ const SelectGroupItem = React.forwardRef<
         className,
       )}
       {...props}
-    >
-      <div className="flex flex-row gap-xs">
-        {leftIcon}
-        <span className="subBody-r text-text-tertiary">{subTitle}</span>
-        {rightIcon}
-      </div>
-      <div className="header-5">{title}</div>
-    </ToggleGroupPrimitive.Item>
+    />
   );
 });
 

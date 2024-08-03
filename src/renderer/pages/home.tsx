@@ -81,20 +81,15 @@ const Home = () => {
         </Button>
       </div>
       <SelectGroup className="p-2">
-        <SelectGroupItem
-          title="title1"
-          subTitle="subTitle1"
-          leftIcon={<div>O</div>}
-          rightIcon={<div>X</div>}
-          className="p-4"
-        />
-        <SelectGroupItem
-          title="title2"
-          subTitle="subTitle2"
-          leftIcon={<div>O</div>}
-          rightIcon={<div>X</div>}
-          className="p-4"
-        />
+        <SelectGroupItem value="select1" className="p-4" disabled>
+          select 1
+        </SelectGroupItem>
+        <SelectGroupItem value="select2" className="p-4">
+          select 2
+        </SelectGroupItem>
+        <SelectGroupItem value="select3" className="p-4">
+          select 3
+        </SelectGroupItem>
       </SelectGroup>
       <Toggle />
     </div>
