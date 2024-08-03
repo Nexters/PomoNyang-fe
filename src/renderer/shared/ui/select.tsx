@@ -6,8 +6,6 @@ import React__default from 'react';
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { ToggleGroupItem, ToggleGroup } from './toggle-group';
-
 import { cn } from '@/shared/utils';
 
 declare const CustomSingleSelectGroup: React__default.ForwardRefExoticComponent<
@@ -50,7 +48,7 @@ const SelectGroup = React.forwardRef<
     VariantProps<typeof selectVariants>
 >(({ className, variant, size, children, ...props }, ref) => {
   return (
-    <ToggleGroup
+    <ToggleGroupPrimitive.Root
       ref={ref}
       type="single"
       className={cn('flex items-center justify-center gap-1', className)}
@@ -59,7 +57,7 @@ const SelectGroup = React.forwardRef<
       <ToggleGroupContext.Provider value={{ variant, size }}>
         {children}
       </ToggleGroupContext.Provider>
-    </ToggleGroup>
+    </ToggleGroupPrimitive.Root>
   );
 });
 
@@ -78,7 +76,7 @@ const SelectGroupItem = React.forwardRef<
   const context = React.useContext(ToggleGroupContext);
 
   return (
-    <ToggleGroupItem
+    <ToggleGroupPrimitive.Item
       ref={ref}
       value={title}
       className={cn(
@@ -96,7 +94,7 @@ const SelectGroupItem = React.forwardRef<
         {rightIcon}
       </div>
       <div className="header-5">{title}</div>
-    </ToggleGroupItem>
+    </ToggleGroupPrimitive.Item>
   );
 });
 
