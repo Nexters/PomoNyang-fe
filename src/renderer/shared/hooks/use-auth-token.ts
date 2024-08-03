@@ -21,8 +21,7 @@ type AuthTokenMeta = {
 
 export const AUTH_TOKEN_QUERY_KEY = ['authToken'];
 
-// FIXME: enabled 제거
-export const useAuthToken = (enabled?: boolean) => {
+export const useAuthToken = () => {
   const deviceId = useMachineId();
   const authTokenQuery = useQuery<AuthToken | null>({
     queryKey: AUTH_TOKEN_QUERY_KEY,
@@ -100,7 +99,7 @@ export const useAuthToken = (enabled?: boolean) => {
       refreshToken: '',
       retryCount: 0,
     } as AuthTokenMeta,
-    enabled: !!deviceId && enabled,
+    enabled: !!deviceId,
   });
 
   const isValid = useMemo(() => {
