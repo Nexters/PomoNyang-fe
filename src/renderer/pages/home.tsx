@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
 import { useMachineId } from '@/shared/hooks';
-import { Button, SelectGroup, SelectGroupItem } from '@/shared/ui';
+import { Button, SelectGroup, SelectGroupItem, Toggle } from '@/shared/ui';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -96,6 +96,7 @@ const Home = () => {
           className="p-4"
         />
       </SelectGroup>
+      <Toggle />
     </div>
   );
 };

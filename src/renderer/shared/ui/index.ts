@@ -5,3 +5,4 @@ export * from './toast';
 export * from './toaster';
 export * from './use-toast';
 export * from './select';
+export * from './toggle';
