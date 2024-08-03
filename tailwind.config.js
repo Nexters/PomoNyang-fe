@@ -36,6 +36,7 @@ module.exports = {
         lg: 24,
       },
       colors: {
+        // 자동 생성
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -69,6 +70,28 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+
+        // 커스텀
+
+        bg: {
+          primary: '#FAF6F3',
+          secondary: '#F3EEEB',
+          tertiary: '#A39A93',
+          inverse: '#292621',
+          accent: {
+            1: '#F47A0A',
+            2: '#FFF2E6',
+          },
+        },
+
+        text: {
+          primary: '#3D3732',
+          secondary: '#665E57',
+          tertiary: '#8F867E',
+          disabled: '#B8AFA8',
+          inverse: '#FFFFFF',
+        },
+
         gray: {
           50: '#FAF6F3',
           100: '#F3EEEB',
