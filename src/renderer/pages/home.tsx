@@ -40,9 +40,8 @@ const Home = () => {
       >
         뽀모도로 페이지로 가기
       </Button>
-      <div className="container">
+      <div className="p-2">
         <div className="time">time</div>
-
         <div className="header-1">header-1</div>
         <div className="header-2">header-2</div>
         <div className="header-3">header-3</div>
@@ -57,6 +56,29 @@ const Home = () => {
 
         <div className="caption-sb">caption-sb</div>
         <div className="caption-r">caption-r</div>
+      </div>
+
+      <div className="inline-grid gap-2 p-2">
+        <Button size="lg">default - lg</Button>
+        <Button>default - md</Button>
+        <Button size="sm">default - sm</Button>
+        <Button disabled>default - disable</Button>
+        <Button variant="secondary">secondary - able</Button>
+        <Button variant="secondary" disabled>
+          secondary - disable
+        </Button>
+        <Button variant="text-primary">text primary - default</Button>
+        <Button variant="text-primary" disabled>
+          text primary - disabled
+        </Button>
+        <Button variant="text-secondary">text secondary - default</Button>
+        <Button variant="text-secondary" disabled>
+          text secondary - disabled
+        </Button>
+        <Button variant="tertiary">tertiary - default</Button>
+        <Button variant="icon" size="round" className="w-12 h-12 text-white">
+          O
+        </Button>
       </div>
     </div>
   );
