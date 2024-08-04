@@ -4,7 +4,6 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -16,8 +15,6 @@
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
@@ -32,7 +29,6 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -44,8 +40,6 @@
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
@@ -64,6 +58,45 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background-primary text-foreground;
+  }
+}
+
+@layer utilities {
+  .time {
+    @apply text-[64px] font-bold leading-[77px] tracking-[-.02em];
+  }
+  .header-1 {
+    @apply text-[48px] font-bold leading-[58px] tracking-[-.02em];
+  }
+  .header-2 {
+    @apply text-[34px] font-bold leading-[41px] tracking-[-.02em];
+  }
+  .header-3 {
+    @apply text-[24px] font-bold leading-[28px] tracking-[-.02em];
+  }
+  .header-4 {
+    @apply text-[20px] font-bold leading-[25px] tracking-[-.02em];
+  }
+  .header-5 {
+    @apply text-[18px] font-semibold leading-[22px] tracking-[-.02em];
+  }
+  .body-sb {
+    @apply text-[16px] font-semibold leading-[22px] tracking-[-.01em];
+  }
+  .body-r {
+    @apply text-[16px] font-normal leading-[22px] tracking-[-.01em];
+  }
+  .subBody-sb {
+    @apply text-[14px] font-semibold leading-[21px] tracking-[-.01em];
+  }
+  .subBody-r {
+    @apply text-[14px] font-normal leading-[21px] tracking-[-.01em];
+  }
+  .caption-sb {
+    @apply text-[12px] font-semibold leading-[16px] tracking-[-.01em];
+  }
+  .caption-r {
+    @apply text-[12px] font-normal leading-[16px] tracking-[-.01em];
   }
 }

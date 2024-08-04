@@ -6,27 +6,26 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/shared/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex gap-sm items-center justify-center whitespace-nowrap ring-offset-background transition-colors active:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:bg-background-secondary disabled:text-text-disabled',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        primary: 'bg-background-accent-1 text-text-inverse hover:opacity-90',
+        secondary: 'bg-background-inverse text-text-inverse hover:opacity-90',
+        tertiary: 'bg-background-secondary text-text-tertiary hover:opacity-90',
+        'text-primary': 'bg-transparent active:bg-black/5 text-text-secondary',
+        'text-secondary': 'bg-transparent active:bg-black/5 text-text-tertiary',
       },
       size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        icon: 'h-10 w-10',
+        md: 'rounded-sm p-lg body-sb',
+        sm: 'rounded-xs px-md py-sm subBody-sb',
+        lg: 'rounded-sm p-xl header-5',
+        icon: 'rounded-full',
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: 'primary',
+      size: 'md',
     },
   },
 );

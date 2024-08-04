@@ -6,3 +6,5 @@ export * from './toaster';
 export * from './use-toast';
 export * from './icon';
 export * from './tooltip';
+export * from './select';
+export * from './toggle';
