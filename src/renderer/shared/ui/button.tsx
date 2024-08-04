@@ -10,22 +10,22 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-background-accent-1 text-text-inverse hover:opacity-90', // primary
+        primary: 'bg-background-accent-1 text-text-inverse hover:opacity-90',
         secondary: 'bg-background-inverse text-text-inverse hover:opacity-90',
         tertiary: 'bg-background-secondary text-text-tertiary hover:opacity-90',
         'text-primary': 'bg-transparent active:bg-black/5 text-text-secondary',
         'text-secondary': 'bg-transparent active:bg-black/5 text-text-tertiary',
       },
       size: {
-        default: 'rounded-sm p-lg body-sb', // md
+        md: 'rounded-sm p-lg body-sb',
         sm: 'rounded-xs px-md py-sm subBody-sb',
         lg: 'rounded-sm p-xl header-5',
         icon: 'rounded-full',
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: 'primary',
+      size: 'md',
     },
   },
 );
