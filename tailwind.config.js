@@ -1,4 +1,46 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = {
+  white: '#FFFFFF',
+  black: '#000000',
+  gray: {
+    50: '#FAF6F3',
+    100: '#F3EEEB',
+    200: '#DFD8D',
+    300: '#B8AFA8',
+    400: '#A39A93',
+    500: '#8F867E',
+    600: '#665E57',
+    700: '#524A44',
+    800: '#3D3732',
+    900: '#292621',
+  },
+  orange: {
+    50: '#FFF2E6',
+    100: '#FFDBBA',
+    200: '#FFC48E',
+    300: '#FFAD62',
+    400: '#FF9636',
+    500: '#F47A0A',
+    600: '#CB6100',
+    700: '#A24E00',
+    800: '#7A3A00',
+    900: '#512700',
+  },
+  red: {
+    50: '#FFEBE7',
+    100: '#FFC7BC',
+    200: '#FFA290',
+    300: '#FF7E65',
+    400: '#FF5A3A',
+    500: '#FE360F',
+    600: '#D52300',
+    700: '#AC1C00',
+    800: '#841600',
+    900: '#5B0F00',
+  },
+};
+
 module.exports = {
   darkMode: ['class'],
   content: [
@@ -68,72 +110,46 @@ module.exports = {
 
         // 커스텀
         background: {
-          DEFAULT: '#FAF6F3', // primary
-          secondary: '#F3EEEB',
-          tertiary: '#A39A93',
-          inverse: '#292621',
+          primary: colors.gray[50],
+          secondary: colors.gray[100],
+          tertiary: colors.gray[400],
+          inverse: colors.gray[900],
           accent: {
-            1: '#F47A0A',
-            2: '#FFF2E6',
+            1: colors.orange[500],
+            2: colors.orange[50],
+          },
+          hover: {
+            primary: colors.orange[600],
+          },
+          pressed: {
+            primary: colors.orange[700],
           },
         },
 
         text: {
-          DEFAULT: '#3D3732', // primary
-          secondary: '#665E57',
-          tertiary: '#8F867E',
-          disabled: '#B8AFA8',
-          inverse: '#FFFFFF',
+          primary: colors.gray[800],
+          secondary: colors.gray[600],
+          tertiary: colors.gray[500],
+          disabled: colors.gray[300],
+          inverse: colors.white,
+          accent: {
+            1: colors.orange[500],
+          },
         },
 
         icon: {
-          DEFAULT: '#524A44', // primary
-          secondary: '#8F867E',
-          tertiary: '#B8AFA8',
-          disabled: '#DFD8D2',
-          inverse: '#FFFFFF',
+          primary: colors.gray[700],
+          secondary: colors.gray[500],
+          tertiary: colors.gray[300],
+          disabled: colors.gray[200],
+          inverse: colors.white,
         },
 
         accent: {
-          red: '#FF7E65',
+          red: colors.red[300],
         },
 
-        gray: {
-          50: '#FAF6F3',
-          100: '#F3EEEB',
-          200: '#DFD8D',
-          300: '#B8AFA8',
-          400: '#A39A93',
-          500: '#8F867E',
-          600: '#665E57',
-          700: '#524A44',
-          800: '#3D3732',
-          900: '#292621',
-        },
-        orange: {
-          50: '#FFF2E6',
-          100: '#FFDBBA',
-          200: '#FFC48E',
-          300: '#FFAD62',
-          400: '#FF9636',
-          500: '#F47A0A',
-          600: '#CB6100',
-          700: '#A24E00',
-          800: '#7A3A00',
-          900: '#512700',
-        },
-        red: {
-          50: '#FFEBE7',
-          100: '#FFC7BC',
-          200: '#FFA290',
-          300: '#FF7E65',
-          400: '#FF5A3A',
-          500: '#FE360F',
-          600: '#D52300',
-          700: '#AC1C00',
-          800: '#841600',
-          900: '#5B0F00',
-        },
+        ...colors,
       },
       keyframes: {
         'accordion-down': {
