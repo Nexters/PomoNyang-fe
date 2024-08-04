@@ -33,9 +33,7 @@ export const Toast = forwardRef<
       ref={ref}
       className={cn(
         'group pointer-events-auto relative flex w-full items-center justify-start gap-2 overflow-hidden shadow-lg',
-        'rounded-sm p-4 bg-gray-900 text-white opacity-90',
-        // TODO: typography 적용
-        'text-sm font-normal leading-[21px] tracking-[-0.02em] text-left',
+        'rounded-sm p-4 bg-gray-900 text-white opacity-90 subBody-r text-left',
         'transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full',
         className,
       )}
@@ -68,14 +66,6 @@ export const ToastTitle = forwardRef<
   ElementRef<typeof ToastPrimitives.Title>,
   ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitives.Title
-    ref={ref}
-    className={cn(
-      // TODO: typography 적용
-      'text-sm font-normal leading-[21px] tracking-[-0.02em] text-left',
-      className,
-    )}
-    {...props}
-  />
+  <ToastPrimitives.Title ref={ref} className={cn('subBody-r text-left', className)} {...props} />
 ));
 ToastTitle.displayName = ToastPrimitives.Title.displayName;

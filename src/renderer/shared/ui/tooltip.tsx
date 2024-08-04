@@ -29,9 +29,7 @@ export const Tooltip = ({
           className={cn(
             color === 'black' && 'text-white bg-gray-900',
             color === 'white' && 'text-gray-600 bg-white',
-            // TODO: typography 적용
-            'text-base font-semibold leading-[22px] tracking-[-0.02em]',
-            'z-50 rounded-xs px-lg py-md shadow-xs',
+            'z-50 rounded-xs px-lg py-md shadow-xs body-sb',
             'animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
             className,
           )}
