@@ -1,15 +1,15 @@
 import { ReactNode, useEffect, useState } from 'react';
 
-import type { ToastActionElement, ToastProps } from '@/shared/ui/toast';
+import { IconName } from './icon';
+import type { ToastProps } from './toast';
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
 
 type ToasterToast = ToastProps & {
   id: string;
-  title?: ReactNode;
-  description?: ReactNode;
-  action?: ToastActionElement;
+  iconName?: IconName;
+  message: ReactNode;
 };
 
 const actionTypes = {
