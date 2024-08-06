@@ -37,7 +37,7 @@ const contents = [
 ];
 
 const OnboardingContent = () => {
-  const { api, totalSlides, currentIndex, canScrollNext } = useCarousel();
+  const { api, currentIndex, canScrollNext } = useCarousel();
   const navigate = useNavigate();
 
   return (
@@ -64,7 +64,7 @@ const OnboardingContent = () => {
         </div>
 
         <div className="flex gap-2">
-          {new Array(totalSlides).fill(0).map((_, index) => (
+          {contents.map((_, index) => (
             <button
               key={index}
               className={`w-2 h-2 rounded-full ${index === currentIndex ? 'bg-background-tertiary' : 'bg-background-secondary'}`}
