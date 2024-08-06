@@ -82,9 +82,11 @@ const AlarmEmpty = () => {
 };
 
 type AlarmSampleProps = {
+  appName?: string;
+  time?: string;
   message: string;
 };
-const AlarmSample = ({ message }: AlarmSampleProps) => {
+const AlarmSample = ({ appName = '모하냥', time = '9:41 AM', message }: AlarmSampleProps) => {
   return (
     <div
       className={cn(
@@ -99,8 +101,8 @@ const AlarmSample = ({ message }: AlarmSampleProps) => {
 
       <div className="flex flex-col flex-1">
         <div className="flex justify-between">
-          <h3 className="subBody-sb text-gray-900">모하냥</h3>
-          <p className="caption-r text-gray-300 pr-2">9:41 AM</p>
+          <h3 className="subBody-sb text-gray-900">{appName}</h3>
+          <p className="caption-r text-gray-300 pr-2">{time}</p>
         </div>
         <p className="subBody-r text-gray-900">{message}</p>
       </div>
