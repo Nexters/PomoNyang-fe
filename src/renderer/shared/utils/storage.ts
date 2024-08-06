@@ -12,4 +12,7 @@ export const __localStorage = {
   setItem<T = unknown>(key: string, value: T) {
     localStorage.setItem(key, JSON.stringify(value));
   },
+  removeItem(key: string) {
+    localStorage.removeItem(key);
+  },
 };

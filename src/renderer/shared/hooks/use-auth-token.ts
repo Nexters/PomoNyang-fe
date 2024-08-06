@@ -19,6 +19,8 @@ type AuthTokenMeta = {
   retryCount: number;
 };
 
+const AUTH_TOKEN_LOCAL_STORAGE_KEY = 'authToken';
+
 export const AUTH_TOKEN_QUERY_KEY = ['authToken'];
 
 export const useAuthToken = () => {
@@ -39,18 +41,21 @@ export const useAuthToken = () => {
       return await fetchAuthToken(deviceId);
     },
     initialData: () => {
-      const prevAuthToken = __localStorage.getItem<AuthToken>('authToken');
+      const prevAuthToken = __localStorage.getItem<AuthToken>(AUTH_TOKEN_LOCAL_STORAGE_KEY);
       if (!prevAuthToken) return null;
 
-      // 만약 access token 만료 시점이 지났다면, null 반환
-      if (new Date(prevAuthToken.accessTokenExpiredAt) < new Date()) return null;
+      // 만약 access token 만료 시점이 지났다면, 저장되어있었던 토큰 지우고 null 반환
+      if (new Date(prevAuthToken.accessTokenExpiredAt) < new Date()) {
+        __localStorage.removeItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
+        return null;
+      }
 
       // 그렇지 않다면 유효하다고 판단하고 값 반환
       return prevAuthToken;
     },
     refetchInterval: (query) => {
       const currAuthToken = query.state.data;
-      // 만약 auth token 이 없다면, 1초 뒤에 다시 시도
+      // 만약 auth token 이 없다면, n초(=2의 지수배) 후 다시 시도
       if (!currAuthToken) {
         const retryCount = (query.options.meta as AuthTokenMeta).retryCount;
         query.options.meta = {
