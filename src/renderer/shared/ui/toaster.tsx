@@ -1,7 +1,6 @@
-import Icon from './icon';
-
-import { Toast, ToastClose, ToastTitle, ToastProvider, ToastViewport } from '@/shared/ui/toast';
-import { useToast } from '@/shared/ui/use-toast';
+import { Icon } from './icon';
+import { Toast, ToastClose, ToastTitle, ToastProvider, ToastViewport } from './toast';
+import { useToast } from './use-toast';
 
 export function Toaster() {
   const { toasts } = useToast();
