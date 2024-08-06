@@ -1,22 +1,41 @@
 import { resolveUrl } from '@/shared/utils';
 
-// FIXME
-export const BASE_URL = '';
+export const BASE_URL = import.meta.env.VITE_API_SERVER_URL ?? '';
 
-export const httpClient = {
-  get: <T>(url: string) => __fetch<T, void>('get', url),
-  post: <T, D>(url: string, body: D) => __fetch<T, D>('post', url, body),
-  put: <T, D>(url: string, body: D) => __fetch<T, D>('put', url, body),
-  delete: <T>(url: string) => __fetch<T, void>('delete', url),
+export const createHttpClient = (defaultHeader?: object) => {
+  const mergeHeaders = (headers?: object) => {
+    return {
+      ...defaultHeader,
+      ...headers,
+    };
+  };
+
+  return {
+    get: <T = unknown>(url: string, headers?: object) =>
+      __fetch<T, void>('get', url, { headers: mergeHeaders(headers) }),
+    post: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
+      __fetch<T, D>('post', url, { body, headers: mergeHeaders(headers) }),
+    put: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
+      __fetch<T, D>('put', url, { body, headers: mergeHeaders(headers) }),
+    delete: <T = unknown>(url: string, headers?: object) =>
+      __fetch<T, void>('delete', url, { headers: mergeHeaders(headers) }),
+  };
 };
 
-const __fetch = async <T, D>(method: string, path: string, body?: D) => {
+export const httpClient = createHttpClient();
+
+const __fetch = async <T = unknown, D = unknown>(
+  method: string,
+  path: string,
+  init?: { body?: D; headers?: object },
+) => {
   const response = await fetch(resolveUrl(BASE_URL, path), {
     method,
     // @note: body가 undefined이면, stringify 된 값도 undefined이므로 body는 전송되지 않는다.
-    body: JSON.stringify(body),
+    body: JSON.stringify(init?.body),
     headers: {
       'Content-Type': 'application/json',
+      ...init?.headers,
     },
   });
 

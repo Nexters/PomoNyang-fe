@@ -1,13 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 
+import { useUser } from '@/features/auth';
 import { PATH } from '@/shared/constants';
-import { useMachineId } from '@/shared/hooks';
+import { useAuthToken, useMachineId } from '@/shared/hooks';
 import { Button, SelectGroup, SelectGroupItem, Toggle, Tooltip } from '@/shared/ui';
 
 const Home = () => {
   const navigate = useNavigate();
   const machineId = useMachineId();
+  const { data: authToken } = useAuthToken();
+  const { data: user } = useUser();
   console.log('from env:', import.meta.env.VITE_SAMPLE);
+  console.log('authToken:', authToken, 'user:', user);
   return (
     <div>
       <h1>
