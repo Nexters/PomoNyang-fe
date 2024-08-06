@@ -1,70 +1,158 @@
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Button, Icon } from '@/shared/ui';
+import { __localStorage } from '@/shared/utils';
 
-import { PATH } from '@/shared/constants';
-import { useTimer } from '@/shared/hooks';
-import { Button, Drawer, DrawerContent, DrawerFooter, DrawerTitle, useToast } from '@/shared/ui';
+const guideMessages = ['눌러서 카테고리를 변경할 수 있어요', '눌러서 시간을 조정할 수 있어요'];
 
-const INITIAL_TIME = 1000 * 60 * 25;
+type TGuide = {
+  isGuideOpen: boolean;
+};
+
+type TGuideState = {
+  ref: React.RefObject<HTMLElement>;
+  message: string;
+};
 
 const Pomodoro = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const { time, isRunning, start, resume, stop, pause } = useTimer(INITIAL_TIME, {
-    onFinish: () => {
-      new Notification('모하냥', {
-        body: '수고했다냥',
-      });
-    },
-  });
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [guides, setGuides] = useState<TGuideState[]>([]);
+  const [viewGuide, setViewGuide] = useState(false);
+  const [currentGuideIndex, setCurrentGuideIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [, forceUpdate] = useState({});
+
+  // 여러 ref를 생성하는 함수
+  const createRef = () => useRef<HTMLElement>(null);
+
+  const guideRefs = {
+    category: createRef(),
+    timeAdjust: createRef(),
+  };
+
+  useEffect(() => {
+    setGuides([
+      { ref: guideRefs.category, message: guideMessages[0] },
+      { ref: guideRefs.timeAdjust, message: guideMessages[1] },
+    ]);
+    const handleResize = () => {
+      // forceUpdate를 사용하여 컴포넌트 리렌더링
+      forceUpdate({});
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const isGuide = __localStorage.getItem<TGuide>('isGuideOpen');
+    if (!isGuide) {
+      setViewGuide(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (viewGuide) {
+      setIsAnimating(true);
+      const timeout = setTimeout(() => setIsAnimating(false), 300); // Adjust duration as needed
+      return () => clearTimeout(timeout);
+    }
+  }, [currentGuideIndex, viewGuide]);
+
+  const handleGuideClick = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      if (currentGuideIndex < guides.length - 1) {
+        setCurrentGuideIndex((prevIndex) => prevIndex + 1);
+      } else {
+        setViewGuide(false);
+      }
+    }, 300); // Adjust duration to match animation
+  };
 
   return (
-    <Drawer open={isOpenDrawer} onOpenChange={setIsOpenDrawer}>
-      <div>
-        <Button
-          onClick={() => {
-            navigate(PATH.HOME);
-          }}
-        >
-          홈 페이지로 가기
-        </Button>
-        <h1>뽀모도로 타이머</h1>
-        {Math.floor(time / 1000)} : {INITIAL_TIME / 1000}
-        <div>isRunning: {isRunning ? 'true' : 'false'}</div>
-        <Button onClick={start}>START</Button>
-        <Button onClick={resume}>RESUME</Button>
-        <Button onClick={pause}>PAUSE</Button>
-        <Button onClick={stop}>STOP</Button>
-        <Button onClick={() => setIsOpenDrawer(true)}>끝났냥</Button>
-        <DrawerContent>
-          <div className="p-4">
-            <DrawerTitle>집중 시간 어땠옹?</DrawerTitle>
-            <p>나중에 설정에서 선택을 변경할 수 있엉</p>
-
-            <div className="flex flex-col gap-2">
-              <Button size="lg">쫌 짧드라</Button>
-              <Button size="lg">적당했어</Button>
-              <Button size="lg">쫌 길드라</Button>
+    <>
+      <div className="flex flex-col h-full">
+        <header className="flex justify-end p-4">
+          <Button variant="text-primary" size="md" className="p-[8px] rounded-none bg-gray-50">
+            <Icon name="placeholder" size="md" />
+          </Button>
+        </header>
+        <main className="flex flex-col gap-[25px] items-center justify-center flex-1">
+          <div className="w-[240px] h-[240px] bg-background-secondary" />
+          <div className="flex flex-col p-lg gap-md">
+            <Button
+              variant="tertiary"
+              className="w-[80px] mx-auto"
+              size="sm"
+              ref={guideRefs.category as React.RefObject<HTMLButtonElement>}
+            >
+              <Icon name="placeholder" size="sm" />
+              집중
+            </Button>
+            <div
+              className="flex items-center text-gray-500 p-xs gap-md"
+              ref={guideRefs.timeAdjust as React.RefObject<HTMLDivElement>}
+            >
+              <div className="flex items-center cursor-pointer p-sm gap-sm">
+                <span className="body-sb">집중</span>
+                <span className="header-3">25분</span>
+              </div>
+              <div className="w-[2px] h-[20px] bg-gray-200 rounded-full" />
+              <div className="flex items-center cursor-pointer p-sm gap-sm">
+                <span className="body-sb">휴식</span>
+                <span className="header-3">25분</span>
+              </div>
             </div>
           </div>
-          <DrawerFooter>
-            <Button
-              size="lg"
-              onClick={() => {
-                setIsOpenDrawer(false);
-                toast({
-                  message: '오키 5분 추가했엉 다음 집중때 해바',
-                });
-              }}
-            >
-              완료
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
+          <Button variant="primary" className="p-[28px]" size="icon">
+            <Icon name="placeholder" size="lg" />
+          </Button>
+        </main>
       </div>
-    </Drawer>
+      {viewGuide && guides[currentGuideIndex] && guides[currentGuideIndex].ref.current && (
+        <div
+          className="absolute top-0 left-0 w-full h-full cursor-pointer"
+          onClick={handleGuideClick}
+        >
+          <div
+            className="absolute duration-300 rounded-xs w-fit transition-position"
+            style={{
+              boxShadow: `0 0 0 100vmax rgba(0, 0, 0, 0.5),
+          0 0 0 ${guides[currentGuideIndex].ref.current.getBoundingClientRect().width}px rgba(0, 0, 0, 0) inset`,
+              top: `${guides[currentGuideIndex].ref.current.getBoundingClientRect().top}px`,
+              left: `${guides[currentGuideIndex].ref.current.getBoundingClientRect().left}px`,
+              width: `${guides[currentGuideIndex].ref.current.getBoundingClientRect().width}px`,
+              height: `${guides[currentGuideIndex].ref.current.getBoundingClientRect().height}px`,
+            }}
+          />
+          <div
+            className={`bg-white rounded-xs p-md text-text-secondary transition-position duration-300 ${isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}
+            style={{
+              position: 'absolute',
+              top: `${guides[currentGuideIndex].ref.current.getBoundingClientRect().top - 20}px`,
+              left: `${guides[currentGuideIndex].ref.current.getBoundingClientRect().left + guides[currentGuideIndex].ref.current.getBoundingClientRect().width / 2}px`,
+              transform: 'translate(-50%, -100%)',
+            }}
+          >
+            {guides[currentGuideIndex].message}
+            <div
+              className="absolute w-0 h-0"
+              style={{
+                bottom: '-8px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                borderLeft: '8px solid transparent',
+                borderRight: '8px solid transparent',
+                borderTop: '8px solid white',
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
