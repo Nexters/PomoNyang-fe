@@ -8,15 +8,16 @@ import { Button } from '@/shared/ui/button';
 import Icon from '@/shared/ui/icon';
 import { cn } from '@/shared/utils';
 
-const cats = [
-  { id: '1', name: '치즈냥', adj: '응원', alarmMessage: '어디갔나옹...' },
-  { id: '2', name: '까만냥', adj: '긍정', alarmMessage: '어디갔나옹...' },
-  { id: '3', name: '삼색냥', adj: '자극', alarmMessage: '내가 여기있는데 어디갔냐옹!' },
-];
-
 const Selection = () => {
   const navigate = useNavigate();
   const [selectedCatId, setSelectedCatId] = useState<string | undefined>(undefined);
+
+  // TODO: 고양이 목록 API 호출
+  const cats = [
+    { id: '1', name: '치즈냥', adj: '응원', alarmMessage: '어디갔나옹...' },
+    { id: '2', name: '까만냥', adj: '긍정', alarmMessage: '어디갔나옹...' },
+    { id: '3', name: '삼색냥', adj: '자극', alarmMessage: '내가 여기있는데 어디갔냐옹!' },
+  ];
 
   return (
     <div className="h-full flex flex-col justify-center items-center my-auto">
@@ -62,6 +63,7 @@ const Selection = () => {
 
         {/* @note: padding-top: 12px = 위의 SelectGroup 간격 55px - 전체 gap 43px */}
         <div className="pt-3">
+          {/* TODO: 고양이 선택 api 호출 */}
           <Button disabled={!selectedCatId} className="w-full" onClick={() => navigate(PATH.HOME)}>
             이 고양이와 시작하기
           </Button>
@@ -73,8 +75,8 @@ const Selection = () => {
 
 const AlarmEmpty = () => {
   return (
-    <div className="w-full h-[66px] rounded-xs bg-background-secondary flex justify-center items-center text-center text-gray-400 subBody-r">
-      고양이를 선택하면 <br />딴 짓 방해알림 예시를 보여드려요
+    <div className="w-full h-[66px] rounded-xs bg-background-secondary flex justify-center items-center text-center text-gray-400 subBody-r whitespace-pre-line">
+      {'고양이를 선택하면\n딴 짓 방해알림 예시를 보여드려요'}
     </div>
   );
 };
