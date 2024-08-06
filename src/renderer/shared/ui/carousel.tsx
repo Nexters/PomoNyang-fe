@@ -22,6 +22,8 @@ type CarouselProps = {
 type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0];
   api: ReturnType<typeof useEmblaCarousel>[1];
+  totalSlides: number;
+  currentIndex: number;
   scrollPrev: () => void;
   scrollNext: () => void;
   canScrollPrev: boolean;
@@ -53,6 +55,8 @@ const Carousel = React.forwardRef<
   );
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
+  const [totalSlides, setTotalSlides] = React.useState(0);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
 
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) {
@@ -106,11 +110,31 @@ const Carousel = React.forwardRef<
     };
   }, [api, onSelect]);
 
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setTotalSlides(api.scrollSnapList().length);
+    setCurrentIndex(api.selectedScrollSnap());
+
+    const onSelect = () => {
+      setCurrentIndex(api.selectedScrollSnap());
+    };
+    api.on('select', onSelect);
+
+    return () => {
+      api.off('select', onSelect);
+    };
+  }, [api]);
+
   return (
     <CarouselContext.Provider
       value={{
         carouselRef,
         api: api,
+        totalSlides,
+        currentIndex,
         opts,
         orientation: orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
         scrollPrev,
@@ -177,13 +201,12 @@ const CarouselItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
 CarouselItem.displayName = 'CarouselItem';
 
 const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof Button>>(
-  ({ className, variant = 'outline', size = 'icon', ...props }, ref) => {
+  ({ className, size = 'icon', ...props }, ref) => {
     const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
     return (
       <Button
         ref={ref}
-        variant={variant}
         size={size}
         className={cn(
           'absolute  h-8 w-8 rounded-full',
@@ -205,13 +228,12 @@ const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProp
 CarouselPrevious.displayName = 'CarouselPrevious';
 
 const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof Button>>(
-  ({ className, variant = 'outline', size = 'icon', ...props }, ref) => {
+  ({ className, size = 'icon', ...props }, ref) => {
     const { orientation, scrollNext, canScrollNext } = useCarousel();
 
     return (
       <Button
         ref={ref}
-        variant={variant}
         size={size}
         className={cn(
           'absolute h-8 w-8 rounded-full',
