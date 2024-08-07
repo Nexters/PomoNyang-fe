@@ -42,7 +42,7 @@ const OnboardingContent = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="h-full flex flex-col items-center justify-center gap-6">
+    <div className="h-full flex flex-col items-center justify-center gap-12">
       <div
         className={cn(
           'w-full flex flex-col justify-center items-center gap-8 overflow-hidden',
