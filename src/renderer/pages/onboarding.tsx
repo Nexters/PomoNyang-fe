@@ -10,6 +10,7 @@ import {
   CarouselPrevious,
   useCarousel,
 } from '@/shared/ui';
+import { cn } from '@/shared/utils';
 
 const Onboarding = () => {
   return (
@@ -42,7 +43,13 @@ const OnboardingContent = () => {
 
   return (
     <div className="h-full flex flex-col items-center justify-center gap-6">
-      <div className="w-full flex flex-col justify-center items-center gap-8 overflow-hidden">
+      <div
+        className={cn(
+          'w-full flex flex-col justify-center items-center gap-8 overflow-hidden',
+          // TODO: 가운데 정렬하고 최소 간격으로 하고 싶은데 잘 안되서 일단 주석처리함
+          // 'h-sm:pt-[40px] h-md:pt-[60px] h-lg:pt-[100px] h-xl:pt-[140px]',
+        )}
+      >
         <CarouselContent>
           {contents.map((_, index) => (
             <CarouselItem key={index}>

@@ -165,6 +165,12 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      screens: {
+        'h-sm': { raw: '(max-height: 640px)' },
+        'h-md': { raw: '(min-height: 641px) and (max-height: 740px)' },
+        'h-lg': { raw: '(min-height: 741px) and (max-height: 810px)' },
+        'h-xl': { raw: '(min-height: 810px)' },
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
