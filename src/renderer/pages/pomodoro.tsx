@@ -11,7 +11,7 @@ type TShowGuide = {
 };
 
 const Pomodoro = () => {
-  const showGuide = !!__localStorage.getItem<TShowGuide>('showGuide');
+  const hasShownGuide = !!__localStorage.getItem<TShowGuide>('showGuide');
 
   return (
     <>
@@ -45,13 +45,14 @@ const Pomodoro = () => {
           </Button>
         </main>
       </div>
-      <Guide
-        steps={steps}
-        run={!showGuide}
-        handler={{
-          onGuideEnd: () => __localStorage.setItem('showGuide', { showGuide: false }),
-        }}
-      />
+      {!hasShownGuide && (
+        <Guide
+          steps={steps}
+          handler={{
+            onGuideEnd: () => __localStorage.setItem('showGuide', { showGuide: false }),
+          }}
+        />
+      )}
     </>
   );
 };
