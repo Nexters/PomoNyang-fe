@@ -61,10 +61,13 @@ export const Guide = ({ steps, run = true, handler }: TGuideProps) => {
   };
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full cursor-pointer" onClick={handleGuideClick}>
+    // 1. 전체 오버레이
+    <div className="fixed inset-0 cursor-pointer" onClick={handleGuideClick}>
+      {/* 2. 빵꾸 뚫을 영역 */}
       <div
         className="absolute duration-300 rounded-xs w-fit transition-position"
         style={{
+          // boxShadow로 뷰포트 덮는 검정 반투명 영역 만들고 가이드 하려는 영역 빵꾸 뚫기
           boxShadow: `0 0 0 100vmax rgba(0, 0, 0, 0.5),
             0 0 0 ${rect.width}px rgba(0, 0, 0, 0) inset`,
           top: `${rect.top}px`,
@@ -73,6 +76,8 @@ export const Guide = ({ steps, run = true, handler }: TGuideProps) => {
           height: `${rect.height}px`,
         }}
       />
+
+      {/* 3. 툴팁 메세지 */}
       <div
         className={`bg-white rounded-xs p-md text-text-secondary transition-position duration-300 ${
           isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
