@@ -1,7 +1,6 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useWindowSize } from '../hooks';
-import { __localStorage } from '../utils';
 
 type TSteps = {
   id: string;
@@ -10,36 +9,36 @@ type TSteps = {
 
 type TGuideProps = {
   steps: TSteps;
+  run?: boolean;
+  handler?: {
+    onGuideStart?: () => void;
+    onGuideEnd?: () => void;
+  };
 };
 
-type TGuide = {
-  isGuideOpen: boolean;
-};
+export const Guide = ({ steps, run = true, handler }: TGuideProps) => {
+  const { onGuideStart, onGuideEnd } = handler || {};
 
-export const Guide = (props: TGuideProps) => {
-  const { steps } = props;
-
-  const [viewGuide, setViewGuide] = useState(false);
+  const [isStart, setIsStart] = useState(run);
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentGuideIndex, setCurrentGuideIndex] = useState(0);
 
   // windowSize 바뀔때마다 자동 리렌더링 되도록 훅만 호출
   useWindowSize();
 
-  useLayoutEffect(() => {
-    const isGuide = __localStorage.getItem<TGuide>('isGuideOpen');
-    if (!isGuide) {
-      setViewGuide(true);
-    }
-  }, []);
-
   useEffect(() => {
     if (steps.length > 0) {
-      setIsAnimating(true);
-      const timeout = setTimeout(() => setIsAnimating(false), 300);
-      return () => clearTimeout(timeout);
+      onGuideStart?.();
     }
   }, [steps]);
+
+  useEffect(() => {
+    setIsAnimating(true);
+    const timeout = setTimeout(() => setIsAnimating(false), 500);
+    return () => clearTimeout(timeout);
+  }, [currentGuideIndex]);
+
+  if (!isStart) return null;
 
   if (!steps[currentGuideIndex]) {
     return null;
@@ -56,11 +55,10 @@ export const Guide = (props: TGuideProps) => {
     if (currentGuideIndex < steps.length - 1) {
       setCurrentGuideIndex((prevIndex) => prevIndex + 1);
     } else {
-      setViewGuide(false);
+      setIsStart(false);
+      onGuideEnd?.();
     }
   };
-
-  if (!viewGuide) return null;
 
   return (
     <div className="absolute top-0 left-0 w-full h-full cursor-pointer" onClick={handleGuideClick}>

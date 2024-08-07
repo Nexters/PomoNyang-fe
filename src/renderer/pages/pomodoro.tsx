@@ -1,11 +1,18 @@
 import { Guide, Button, Icon } from '@/shared/ui';
+import { __localStorage } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
   { id: 'timeAdjustDiv', message: '눌러서 시간을 조정할 수 있어요' },
 ];
 
+type TShowGuide = {
+  showGuide: boolean;
+};
+
 const Pomodoro = () => {
+  const showGuide = !!__localStorage.getItem<TShowGuide>('showGuide');
+
   return (
     <>
       <div className="flex flex-col h-full">
@@ -38,7 +45,13 @@ const Pomodoro = () => {
           </Button>
         </main>
       </div>
-      <Guide steps={steps} />
+      <Guide
+        steps={steps}
+        run={!showGuide}
+        handler={{
+          onGuideEnd: () => __localStorage.setItem('showGuide', { showGuide: false }),
+        }}
+      />
     </>
   );
 };
