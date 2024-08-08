@@ -13,15 +13,15 @@ const sizes = {
   xl: 48,
 } as const;
 
-type IconName = keyof typeof icons;
-type IconSize = keyof typeof sizes;
+export type IconName = keyof typeof icons;
+export type IconSize = keyof typeof sizes;
 
-type IconProps = {
+export type IconProps = {
   name?: IconName;
   size?: IconSize;
 } & Omit<JSX.IntrinsicElements['img'], 'size'>;
 
-function Icon({
+export function Icon({
   name = 'placeholder',
   size = 'xs',
   className,
@@ -39,5 +39,3 @@ function Icon({
     />
   );
 }
-
-export { Icon, type IconProps, type IconName, type IconSize };
