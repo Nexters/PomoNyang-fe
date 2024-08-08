@@ -3,9 +3,7 @@ import { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
-import { SelectGroup, SelectGroupItem } from '@/shared/ui';
-import { Button } from '@/shared/ui/button';
-import Icon from '@/shared/ui/icon';
+import { Button, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
 import { cn } from '@/shared/utils';
 
 const Selection = () => {
