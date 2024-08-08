@@ -21,7 +21,7 @@ export type IconProps = {
   size?: IconSize;
 } & Omit<JSX.IntrinsicElements['img'], 'size'>;
 
-export default function Icon({
+export function Icon({
   name = 'placeholder',
   size = 'xs',
   className,
