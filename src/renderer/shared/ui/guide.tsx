@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useWindowSize } from '../hooks';
+import { cn } from '../utils';
 
 type TSteps = {
   id: string;
@@ -78,9 +79,10 @@ export const Guide = ({ steps, handler }: TGuideProps) => {
 
       {/* 3. 툴팁 메세지 */}
       <div
-        className={`bg-white rounded-xs p-md text-text-secondary transition-position duration-300 ${
-          isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-        }`}
+        className={cn(
+          'bg-white rounded-xs p-md text-text-secondary transition-position duration-300',
+          isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0',
+        )}
         style={{
           position: 'absolute',
           top: `${rect.top - 20}px`,
