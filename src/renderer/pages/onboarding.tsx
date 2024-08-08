@@ -10,10 +10,11 @@ import {
   CarouselPrevious,
   useCarousel,
 } from '@/shared/ui';
+import { cn } from '@/shared/utils';
 
 const Onboarding = () => {
   return (
-    <Carousel className="w-full h-full">
+    <Carousel className="w-full h-full" opts={{ loop: true }}>
       {/* @note: useCarousel를 사용하기 위해 별도 컴포넌트로 분리 */}
       <OnboardingContent />
     </Carousel>
@@ -37,17 +38,30 @@ const contents = [
 ];
 
 const OnboardingContent = () => {
-  const { api, currentIndex, canScrollNext } = useCarousel();
+  const { currentIndex } = useCarousel();
   const navigate = useNavigate();
 
   return (
-    <div className="h-full flex flex-col items-center justify-center gap-6">
-      <div className="w-full flex flex-col justify-center items-center gap-8 overflow-hidden">
+    <div className="h-full flex flex-col items-center justify-center gap-12">
+      <div
+        className={cn(
+          'w-full flex flex-col justify-center items-center gap-8 overflow-hidden',
+          // TODO: 가운데 정렬하고 최소 간격으로 하고 싶은데 잘 안되서 일단 주석처리함
+          // 'h-sm:pt-[40px] h-md:pt-[60px] h-lg:pt-[100px] h-xl:pt-[140px]',
+        )}
+      >
         <CarouselContent>
           {contents.map((_, index) => (
             <CarouselItem key={index}>
-              <div className="flex items-center justify-center select-none">
+              <div className="flex flex-col items-center justify-center gap-8 select-none">
                 <div className="w-[240px] aspect-square bg-background-secondary" />
+
+                <div className="flex flex-col gap-2 text-center">
+                  <h2 className="header-4 text-text-primary">{contents[index].title}</h2>
+                  <p className="body-r text-text-secondary whitespace-pre-line">
+                    {contents[index].description}
+                  </p>
+                </div>
               </div>
             </CarouselItem>
           ))}
@@ -56,31 +70,21 @@ const OnboardingContent = () => {
         <CarouselPrevious />
         <CarouselNext />
 
-        <div className="flex flex-col gap-2 text-center">
-          <h2 className="header-4 text-text-primary">{contents[currentIndex].title}</h2>
-          <p className="body-r text-text-secondary whitespace-pre-line">
-            {contents[currentIndex].description}
-          </p>
-        </div>
-
-        <div className="flex gap-2">
+        <ul className="flex gap-2">
           {contents.map((_, index) => (
-            <button
+            <li
               key={index}
-              className={`w-2 h-2 rounded-full ${index === currentIndex ? 'bg-background-tertiary' : 'bg-background-secondary'}`}
-              onClick={() => api?.scrollTo(index)}
+              className={cn(
+                'w-2 h-2 rounded-full',
+                index === currentIndex ? 'bg-background-tertiary' : 'bg-background-secondary',
+              )}
             />
           ))}
-        </div>
+        </ul>
       </div>
 
       <div className="flex gap-1">
-        <Button
-          size="lg"
-          className="w-[200px]"
-          disabled={canScrollNext}
-          onClick={() => navigate(PATH.HOME)}
-        >
+        <Button size="lg" className="w-[200px]" onClick={() => navigate(PATH.HOME)}>
           시작하기
         </Button>
       </div>
