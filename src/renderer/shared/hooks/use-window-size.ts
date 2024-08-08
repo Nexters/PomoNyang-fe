@@ -20,14 +20,15 @@ export const useWindowSize = () => {
     });
   }, []);
 
-  const debouncedHandleResize = useDebounce(handleResize, 200);
-
   useEffect(() => {
+    const debouncedHandleResize = useDebounce(handleResize, 200);
+
     window.addEventListener('resize', debouncedHandleResize);
+
     return () => {
       window.removeEventListener('resize', debouncedHandleResize);
     };
-  }, [debouncedHandleResize]);
+  }, []);
 
   return windowSize;
 };
