@@ -9,17 +9,16 @@ type TSteps = {
 
 type TGuideProps = {
   steps: TSteps;
-  run?: boolean;
   handler?: {
     onGuideStart?: () => void;
     onGuideEnd?: () => void;
   };
 };
 
-export const Guide = ({ steps, run = true, handler }: TGuideProps) => {
+export const Guide = ({ steps, handler }: TGuideProps) => {
   const { onGuideStart, onGuideEnd } = handler || {};
 
-  const [isStart, setIsStart] = useState(run);
+  const [isStart, setIsStart] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentGuideIndex, setCurrentGuideIndex] = useState(0);
 
