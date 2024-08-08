@@ -74,7 +74,10 @@ const OnboardingContent = () => {
           {contents.map((_, index) => (
             <li
               key={index}
-              className={`w-2 h-2 rounded-full ${index === currentIndex ? 'bg-background-tertiary' : 'bg-background-secondary'}`}
+              className={cn(
+                'w-2 h-2 rounded-full',
+                index === currentIndex ? 'bg-background-tertiary' : 'bg-background-secondary',
+              )}
             />
           ))}
         </ul>
