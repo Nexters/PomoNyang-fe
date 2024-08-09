@@ -31,7 +31,7 @@ const Naming = () => {
             <div className=" h-[240px] bg-background-secondary" />
           </Tooltip>
 
-          <div className="flex flex-col gap-2">
+          <div className="relative flex flex-col gap-2">
             <label className="subBody-4 text-text-secondary">내 고양이의 이름</label>
             <input
               value={name}
@@ -39,7 +39,13 @@ const Naming = () => {
               className="body-sb text-text-primary placeholder:text-text-disabled p-lg rounded-sm caret-text-accent-1"
               onChange={(e) => setName(e.target.value)}
             />
-            {errorMessage && <div className="caption-r text-accent-red">{errorMessage}</div>}
+            {errorMessage && (
+              <div className="absolute bottom-[-8px] left-0 w-full">
+                <div className="absolute top-0 left-0 caption-r text-accent-red">
+                  {errorMessage}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
