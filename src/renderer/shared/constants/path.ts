@@ -4,4 +4,5 @@ export const PATH = {
   ONBOARDING: '/onboarding',
   SELECTION: '/selection',
   POMODORO: '/pomodoro',
+  NAMING: '/naming',
 } as const;

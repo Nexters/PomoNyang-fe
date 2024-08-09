@@ -46,6 +46,13 @@ const Home = () => {
       >
         뽀모도로 페이지로 가기
       </Button>
+      <Button
+        onClick={() => {
+          navigate(PATH.NAMING);
+        }}
+      >
+        이름짓기 페이지로 가기
+      </Button>
       <div className="p-2">
         <div className="time">time</div>
         <div className="header-1">header-1</div>

@@ -1,9 +1,11 @@
 import { cn } from '../utils';
 
+import BackIcon from '@/shared/assets/svgs/back.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
 
 const icons = {
   placeholder: PlaceholderIcon,
+  back: BackIcon,
 } as const;
 const sizes = {
   xs: 16,
