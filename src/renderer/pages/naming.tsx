@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
-import { Button, Frame } from '@/shared/ui';
+import { Button, Frame, Tooltip } from '@/shared/ui';
 
 const Naming = () => {
   const location = useLocation();
@@ -19,22 +19,28 @@ const Naming = () => {
   return (
     <Frame>
       <Frame.NavBar onBack={() => navigate(PATH.SELECTION)} />
-      <div className="flex flex-col gap-10">
-        <h2 className="header-3 text-text-primary whitespace-pre-wrap">
-          {'반갑다냥!\n내 이름을 지어줄래냥?'}
-        </h2>
-        <div className="text-center">
-          <div className="inline-block w-[240px] h-[240px] bg-background-secondary" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="subBody-4 text-text-secondary">내 고양이의 이름</label>
-          <input
-            value={name}
-            placeholder={selectedCatName}
-            className="body-sb text-text-primary placeholder:text-text-disabled p-lg rounded-sm caret-text-accent-1"
-            onChange={(e) => setName(e.target.value)}
-          />
-          {errorMessage && <div className="caption-r text-accent-red">{errorMessage}</div>}
+      <div className="h-full flex justify-center items-center">
+        <div className="w-full flex flex-col gap-10">
+          <Tooltip
+            content="반갑다냥! 내 이름을 지어줄래냥?"
+            color="white"
+            sideOffset={-20}
+            rootProps={{ open: true }}
+            arrowProps={{ width: 14, height: 9 }}
+          >
+            <div className=" h-[240px] bg-background-secondary" />
+          </Tooltip>
+
+          <div className="flex flex-col gap-2">
+            <label className="subBody-4 text-text-secondary">내 고양이의 이름</label>
+            <input
+              value={name}
+              placeholder={selectedCatName}
+              className="body-sb text-text-primary placeholder:text-text-disabled p-lg rounded-sm caret-text-accent-1"
+              onChange={(e) => setName(e.target.value)}
+            />
+            {errorMessage && <div className="caption-r text-accent-red">{errorMessage}</div>}
+          </div>
         </div>
       </div>
       <Frame.BottomBar>

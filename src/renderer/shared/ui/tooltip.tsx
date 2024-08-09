@@ -8,6 +8,8 @@ export type TooltipProps = {
   content?: ReactNode;
   children?: ReactNode;
   color?: 'black' | 'white';
+  rootProps?: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>;
+  arrowProps?: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Arrow>;
 } & React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>;
 
 export const Tooltip = ({
@@ -16,11 +18,13 @@ export const Tooltip = ({
   color = 'black',
   sideOffset = 4,
   className,
+  rootProps,
+  arrowProps,
   ...contentProps
 }: TooltipProps) => {
   return (
     <TooltipPrimitive.Provider delayDuration={100}>
-      <TooltipPrimitive.Root>
+      <TooltipPrimitive.Root {...rootProps}>
         <TooltipPrimitive.Trigger>{children}</TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
           sideOffset={sideOffset}
@@ -38,6 +42,7 @@ export const Tooltip = ({
           <div>{content}</div>
           <TooltipPrimitive.Arrow
             className={cn(color === 'black' && 'fill-gray-900', color === 'white' && 'fill-white')}
+            {...arrowProps}
           />
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>

@@ -8,7 +8,7 @@ type FrameProps = {
 export const Frame = ({ children }: FrameProps) => {
   return (
     <div className="w-full h-full relative pt-[56px] pb-[112px] overflow-y-auto">
-      <div className="p-5">{children}</div>
+      <div className="p-5 h-full">{children}</div>
     </div>
   );
 };
