@@ -37,7 +37,7 @@ const Naming = () => {
           {errorMessage && <div className="caption-r text-accent-red">{errorMessage}</div>}
         </div>
       </div>
-      <Frame.BottomContainer>
+      <Frame.BottomBar>
         <Button
           className="w-full"
           disabled={!!errorMessage}
@@ -45,7 +45,7 @@ const Naming = () => {
         >
           완료
         </Button>
-      </Frame.BottomContainer>
+      </Frame.BottomBar>
     </Frame>
   );
 };

@@ -39,4 +39,4 @@ const BottomBar = ({ children }: BottomBarProps) => {
 };
 
 Frame.NavBar = NavBar;
-Frame.BottomContainer = BottomBar;
+Frame.BottomBar = BottomBar;
