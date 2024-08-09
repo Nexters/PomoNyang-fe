@@ -19,7 +19,7 @@ const Selection = () => {
 
   return (
     <Frame>
-      <Frame.NavBar title="고양이 선택" />
+      <Frame.NavBar title="고양이 선택" onBack={() => navigate(PATH.ONBOARDING)} />
 
       <div className="w-full flex flex-col gap-[42px]">
         <div className="flex flex-col gap-1">
