@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '@/shared/constants';
-import { Button, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
+import { Button, Frame, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
 import { cn } from '@/shared/utils';
 
 const Selection = () => {
@@ -18,8 +18,10 @@ const Selection = () => {
   ];
 
   return (
-    <div className="h-full flex flex-col justify-center items-center my-auto">
-      <div className="w-[335px] flex flex-col gap-[43px]">
+    <Frame>
+      <Frame.NavBar title="고양이 선택" />
+
+      <div className="w-full flex flex-col gap-[42px]">
         <div className="flex flex-col gap-1">
           <h1 className="header-3 text-text-primary">어떤 고양이와 함께할까요?</h1>
           <p className="body-r text-text-secondary">언제든지 다른 고양이와 함께할 수 있어요</p>
@@ -58,22 +60,31 @@ const Selection = () => {
             </SelectGroupItem>
           ))}
         </SelectGroup>
-
-        {/* @note: padding-top: 12px = 위의 SelectGroup 간격 55px - 전체 gap 43px */}
-        <div className="pt-3">
-          {/* TODO: 고양이 선택 api 호출 */}
-          <Button disabled={!selectedCatId} className="w-full" onClick={() => navigate(PATH.HOME)}>
-            이 고양이와 시작하기
-          </Button>
-        </div>
       </div>
-    </div>
+
+      <Frame.BottomBar>
+        <Button
+          disabled={!selectedCatId}
+          className="w-full"
+          onClick={() =>
+            navigate(PATH.NAMING, {
+              state: {
+                selectedCatId,
+                selectedCatName: cats.find((cat) => cat.id === selectedCatId)?.name,
+              },
+            })
+          }
+        >
+          이 고양이와 시작하기
+        </Button>
+      </Frame.BottomBar>
+    </Frame>
   );
 };
 
 const AlarmEmpty = () => {
   return (
-    <div className="w-full h-[66px] rounded-xs bg-background-secondary flex justify-center items-center text-center text-gray-400 subBody-r whitespace-pre-line">
+    <div className="w-full h-[72px] rounded-xs bg-background-secondary flex justify-center items-center text-center text-gray-400 body-r whitespace-pre-line">
       {'고양이를 선택하면\n딴 짓 방해알림 예시를 보여드려요'}
     </div>
   );
@@ -84,14 +95,13 @@ type AlarmSampleProps = {
   time?: string;
   message: string;
 };
-const AlarmSample = ({ appName = '모하냥', time = '9:41 AM', message }: AlarmSampleProps) => {
+const AlarmSample = ({ appName = '모하냥', time = '지금', message }: AlarmSampleProps) => {
   return (
     <div
       className={cn(
-        'w-full h-[66px] rounded-xs bg-background-secondary flex items-center gap-[10px] px-[14px]',
+        'w-full h-[72px] rounded-xs bg-background-secondary flex items-center gap-[10px] px-[14px]',
         'animate-in fade-in-0 slide-in-from-bottom-2 duration-700',
         'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
-        // 'animate-fade-up animate-duration-500 animate-ease-out ',
       )}
     >
       {/* TODO: 앱 아이콘으로 변경 */}
