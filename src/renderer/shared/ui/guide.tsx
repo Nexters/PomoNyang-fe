@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { useWindowSize } from '../hooks';
+import { useWindowSize } from 'usehooks-ts';
+
 import { cn } from '../utils';
 
 type TSteps = {
