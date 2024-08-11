@@ -1,9 +1,21 @@
 import { cn } from '../utils';
 
+import CategoryDefault from '@/shared/assets/svgs/category-default.svg';
+import CategoryExercise from '@/shared/assets/svgs/category-exercise.svg';
+import CategoryStudy from '@/shared/assets/svgs/category-study.svg';
+import CategoryWork from '@/shared/assets/svgs/category-work.svg';
+import MenuIcon from '@/shared/assets/svgs/menu.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
+import Play from '@/shared/assets/svgs/play.svg';
 
 const icons = {
   placeholder: PlaceholderIcon,
+  menu: MenuIcon,
+  categoryDefault: CategoryDefault,
+  categoryStudy: CategoryStudy,
+  categoryWork: CategoryWork,
+  categoryExercise: CategoryExercise,
+  play: Play,
 } as const;
 const sizes = {
   xs: 16,
