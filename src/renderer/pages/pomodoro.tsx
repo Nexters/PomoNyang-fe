@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -27,6 +27,9 @@ const steps = [
 
 const Pomodoro = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const selectCategoryRef = useRef<string>();
+  // @TODO: 현재 서버에서 default 값을 집중으로 주고 있어서 디자인 시안에 맞게 추후 기본으로 수저해야 함
+  const [selectedCategory, setSelectedCategory] = useState('집중');
 
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(
     'showGuide',
@@ -66,8 +69,8 @@ const Pomodoro = () => {
                 setIsOpenDrawer(true);
               }}
             >
-              <Icon name="categoryDefault" size="sm" />
-              기본
+              <Icon name={categoryIconName(selectedCategory)} size="sm" />
+              {selectedCategory}
             </Button>
             <div className="flex items-center p-xs gap-md" id="timeAdjustDiv">
               <div className="flex items-center cursor-pointer p-sm gap-sm">
@@ -94,7 +97,13 @@ const Pomodoro = () => {
               <Icon name="close" size="sm" />
             </DrawerClose>
           </div>
-          <SelectGroup className="flex flex-col gap-4 mt-lg px-lg">
+          <SelectGroup
+            defaultValue={selectedCategory}
+            onValueChange={(value) => {
+              selectCategoryRef.current = value;
+            }}
+            className="flex flex-col gap-4 mt-lg px-lg"
+          >
             {categoryData?.map((category) => {
               return (
                 <SelectGroupItem
@@ -103,7 +112,7 @@ const Pomodoro = () => {
                   className="flex flex-row items-center justify-start w-full p-xl gap-md"
                 >
                   <div className="flex gap-sm">
-                    <Icon name="categoryDefault" size="sm" />
+                    <Icon name={categoryIconName(category.title)} size="sm" />
                     <span className="body-sb text-text-primary">{category.title}</span>
                   </div>
                   <div className="flex items-center subBody-r text-text-tertiary gap-xs">
@@ -117,7 +126,15 @@ const Pomodoro = () => {
           </SelectGroup>
 
           <DrawerFooter>
-            <Button variant="secondary" className="w-full" size="lg">
+            <Button
+              variant="secondary"
+              className="w-full"
+              size="lg"
+              onClick={() => {
+                setSelectedCategory(selectCategoryRef.current ?? '집중');
+                setIsOpenDrawer(false);
+              }}
+            >
               확인
             </Button>
           </DrawerFooter>
@@ -142,4 +159,12 @@ const catName = (type: CatType) => {
   if (type === 'BLACK') return '까만냥';
   if (type === 'THREE_COLOR') return '삼색냥';
   return '';
+};
+
+const categoryIconName = (type: string) => {
+  if (type === '집중') return 'categoryDefault';
+  if (type === '공부') return 'categoryStudy';
+  if (type === '작업') return 'categoryWork';
+  if (type === '운동') return 'categoryExercise';
+  return 'categoryDefault';
 };
