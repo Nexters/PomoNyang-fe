@@ -1,5 +1,6 @@
 import { cn } from '../utils';
 
+import BackIcon from '@/shared/assets/svgs/back.svg';
 import CategoryDefault from '@/shared/assets/svgs/category-default.svg';
 import CategoryExercise from '@/shared/assets/svgs/category-exercise.svg';
 import CategoryStudy from '@/shared/assets/svgs/category-study.svg';
@@ -10,6 +11,7 @@ import Play from '@/shared/assets/svgs/play.svg';
 
 const icons = {
   placeholder: PlaceholderIcon,
+  back: BackIcon,
   menu: MenuIcon,
   categoryDefault: CategoryDefault,
   categoryStudy: CategoryStudy,
