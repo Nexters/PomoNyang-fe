@@ -50,7 +50,7 @@ export const Dialog = ({
               !fullScreen && 'absolute top-[20px] right-[20px] p-2',
             )}
           >
-            <Icon name="placeholder" size="md" />
+            <Icon name="close" size="md" />
             <span className="sr-only">닫기</span>
           </DialogPrimitive.Close>
 
