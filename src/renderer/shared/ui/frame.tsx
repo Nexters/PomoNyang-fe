@@ -20,12 +20,14 @@ type NavBarProps = {
 const NavBar = ({ title, onBack }: NavBarProps) => {
   return (
     <div className="absolute top-0 left-0 w-full h-[56px] flex justify-center items-center p-2">
-      <button
-        className="absolute top-2 left-2 flex justify-center items-center w-[40px] h-[40px]"
-        onClick={onBack}
-      >
-        <Icon name="back" size="md" />
-      </button>
+      {onBack && (
+        <button
+          className="absolute top-2 left-2 flex justify-center items-center w-[40px] h-[40px]"
+          onClick={onBack}
+        >
+          <Icon name="back" size="md" />
+        </button>
+      )}
       <h1 className="body-sb text-text-primary">{title}</h1>
     </div>
   );
