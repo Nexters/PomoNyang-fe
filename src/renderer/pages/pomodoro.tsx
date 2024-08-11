@@ -19,7 +19,7 @@ import {
   SelectGroupItem,
   IconName,
 } from '@/shared/ui';
-import { formatDuration } from '@/shared/utils';
+import { parseIsoDuration } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
@@ -124,9 +124,9 @@ const Pomodoro = () => {
                     <span className="body-sb text-text-primary">{category.title}</span>
                   </div>
                   <div className="flex items-center subBody-r text-text-tertiary gap-xs">
-                    <span>집중 {formatDuration(category.restTime).minutes}분</span>
+                    <span>집중 {parseIsoDuration(category.restTime).minutes}분</span>
                     <span>|</span>
-                    <span>휴식 {formatDuration(category.restTime).minutes}분</span>
+                    <span>휴식 {parseIsoDuration(category.restTime).minutes}분</span>
                   </div>
                 </SelectGroupItem>
               );

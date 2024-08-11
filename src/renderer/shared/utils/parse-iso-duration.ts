@@ -1,7 +1,6 @@
-export const formatDuration = (isoDuration: string) => {
-  const regex = /P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?/;
-
-  const matches = isoDuration.match(regex);
+const isoRegex = /P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?/;
+export const parseIsoDuration = (isoDuration: string) => {
+  const matches = isoDuration.match(isoRegex);
 
   if (!matches) {
     throw new Error('Invalid ISO 8601 duration format');
