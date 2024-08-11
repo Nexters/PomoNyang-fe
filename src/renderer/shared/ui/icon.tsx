@@ -5,10 +5,15 @@ import CategoryDefaultIcon from '@/shared/assets/svgs/category-default.svg';
 import CategoryExerciseIcon from '@/shared/assets/svgs/category-exercise.svg';
 import CategoryStudyIcon from '@/shared/assets/svgs/category-study.svg';
 import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
+import CheckIcon from '@/shared/assets/svgs/check.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
+import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
 import MenuIcon from '@/shared/assets/svgs/menu.svg';
+import MinusIcon from '@/shared/assets/svgs/minus.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
 import PlayIcon from '@/shared/assets/svgs/play.svg';
+import PlusIcon from '@/shared/assets/svgs/plus.svg';
+import RestTimeIcon from '@/shared/assets/svgs/rest-time.svg';
 
 const icons = {
   placeholder: PlaceholderIcon,
@@ -20,6 +25,11 @@ const icons = {
   categoryExercise: CategoryExerciseIcon,
   play: PlayIcon,
   close: CloseIcon,
+  focusTime: FocusTimeIcon,
+  restTime: RestTimeIcon,
+  check: CheckIcon,
+  minus: MinusIcon,
+  plus: PlusIcon,
 } as const;
 const sizes = {
   xs: 16,
