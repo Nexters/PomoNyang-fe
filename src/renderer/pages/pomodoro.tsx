@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
-import { useCategory } from '@/features/category';
+import { useCategories } from '@/features/category';
 import { useUser } from '@/features/user';
 import {
   Guide,
@@ -37,7 +37,7 @@ const Pomodoro = () => {
   );
 
   const { data: userData } = useUser();
-  const { data: categoryData } = useCategory();
+  const { data: categoryData } = useCategories();
 
   return (
     <>

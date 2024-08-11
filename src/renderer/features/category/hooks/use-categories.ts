@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Category } from '@/entities/category';
 import { useAuthClient } from '@/shared/hooks';
 
-export const useCategory = () => {
+export const useCategories = () => {
   const authClient = useAuthClient();
   return useQuery({
     queryKey: ['category'],
