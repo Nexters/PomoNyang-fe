@@ -38,7 +38,7 @@ const Pomodoro = () => {
   );
 
   const { data: userData } = useUser();
-  const { data: categoryData } = useCategories();
+  const { data: categoriesData } = useCategories();
 
   return (
     <>
@@ -105,7 +105,7 @@ const Pomodoro = () => {
             }}
             className="flex flex-col gap-4 mt-lg px-lg"
           >
-            {categoryData?.map((category) => {
+            {categoriesData?.map((category) => {
               return (
                 <SelectGroupItem
                   key={category.no}
@@ -119,7 +119,8 @@ const Pomodoro = () => {
                   <div className="flex items-center subBody-r text-text-tertiary gap-xs">
                     <span>집중 {formatDuration(category.restTime).minutes}분</span>
                     <span>|</span>
-                    <span>휴식 {formatDuration(category.restTime).minutes}분</span>
+                    {/* <span>휴식 {formatDuration(category.restTime).minutes}분</span> */}
+                    <span>휴식 {new Date(category.restTime).getHours()}분</span>
                   </div>
                 </SelectGroupItem>
               );
