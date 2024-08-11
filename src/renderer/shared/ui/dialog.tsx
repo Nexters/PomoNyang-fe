@@ -10,6 +10,7 @@ type DialogProps = {
   open: boolean;
   title?: string;
   fullScreen?: boolean;
+  animated?: boolean;
   children: React.ReactNode;
   onOpenChange?: (open: boolean) => void;
 };
@@ -18,6 +19,7 @@ export const Dialog = ({
   open,
   title,
   fullScreen = false,
+  animated = true,
   children,
   onOpenChange,
 }: DialogProps) => {
@@ -28,16 +30,18 @@ export const Dialog = ({
           className={cn(
             'fixed inset-0 z-50',
             !fullScreen && 'bg-black/80',
-            'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+            animated &&
+              'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
           )}
         />
         <DialogPrimitive.Content
           className={cn(
             fullScreen && 'fixed left-[50%] top-0 bottom-0 translate-x-[-50%]',
             !fullScreen &&
-              'fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] p-[20px] rounded-md',
-            'z-50 w-full max-w-md bg-background-primary shadow-lg pt-[56px]',
-            'duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
+              'fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] p-[20px] rounded-md shadow-lg',
+            'z-50 w-full max-w-md bg-background-primary pt-[56px]',
+            animated &&
+              'duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
           )}
         >
           <DialogPrimitive.Close
