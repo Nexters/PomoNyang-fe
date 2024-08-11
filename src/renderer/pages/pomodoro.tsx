@@ -1,8 +1,24 @@
+import { useState } from 'react';
+
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
+import { useCategory } from '@/features/category';
 import { useUser } from '@/features/user';
-import { Guide, Button, Icon, Tooltip } from '@/shared/ui';
+import {
+  Guide,
+  Button,
+  Icon,
+  Tooltip,
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerFooter,
+  DrawerClose,
+  SelectGroup,
+  SelectGroupItem,
+} from '@/shared/ui';
+import { formatDuration } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
@@ -10,12 +26,15 @@ const steps = [
 ];
 
 const Pomodoro = () => {
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(
     'showGuide',
     !(localStorage.getItem('showGuide') === 'false'),
   );
 
   const { data: userData } = useUser();
+  const { data: categoryData } = useCategory();
 
   return (
     <>
@@ -38,8 +57,17 @@ const Pomodoro = () => {
             {catName(userData?.cat?.catType ?? 'CHEESE')}
           </div>
           <div className="flex flex-col p-lg gap-md">
-            <Button variant="tertiary" className="w-[80px] mx-auto" size="sm" id="categoryButton">
-              <Icon name="placeholder" size="sm" />
+            <Button
+              variant="tertiary"
+              className="w-[80px] mx-auto"
+              size="sm"
+              id="categoryButton"
+              onClick={() => {
+                setIsOpenDrawer(true);
+              }}
+            >
+              <Icon name="categoryDefault" size="sm" />
+              기본
             </Button>
             <div className="flex items-center p-xs gap-md" id="timeAdjustDiv">
               <div className="flex items-center cursor-pointer p-sm gap-sm">
@@ -58,6 +86,43 @@ const Pomodoro = () => {
           </Button>
         </main>
       </div>
+      <Drawer open={isOpenDrawer} onOpenChange={setIsOpenDrawer}>
+        <DrawerContent>
+          <div className="flex items-center justify-between gap-2 ml-xl mr-sm">
+            <DrawerTitle className="py-1 header-3">카테고리 변경</DrawerTitle>
+            <DrawerClose className="p-sm">
+              <Icon name="close" size="sm" />
+            </DrawerClose>
+          </div>
+          <SelectGroup className="flex flex-col gap-4 mt-lg px-lg">
+            {categoryData?.map((category) => {
+              return (
+                <SelectGroupItem
+                  key={category.no}
+                  value={category.title}
+                  className="flex flex-row items-center justify-start w-full p-xl gap-md"
+                >
+                  <div className="flex gap-sm">
+                    <Icon name="categoryDefault" size="sm" />
+                    <span className="body-sb text-text-primary">{category.title}</span>
+                  </div>
+                  <div className="flex items-center subBody-r text-text-tertiary gap-xs">
+                    <span>집중 {formatDuration(category.restTime).minutes}분</span>
+                    <span>|</span>
+                    <span>휴식 {formatDuration(category.restTime).minutes}분</span>
+                  </div>
+                </SelectGroupItem>
+              );
+            })}
+          </SelectGroup>
+
+          <DrawerFooter>
+            <Button variant="secondary" className="w-full" size="lg">
+              확인
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
       {showGuide && (
         <Guide
           steps={steps}
