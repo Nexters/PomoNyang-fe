@@ -1,1 +1,1 @@
-export * from './hooks/use-category';
+export * from './hooks/use-categories';
