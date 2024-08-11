@@ -76,7 +76,7 @@
     @apply text-[24px] font-bold leading-[28px] tracking-[-.02em];
   }
   .header-4 {
-    @apply text-[20px] font-bold leading-[25px] tracking-[-.02em];
+    @apply text-[20px] font-semibold leading-[25px] tracking-[-.02em];
   }
   .header-5 {
     @apply text-[18px] font-semibold leading-[22px] tracking-[-.02em];
