@@ -21,7 +21,7 @@ export const Guide = ({ steps, handler }: TGuideProps) => {
   const { onGuideStart, onGuideEnd } = handler || {};
 
   const [isStart, setIsStart] = useState(true);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(true);
   const [currentGuideIndex, setCurrentGuideIndex] = useState(0);
 
   // windowSize 바뀔때마다 자동 리렌더링 되도록 훅만 호출
