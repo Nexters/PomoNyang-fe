@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -28,9 +28,10 @@ const steps = [
 
 const Pomodoro = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-  const selectCategoryRef = useRef<string>();
-  // @TODO: 현재 서버에서 default 값을 집중으로 주고 있어서 디자인 시안에 맞게 추후 기본으로 수저해야 함
-  const [selectedCategory, setSelectedCategory] = useState('집중');
+
+  // @TODO: 현재 서버에서 default 값을 집중으로 주고 있어서 디자인 시안에 맞게 추후 기본으로 수정해야 함
+  const [currentCategory, setCurrentCategory] = useState('집중');
+  const [selectedCategory, setSelectedCategory] = useState(currentCategory);
 
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(
     'showGuide',
@@ -70,8 +71,8 @@ const Pomodoro = () => {
                 setIsOpenDrawer(true);
               }}
             >
-              <Icon name={categoryIconName(selectedCategory)} size="sm" />
-              {selectedCategory}
+              <Icon name={categoryIconName(currentCategory)} size="sm" />
+              {currentCategory}
             </Button>
             <div className="flex items-center p-xs gap-md" id="timeAdjustDiv">
               <div className="flex items-center cursor-pointer p-sm gap-sm">
@@ -90,7 +91,13 @@ const Pomodoro = () => {
           </Button>
         </main>
       </div>
-      <Drawer open={isOpenDrawer} onOpenChange={setIsOpenDrawer}>
+      <Drawer
+        open={isOpenDrawer}
+        onOpenChange={setIsOpenDrawer}
+        onClose={() => {
+          setSelectedCategory(currentCategory);
+        }}
+      >
         <DrawerContent>
           <div className="flex items-center justify-between gap-2 ml-xl mr-sm">
             <DrawerTitle className="py-1 header-3">카테고리 변경</DrawerTitle>
@@ -101,7 +108,7 @@ const Pomodoro = () => {
           <SelectGroup
             defaultValue={selectedCategory}
             onValueChange={(value) => {
-              selectCategoryRef.current = value;
+              setSelectedCategory(value);
             }}
             className="flex flex-col gap-4 mt-lg px-lg"
           >
@@ -119,8 +126,7 @@ const Pomodoro = () => {
                   <div className="flex items-center subBody-r text-text-tertiary gap-xs">
                     <span>집중 {formatDuration(category.restTime).minutes}분</span>
                     <span>|</span>
-                    {/* <span>휴식 {formatDuration(category.restTime).minutes}분</span> */}
-                    <span>휴식 {new Date(category.restTime).getHours()}분</span>
+                    <span>휴식 {formatDuration(category.restTime).minutes}분</span>
                   </div>
                 </SelectGroupItem>
               );
@@ -133,7 +139,9 @@ const Pomodoro = () => {
               className="w-full"
               size="lg"
               onClick={() => {
-                setSelectedCategory(selectCategoryRef.current ?? '집중');
+                if (selectedCategory) {
+                  setCurrentCategory(selectedCategory);
+                }
                 setIsOpenDrawer(false);
               }}
             >
