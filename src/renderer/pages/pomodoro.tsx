@@ -17,6 +17,7 @@ import {
   DrawerClose,
   SelectGroup,
   SelectGroupItem,
+  IconName,
 } from '@/shared/ui';
 import { formatDuration } from '@/shared/utils';
 
@@ -161,7 +162,7 @@ const catName = (type: CatType) => {
   return '';
 };
 
-const categoryIconName = (type: string) => {
+const categoryIconName = (type: string): IconName => {
   if (type === '집중') return 'categoryDefault';
   if (type === '공부') return 'categoryStudy';
   if (type === '작업') return 'categoryWork';
