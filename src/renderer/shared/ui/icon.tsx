@@ -1,25 +1,25 @@
 import { cn } from '../utils';
 
 import BackIcon from '@/shared/assets/svgs/back.svg';
-import CategoryDefault from '@/shared/assets/svgs/category-default.svg';
-import CategoryExercise from '@/shared/assets/svgs/category-exercise.svg';
-import CategoryStudy from '@/shared/assets/svgs/category-study.svg';
-import CategoryWork from '@/shared/assets/svgs/category-work.svg';
-import Close from '@/shared/assets/svgs/close.svg';
+import CategoryDefaultIcon from '@/shared/assets/svgs/category-default.svg';
+import CategoryExerciseIcon from '@/shared/assets/svgs/category-exercise.svg';
+import CategoryStudyIcon from '@/shared/assets/svgs/category-study.svg';
+import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
+import CloseIcon from '@/shared/assets/svgs/close.svg';
 import MenuIcon from '@/shared/assets/svgs/menu.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
-import Play from '@/shared/assets/svgs/play.svg';
+import PlayIcon from '@/shared/assets/svgs/play.svg';
 
 const icons = {
   placeholder: PlaceholderIcon,
   back: BackIcon,
   menu: MenuIcon,
-  categoryDefault: CategoryDefault,
-  categoryStudy: CategoryStudy,
-  categoryWork: CategoryWork,
-  categoryExercise: CategoryExercise,
-  play: Play,
-  close: Close,
+  categoryDefault: CategoryDefaultIcon,
+  categoryStudy: CategoryStudyIcon,
+  categoryWork: CategoryWorkIcon,
+  categoryExercise: CategoryExerciseIcon,
+  play: PlayIcon,
+  close: CloseIcon,
 } as const;
 const sizes = {
   xs: 16,
