@@ -21,6 +21,7 @@ const buttonVariants = cva(
         sm: 'rounded-xs px-md py-sm subBody-sb',
         lg: 'rounded-sm p-xl header-5',
         icon: 'rounded-full',
+        none: '',
       },
     },
     defaultVariants: {
