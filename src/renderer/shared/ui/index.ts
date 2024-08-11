@@ -9,3 +9,4 @@ export * from './tooltip';
 export * from './select';
 export * from './toggle';
 export * from './frame';
+export * from './guide';
