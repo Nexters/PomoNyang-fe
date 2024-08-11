@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useUser } from '@/features/auth';
+import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
 import { useAuthToken, useMachineId } from '@/shared/hooks';
 import { Button, SelectGroup, SelectGroupItem, Toggle, Tooltip } from '@/shared/ui';
