@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import {
+  MAX_FOCUS_MINUTES,
+  MAX_REST_MINUTES,
+  MIN_FOCUS_MINUTES,
+  MIN_REST_MINUTES,
+  MINUTES_GAP,
+} from '@/shared/constants';
 import { Button, Dialog, DialogProps, Icon } from '@/shared/ui';
-import { getCategoryIconName } from '@/shared/utils';
+import { getCategoryIconName, padNumber } from '@/shared/utils';
 
 export type ChangeTimeDialogProps = Pick<DialogProps, 'open' | 'onOpenChange'> & {
   mode: 'focus' | 'rest';
@@ -11,13 +18,6 @@ export type ChangeTimeDialogProps = Pick<DialogProps, 'open' | 'onOpenChange'> &
   categoryTimeSeconds: number;
   onChangeCategoryTime?: (category: string, minutes: number, seconds: number) => void;
 };
-
-const MAX_FOCUS_MINUTES = 60;
-const MIN_FOCUS_MINUTES = 10;
-const MAX_REST_MINUTES = 30;
-const MIN_REST_MINUTES = 5;
-
-const MINUTES_GAP = 5;
 
 export const ChangeTimeDialog = ({
   open,
@@ -130,5 +130,3 @@ export const ChangeTimeDialog = ({
     </Dialog>
   );
 };
-
-const padNumber = (num: number) => num.toString().padStart(2, '0');
