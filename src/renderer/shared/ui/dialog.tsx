@@ -6,7 +6,7 @@ import { cn } from '../utils/cn';
 
 import { Icon } from './icon';
 
-type DialogProps = {
+export type DialogProps = {
   open: boolean;
   title?: string;
   fullScreen?: boolean;
