@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Button, Dialog, DialogProps, Icon } from '@/shared/ui';
 import { getCategoryIconName } from '@/shared/utils';
@@ -65,6 +65,13 @@ export const ChangeTimeDialog = ({
     onChangeCategoryTime?.(category, minutes, seconds);
     onOpenChange?.(false);
   };
+
+  useEffect(() => {
+    if (!open) {
+      setMinutes(categoryTimeMinutes);
+      setSeconds(categoryTimeSeconds);
+    }
+  }, [open, categoryTimeMinutes, categoryTimeSeconds]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} fullScreen animated={false}>
