@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
-import { useCategories } from '@/features/category';
+import { useCategories, useUpdateCategory } from '@/features/category';
+import { useCategory } from '@/features/category/hooks/use-category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import { useDisclosure } from '@/shared/hooks';
@@ -41,8 +42,20 @@ const Pomodoro = () => {
 
   const { data: userData } = useUser();
   const { data: categoriesData } = useCategories();
+  const { data: categoryData } = useCategory(
+    categoriesData?.find((category) => category.title === currentCategory)?.no,
+  );
+  const { mutate: updateCategory } = useUpdateCategory();
+
   const changeTimeDialogProps = useDisclosure();
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
+
+  const currentFocusMinutes =
+    parseIsoDuration(categoryData?.focusTime ?? '').hours * 60 +
+    parseIsoDuration(categoryData?.focusTime ?? '').minutes;
+  const currentRestMinutes =
+    parseIsoDuration(categoryData?.restTime ?? '').hours * 60 +
+    parseIsoDuration(categoryData?.restTime ?? '').minutes;
 
   return (
     <>
@@ -86,7 +99,7 @@ const Pomodoro = () => {
                 }}
               >
                 <span className="text-gray-500 body-sb">집중</span>
-                <span className="header-3 text-text-secondary">25분</span>
+                <span className="header-3 text-text-secondary">{currentFocusMinutes}분</span>
               </button>
               <div className="w-[2px] h-[20px] bg-gray-200 rounded-full" />
               <button
@@ -97,7 +110,7 @@ const Pomodoro = () => {
                 }}
               >
                 <span className="text-gray-500 body-sb">휴식</span>
-                <span className="header-3 text-text-secondary">25분</span>
+                <span className="header-3 text-text-secondary">{currentRestMinutes}분</span>
               </button>
             </div>
           </div>
@@ -128,6 +141,12 @@ const Pomodoro = () => {
             className="flex flex-col gap-4 mt-lg px-lg"
           >
             {categoriesData?.map((category) => {
+              const categoryFocusTime =
+                parseIsoDuration(category.focusTime).hours * 60 +
+                parseIsoDuration(category.focusTime).minutes;
+              const categoryRestTime =
+                parseIsoDuration(category.restTime).hours * 60 +
+                parseIsoDuration(category.restTime).minutes;
               return (
                 <SelectGroupItem
                   key={category.no}
@@ -139,9 +158,9 @@ const Pomodoro = () => {
                     <span className="body-sb text-text-primary">{category.title}</span>
                   </div>
                   <div className="flex items-center subBody-r text-text-tertiary gap-xs">
-                    <span>집중 {parseIsoDuration(category.focusTime).minutes}분</span>
+                    <span>집중 {categoryFocusTime}분</span>
                     <span>|</span>
-                    <span>휴식 {parseIsoDuration(category.restTime).minutes}분</span>
+                    <span>휴식 {categoryRestTime}분</span>
                   </div>
                 </SelectGroupItem>
               );
@@ -178,8 +197,18 @@ const Pomodoro = () => {
         onOpenChange={changeTimeDialogProps.setIsOpen}
         mode={clickedMode}
         category={currentCategory}
-        // FIXME: 선택한 모드의 시간값 넘겨주도록 변경
-        categoryTimeMinutes={25}
+        onChangeCategoryTime={(category, minutes) => {
+          // 현재 둘다 보내야 하는데, 하나만 보내도 되는지 질문함
+          const body =
+            clickedMode === 'focus'
+              ? { focusTime: `PT${minutes}M` }
+              : { restTime: `PT${minutes}M` };
+          updateCategory({
+            no: categoriesData?.find((_category) => _category.title === category)?.no ?? 0,
+            body,
+          });
+        }}
+        categoryTimeMinutes={clickedMode === 'focus' ? currentFocusMinutes : currentRestMinutes}
         categoryTimeSeconds={0}
       />
     </>
