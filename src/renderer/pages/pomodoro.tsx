@@ -4,7 +4,9 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
 import { useCategories } from '@/features/category';
+import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
+import { useDisclosure } from '@/shared/hooks';
 import {
   Guide,
   Button,
@@ -17,9 +19,8 @@ import {
   DrawerClose,
   SelectGroup,
   SelectGroupItem,
-  IconName,
 } from '@/shared/ui';
-import { parseIsoDuration } from '@/shared/utils';
+import { getCategoryIconName, parseIsoDuration } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
@@ -40,6 +41,8 @@ const Pomodoro = () => {
 
   const { data: userData } = useUser();
   const { data: categoriesData } = useCategories();
+  const changeTimeDialogProps = useDisclosure();
+  const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
   return (
     <>
@@ -71,19 +74,31 @@ const Pomodoro = () => {
                 setIsOpenDrawer(true);
               }}
             >
-              <Icon name={categoryIconName(currentCategory)} size="sm" />
+              <Icon name={getCategoryIconName(currentCategory)} size="sm" />
               {currentCategory}
             </Button>
             <div className="flex items-center p-xs gap-md" id="timeAdjustDiv">
-              <div className="flex items-center cursor-pointer p-sm gap-sm">
+              <button
+                className="flex items-center cursor-pointer p-sm gap-sm"
+                onClick={() => {
+                  setClickedMode('focus');
+                  changeTimeDialogProps.onOpen();
+                }}
+              >
                 <span className="text-gray-500 body-sb">집중</span>
                 <span className="header-3 text-text-secondary">25분</span>
-              </div>
+              </button>
               <div className="w-[2px] h-[20px] bg-gray-200 rounded-full" />
-              <div className="flex items-center cursor-pointer p-sm gap-sm">
+              <button
+                className="flex items-center cursor-pointer p-sm gap-sm"
+                onClick={() => {
+                  setClickedMode('rest');
+                  changeTimeDialogProps.onOpen();
+                }}
+              >
                 <span className="text-gray-500 body-sb">휴식</span>
                 <span className="header-3 text-text-secondary">25분</span>
-              </div>
+              </button>
             </div>
           </div>
           <Button variant="primary" className="p-[28px]" size="icon">
@@ -120,11 +135,11 @@ const Pomodoro = () => {
                   className="flex flex-row items-center justify-start w-full p-xl gap-md"
                 >
                   <div className="flex gap-sm">
-                    <Icon name={categoryIconName(category.title)} size="sm" />
+                    <Icon name={getCategoryIconName(category.title)} size="sm" />
                     <span className="body-sb text-text-primary">{category.title}</span>
                   </div>
                   <div className="flex items-center subBody-r text-text-tertiary gap-xs">
-                    <span>집중 {parseIsoDuration(category.restTime).minutes}분</span>
+                    <span>집중 {parseIsoDuration(category.focusTime).minutes}분</span>
                     <span>|</span>
                     <span>휴식 {parseIsoDuration(category.restTime).minutes}분</span>
                   </div>
@@ -158,6 +173,15 @@ const Pomodoro = () => {
           }}
         />
       )}
+      <ChangeTimeDialog
+        open={changeTimeDialogProps.isOpen}
+        onOpenChange={changeTimeDialogProps.setIsOpen}
+        mode={clickedMode}
+        category={currentCategory}
+        // FIXME: 선택한 모드의 시간값 넘겨주도록 변경
+        categoryTimeMinutes={25}
+        categoryTimeSeconds={0}
+      />
     </>
   );
 };
@@ -169,12 +193,4 @@ const catName = (type: CatType) => {
   if (type === 'BLACK') return '까만냥';
   if (type === 'THREE_COLOR') return '삼색냥';
   return '';
-};
-
-const categoryIconName = (type: string): IconName => {
-  if (type === '집중') return 'categoryDefault';
-  if (type === '공부') return 'categoryStudy';
-  if (type === '작업') return 'categoryWork';
-  if (type === '운동') return 'categoryExercise';
-  return 'categoryDefault';
 };

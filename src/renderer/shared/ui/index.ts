@@ -10,3 +10,4 @@ export * from './select';
 export * from './toggle';
 export * from './frame';
 export * from './guide';
+export * from './dialog';
