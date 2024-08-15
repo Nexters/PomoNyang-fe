@@ -17,6 +17,8 @@ export const createHttpClient = (defaultHeader?: object) => {
       __fetch<T, D>('post', url, { body, headers: mergeHeaders(headers) }),
     put: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
       __fetch<T, D>('put', url, { body, headers: mergeHeaders(headers) }),
+    patch: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
+      __fetch<T, D>('patch', url, { body, headers: mergeHeaders(headers) }),
     delete: <T = unknown>(url: string, headers?: object) =>
       __fetch<T, void>('delete', url, { headers: mergeHeaders(headers) }),
   };

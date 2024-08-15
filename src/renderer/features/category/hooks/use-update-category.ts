@@ -13,7 +13,7 @@ export const useUpdateCategory = () => {
   const authClient = useAuthClient();
   return useMutation({
     mutationFn: async ({ no, body }: { no: number; body: UpdateCategoryBody }) => {
-      return await authClient?.put<Category[], UpdateCategoryBody>(
+      return await authClient?.patch<Category[], UpdateCategoryBody>(
         `/api/v1/categories/${no}`,
         body,
       );
