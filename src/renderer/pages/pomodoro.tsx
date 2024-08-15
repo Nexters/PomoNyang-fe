@@ -31,10 +31,8 @@ const steps = [
 const Pomodoro = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
-  // @TODO: 현재 서버에서 default 값을 집중으로 주고 있어서 디자인 시안에 맞게 추후 기본으로 수정해야 함
-  const [currentCategory, setCurrentCategory] = useState('집중');
+  const [currentCategory, setCurrentCategory] = useState('기본');
   const [selectedCategory, setSelectedCategory] = useState(currentCategory);
-
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(
     'showGuide',
     !(localStorage.getItem('showGuide') === 'false'),
