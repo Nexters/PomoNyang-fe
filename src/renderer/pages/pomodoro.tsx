@@ -1,11 +1,13 @@
 import { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
 import { useCategories } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
+import { PATH } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
 import {
   Guide,
@@ -28,6 +30,7 @@ const steps = [
 ];
 
 const Pomodoro = () => {
+  const navigate = useNavigate();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
   // @TODO: 현재 서버에서 default 값을 집중으로 주고 있어서 디자인 시안에 맞게 추후 기본으로 수정해야 함
@@ -48,7 +51,12 @@ const Pomodoro = () => {
     <>
       <div className="flex flex-col h-full">
         <header className="flex justify-end p-4">
-          <Button variant="text-primary" size="md" className="p-[8px] rounded-none bg-gray-50">
+          <Button
+            variant="text-primary"
+            size="md"
+            className="p-[8px] rounded-none bg-gray-50"
+            onClick={() => navigate(PATH.MY_PAGE)}
+          >
             <Icon name="menu" size="md" />
           </Button>
         </header>
