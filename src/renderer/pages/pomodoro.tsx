@@ -75,7 +75,7 @@ const Pomodoro = () => {
           {/* TODO: 고양이 유형에 따라 다른 이미지 */}
           <div className="w-[240px] h-[240px] bg-background-secondary" />
           <div className="header-4 text-text-tertiary">
-            {catName(userData?.cat?.catType ?? 'CHEESE')}
+            {catName(userData?.cat?.type ?? 'CHEESE')}
           </div>
           <div className="flex flex-col p-lg gap-md">
             <Button

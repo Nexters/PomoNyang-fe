@@ -2,6 +2,6 @@ export type CatType = 'CHEESE' | 'BLACK' | 'THREE_COLOR';
 
 export type Cat = {
   no: number;
-  catType: CatType;
+  type: CatType;
   name: string;
 };
