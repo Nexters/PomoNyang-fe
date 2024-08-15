@@ -1,8 +1,8 @@
 import { cn } from '../utils';
 
 import BackIcon from '@/shared/assets/svgs/back.svg';
+import CategoryBookIcon from '@/shared/assets/svgs/category-book.svg';
 import CategoryDefaultIcon from '@/shared/assets/svgs/category-default.svg';
-import CategoryExerciseIcon from '@/shared/assets/svgs/category-exercise.svg';
 import CategoryStudyIcon from '@/shared/assets/svgs/category-study.svg';
 import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
 import CheckIcon from '@/shared/assets/svgs/check.svg';
@@ -22,7 +22,7 @@ const icons = {
   categoryDefault: CategoryDefaultIcon,
   categoryStudy: CategoryStudyIcon,
   categoryWork: CategoryWorkIcon,
-  categoryExercise: CategoryExerciseIcon,
+  categoryBook: CategoryBookIcon,
   play: PlayIcon,
   close: CloseIcon,
   focusTime: FocusTimeIcon,
