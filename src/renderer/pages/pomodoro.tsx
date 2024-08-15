@@ -4,7 +4,6 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
 import { useCategories, useUpdateCategory } from '@/features/category';
-import { useCategory } from '@/features/category/hooks/use-category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import { useDisclosure } from '@/shared/hooks';
@@ -40,13 +39,12 @@ const Pomodoro = () => {
 
   const { data: userData } = useUser();
   const { data: categoriesData } = useCategories();
-  const { data: categoryData } = useCategory(
-    categoriesData?.find((category) => category.title === currentCategory)?.no,
-  );
   const { mutate: updateCategory } = useUpdateCategory();
 
   const changeTimeDialogProps = useDisclosure();
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
+
+  const categoryData = categoriesData?.find((category) => category.title === currentCategory);
 
   const currentFocusMinutes =
     parseIsoDuration(categoryData?.focusTime).hours * 60 +
