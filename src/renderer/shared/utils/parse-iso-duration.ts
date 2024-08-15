@@ -1,10 +1,19 @@
 const isoRegex = /P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?/;
-export const parseIsoDuration = (isoDuration: string) => {
-  const matches = isoDuration.match(isoRegex);
 
-  if (!matches) {
-    throw new Error('Invalid ISO 8601 duration format');
-  }
+const defaultDuration = {
+  years: 0,
+  months: 0,
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+};
+
+export const parseIsoDuration = (isoDuration?: string) => {
+  if (!isoDuration) return defaultDuration;
+
+  const matches = isoDuration.match(isoRegex);
+  if (!matches) return defaultDuration;
 
   const years = Number(matches[1]) || 0;
   const months = Number(matches[2]) || 0;

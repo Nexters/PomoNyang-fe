@@ -49,11 +49,11 @@ const Pomodoro = () => {
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
   const currentFocusMinutes =
-    parseIsoDuration(categoryData?.focusTime ?? '').hours * 60 +
-    parseIsoDuration(categoryData?.focusTime ?? '').minutes;
+    parseIsoDuration(categoryData?.focusTime).hours * 60 +
+    parseIsoDuration(categoryData?.focusTime).minutes;
   const currentRestMinutes =
-    parseIsoDuration(categoryData?.restTime ?? '').hours * 60 +
-    parseIsoDuration(categoryData?.restTime ?? '').minutes;
+    parseIsoDuration(categoryData?.restTime).hours * 60 +
+    parseIsoDuration(categoryData?.restTime).minutes;
 
   return (
     <>
