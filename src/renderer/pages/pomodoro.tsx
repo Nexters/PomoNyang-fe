@@ -196,7 +196,6 @@ const Pomodoro = () => {
         mode={clickedMode}
         category={currentCategory}
         onChangeCategoryTime={(category, minutes) => {
-          // 현재 둘다 보내야 하는데, 하나만 보내도 되는지 질문함
           const body =
             clickedMode === 'focus'
               ? { focusTime: `PT${minutes}M` }
