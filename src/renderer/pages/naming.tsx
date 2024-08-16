@@ -2,23 +2,42 @@ import { useMemo, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { useRenameSelectedCat } from '@/features/cat';
+import { useCats } from '@/features/cat/hooks/use-cats';
 import { PATH } from '@/shared/constants';
 import { Button, Frame, Tooltip } from '@/shared/ui';
 
 const Naming = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const errorMessage = useMemo(() => getErrorMessage(name), [name]);
 
+  const { data: cats } = useCats();
+  const { mutate: renameSelectedCat } = useRenameSelectedCat();
+
+  const [typedCatName, setTypedCatName] = useState('');
+  const errorMessage = useMemo(() => getErrorMessage(typedCatName), [typedCatName]);
+
+  // FIXME: 고양이 선택 페이지에서 넘어온게 아니면 redirect 해야할지도?
   const selectedCatName = useMemo(() => {
-    // FIXME: 고양이 선택 페이지에서 넘어온게 아니면 redirect 해야할지도?
-    return location.state?.selectedCatName ?? '까만냥';
-  }, [location.state]);
+    const { selectedCatNo } = location.state ?? {};
+    return cats?.find((cat) => cat.no === selectedCatNo)?.name;
+  }, [location.state, cats]);
+
+  const handleClickBackButton = () => {
+    navigate(PATH.SELECTION);
+  };
+  const handleClickCompleteButton = () => {
+    if (errorMessage) return;
+
+    if (typedCatName.length > 0) {
+      renameSelectedCat(typedCatName);
+    }
+    navigate(PATH.POMODORO);
+  };
 
   return (
     <Frame>
-      <Frame.NavBar onBack={() => navigate(PATH.SELECTION)} />
+      <Frame.NavBar onBack={handleClickBackButton} />
       <div className="h-full flex justify-center items-center">
         <div className="w-full flex flex-col gap-10">
           <Tooltip
@@ -34,10 +53,10 @@ const Naming = () => {
           <div className="relative flex flex-col gap-2">
             <label className="subBody-4 text-text-secondary">내 고양이의 이름</label>
             <input
-              value={name}
+              value={typedCatName}
               placeholder={selectedCatName}
               className="body-sb text-text-primary placeholder:text-text-disabled p-lg rounded-sm caret-text-accent-1"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setTypedCatName(e.target.value)}
             />
             {errorMessage && (
               <div className="absolute bottom-[-8px] left-0 w-full">
@@ -50,11 +69,7 @@ const Naming = () => {
         </div>
       </div>
       <Frame.BottomBar>
-        <Button
-          className="w-full"
-          disabled={!!errorMessage}
-          onClick={() => navigate(PATH.POMODORO)}
-        >
+        <Button className="w-full" disabled={!!errorMessage} onClick={handleClickCompleteButton}>
           완료
         </Button>
       </Frame.BottomBar>
