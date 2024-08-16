@@ -30,6 +30,12 @@ export const ChangeTimeDialog = ({
 }: ChangeTimeDialogProps) => {
   const [minutes, setMinutes] = useState(categoryTimeMinutes);
   const [seconds, setSeconds] = useState(categoryTimeSeconds);
+
+  useEffect(() => {
+    setMinutes(categoryTimeMinutes);
+    setSeconds(categoryTimeSeconds);
+  }, [categoryTimeMinutes, categoryTimeSeconds]);
+
   const isMaxMinutes =
     mode === 'focus' ? minutes >= MAX_FOCUS_MINUTES : minutes >= MAX_REST_MINUTES;
   const isMinMinutes =
@@ -75,14 +81,14 @@ export const ChangeTimeDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} fullScreen animated={false}>
-      <div className="h-full flex flex-col">
-        <div className="flex-1 flex flex-col gap-8 justify-center items-center">
-          <div className="flex justify-center items-center gap-2 px-4 py-2">
+      <div className="flex flex-col h-full">
+        <div className="flex flex-col items-center justify-center flex-1 gap-8">
+          <div className="flex items-center justify-center gap-2 px-4 py-2">
             <Icon name={getCategoryIconName(category)} size="sm" />
             <span className="body-sb text-text-secondary">{category}</span>
           </div>
 
-          <div className="relative flex justify-center items-center gap-3 select-none">
+          <div className="relative flex items-center justify-center gap-3 select-none">
             <Button
               variant="primary"
               size="none"
@@ -93,7 +99,7 @@ export const ChangeTimeDialog = ({
               <Icon name="minus" size="md" />
             </Button>
 
-            <div className="flex justify-center items-center gap-3 bg-background-secondary rounded-md px-4 py-5">
+            <div className="flex items-center justify-center gap-3 px-4 py-5 rounded-md bg-background-secondary">
               <Icon name={mode === 'focus' ? 'focusTime' : 'restTime'} size="md" />
               <div className="flex justify-center items-center gap-0.5 header-1 text-text-primary tabular-nums">
                 <span>{padNumber(minutes)}</span>
@@ -114,7 +120,7 @@ export const ChangeTimeDialog = ({
             </Button>
 
             <div className="absolute bottom-0 left-0 w-full">
-              <div className="absolute top-3 left-0 w-full text-center subBody-r text-text-accent-1">
+              <div className="absolute left-0 w-full text-center top-3 subBody-r text-text-accent-1">
                 {errorMessage}
               </div>
             </div>
