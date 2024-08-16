@@ -1,26 +1,45 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
+import { CatType } from '@/entities/cat';
+import { useCats } from '@/features/cat';
 import { PATH } from '@/shared/constants';
-import { Button, Frame, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
+import { Button, Frame, Icon, IconName, SelectGroup, SelectGroupItem } from '@/shared/ui';
 import { cn } from '@/shared/utils';
 
-// TODO: 고양이 목록 API 호출
-const cats = [
-  { id: '1', name: '치즈냥', adj: '응원', iconName: 'cheer', alarmMessage: '어디갔나옹...' },
-  { id: '2', name: '까만냥', adj: '긍정', iconName: 'positive', alarmMessage: '어디갔나옹...' },
-  {
-    id: '3',
-    name: '삼색냥',
-    adj: '자극',
-    iconName: 'stimulus',
-    alarmMessage: '내가 여기있는데 어디갔냐옹!',
-  },
-] as const;
+const adjectiveMap: Record<CatType, string> = {
+  CHEESE: '응원',
+  BLACK: '긍정',
+  THREE_COLOR: '자극',
+};
+const iconNameMap: Record<CatType, IconName> = {
+  CHEESE: 'cheer',
+  BLACK: 'positive',
+  THREE_COLOR: 'stimulus',
+};
+const alarmMessageMap: Record<CatType, string> = {
+  CHEESE: '어디갔나옹...',
+  BLACK: '어디갔나옹...',
+  THREE_COLOR: '내가 여기있는데 어디갔냐옹!',
+};
 
 const Selection = () => {
   const navigate = useNavigate();
+  const { data: originCats } = useCats();
+  const cats = useMemo(
+    () =>
+      originCats?.map((cat) => ({
+        no: cat.no,
+        name: cat.name,
+        type: cat.type,
+        id: String(cat.no),
+        iconName: iconNameMap[cat.type],
+        adjective: adjectiveMap[cat.type],
+        alarmMessage: alarmMessageMap[cat.type],
+      })) ?? [],
+    [originCats],
+  );
   const [selectedCatId, setSelectedCatId] = useState<string | undefined>(undefined);
 
   return (
@@ -53,7 +72,7 @@ const Selection = () => {
               className="h-[80px] flex-1 flex flex-col gap-1"
             >
               <span className="flex gap-1 subBody-4 text-text-tertiary">
-                {cat.adj} <Icon size="xs" name={cat.iconName} />
+                {cat.adjective} <Icon size="xs" name={cat.iconName} />
               </span>
               <span
                 className={cn(
@@ -76,7 +95,7 @@ const Selection = () => {
             navigate(PATH.NAMING, {
               state: {
                 selectedCatId,
-                selectedCatName: cats.find((cat) => cat.id === selectedCatId)?.name,
+                selectedCatNo: Number(selectedCatId),
               },
             })
           }
