@@ -1,25 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
-import { useCategories, useUpdateCategory } from '@/features/category';
+import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import { useDisclosure } from '@/shared/hooks';
-import {
-  Guide,
-  Button,
-  Icon,
-  Tooltip,
-  Drawer,
-  DrawerContent,
-  DrawerTitle,
-  DrawerFooter,
-  DrawerClose,
-  SelectGroup,
-  SelectGroupItem,
-} from '@/shared/ui';
+import { Guide, Button, Icon, Tooltip } from '@/shared/ui';
 import { createIsoDuration, getCategoryIconName, parseIsoDuration } from '@/shared/utils';
 
 const steps = [
@@ -28,10 +16,6 @@ const steps = [
 ];
 
 const Pomodoro = () => {
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-
-  const [currentCategory, setCurrentCategory] = useState('기본');
-  const [selectedCategory, setSelectedCategory] = useState(currentCategory);
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(
     'showGuide',
     !(localStorage.getItem('showGuide') === 'false'),
@@ -42,7 +26,14 @@ const Pomodoro = () => {
   const { mutate: updateCategory } = useUpdateCategory();
 
   const changeTimeDialogProps = useDisclosure();
+  const changeCategoryDrawerProps = useDisclosure();
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
+
+  const [currentCategory, setCurrentCategory] = useState(categories?.[0].title ?? '');
+
+  useEffect(() => {
+    setCurrentCategory(categories?.[0].title ?? '');
+  }, [categories]);
 
   const categoryData = categories?.find((category) => category.title === currentCategory);
 
@@ -78,7 +69,7 @@ const Pomodoro = () => {
               size="sm"
               id="categoryButton"
               onClick={() => {
-                setIsOpenDrawer(true);
+                changeCategoryDrawerProps.onOpen();
               }}
             >
               <Icon name={getCategoryIconName(currentCategory)} size="sm" />
@@ -113,71 +104,15 @@ const Pomodoro = () => {
           </Button>
         </main>
       </div>
-      <Drawer
-        open={isOpenDrawer}
-        onOpenChange={setIsOpenDrawer}
-        onClose={() => {
-          setSelectedCategory(currentCategory);
+      <ChangeCategoryDrawer
+        open={changeCategoryDrawerProps.isOpen}
+        onOpenChange={changeCategoryDrawerProps.setIsOpen}
+        defaultCategory={currentCategory}
+        onChangeCategory={(category) => {
+          setCurrentCategory(category);
         }}
-      >
-        <DrawerContent>
-          <div className="flex items-center justify-between gap-2 ml-xl mr-sm">
-            <DrawerTitle className="py-1 header-3">카테고리 변경</DrawerTitle>
-            <DrawerClose className="p-sm">
-              <Icon name="close" size="sm" />
-            </DrawerClose>
-          </div>
-          <SelectGroup
-            defaultValue={selectedCategory}
-            onValueChange={(value) => {
-              setSelectedCategory(value);
-            }}
-            className="flex flex-col gap-4 mt-lg px-lg"
-          >
-            {categories?.map((category) => {
-              const focusTime =
-                parseIsoDuration(category.focusTime).hours * 60 +
-                parseIsoDuration(category.focusTime).minutes;
-              const restTime =
-                parseIsoDuration(category.restTime).hours * 60 +
-                parseIsoDuration(category.restTime).minutes;
-              return (
-                <SelectGroupItem
-                  key={category.no}
-                  value={category.title}
-                  className="flex flex-row items-center justify-start w-full p-xl gap-md"
-                >
-                  <div className="flex gap-sm">
-                    <Icon name={getCategoryIconName(category.title)} size="sm" />
-                    <span className="body-sb text-text-primary">{category.title}</span>
-                  </div>
-                  <div className="flex items-center subBody-r text-text-tertiary gap-xs">
-                    <span>집중 {focusTime}분</span>
-                    <span>|</span>
-                    <span>휴식 {restTime}분</span>
-                  </div>
-                </SelectGroupItem>
-              );
-            })}
-          </SelectGroup>
+      />
 
-          <DrawerFooter>
-            <Button
-              variant="secondary"
-              className="w-full"
-              size="lg"
-              onClick={() => {
-                if (selectedCategory) {
-                  setCurrentCategory(selectedCategory);
-                }
-                setIsOpenDrawer(false);
-              }}
-            >
-              확인
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
       {showGuide && (
         <Guide
           steps={steps}
