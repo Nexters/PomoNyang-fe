@@ -8,11 +8,16 @@ type UpdateCategoryBody = {
   restTime?: string;
 };
 
+type UpdateCategoryParams = {
+  no: number;
+  body: UpdateCategoryBody;
+};
+
 export const useUpdateCategory = () => {
   const queryClient = useQueryClient();
   const authClient = useAuthClient();
   return useMutation({
-    mutationFn: async ({ no, body }: { no: number; body: UpdateCategoryBody }) => {
+    mutationFn: async ({ no, body }: UpdateCategoryParams) => {
       return await authClient?.patch<Category[], UpdateCategoryBody>(
         `/api/v1/categories/${no}`,
         body,
