@@ -135,10 +135,10 @@ const Pomodoro = () => {
             className="flex flex-col gap-4 mt-lg px-lg"
           >
             {categories?.map((category) => {
-              const categoryFocusTime =
+              const focusTime =
                 parseIsoDuration(category.focusTime).hours * 60 +
                 parseIsoDuration(category.focusTime).minutes;
-              const categoryRestTime =
+              const restTime =
                 parseIsoDuration(category.restTime).hours * 60 +
                 parseIsoDuration(category.restTime).minutes;
               return (
@@ -152,9 +152,9 @@ const Pomodoro = () => {
                     <span className="body-sb text-text-primary">{category.title}</span>
                   </div>
                   <div className="flex items-center subBody-r text-text-tertiary gap-xs">
-                    <span>집중 {categoryFocusTime}분</span>
+                    <span>집중 {focusTime}분</span>
                     <span>|</span>
-                    <span>휴식 {categoryRestTime}분</span>
+                    <span>휴식 {restTime}분</span>
                   </div>
                 </SelectGroupItem>
               );
