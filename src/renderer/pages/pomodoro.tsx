@@ -20,7 +20,7 @@ import {
   SelectGroup,
   SelectGroupItem,
 } from '@/shared/ui';
-import { getCategoryIconName, parseIsoDuration } from '@/shared/utils';
+import { createIsoDuration, getCategoryIconName, parseIsoDuration } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
@@ -194,8 +194,8 @@ const Pomodoro = () => {
         onChangeCategoryTime={(category, minutes) => {
           const body =
             clickedMode === 'focus'
-              ? { focusTime: `PT${minutes}M` }
-              : { restTime: `PT${minutes}M` };
+              ? { focusTime: createIsoDuration({ minutes }) }
+              : { restTime: createIsoDuration({ minutes }) };
           updateCategory({
             no: categories?.find((_category) => _category.title === category)?.no ?? 0,
             body,
