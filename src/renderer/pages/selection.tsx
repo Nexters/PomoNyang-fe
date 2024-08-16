@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { CatType } from '@/entities/cat';
 import { useCats, useSelectCat } from '@/features/cat';
 import { PATH } from '@/shared/constants';
+import { useNotification } from '@/shared/hooks';
 import { Button, Frame, Icon, IconName, SelectGroup, SelectGroupItem } from '@/shared/ui';
 import { cn } from '@/shared/utils';
 
@@ -42,13 +43,18 @@ const Selection = () => {
   );
   const [selectedCatId, setSelectedCatId] = useState<string | undefined>(undefined);
   const { mutate: selectCat } = useSelectCat();
+  const { requestPermission } = useNotification();
 
   const handleClickBackButton = () => {
     navigate(PATH.ONBOARDING);
   };
 
-  const handleClickSelectButton = () => {
+  const handleClickSelectButton = async () => {
     if (!selectedCatId) return;
+
+    const permission = await requestPermission();
+    // TODO: 알림 허가 여부에 따른 토스트 메시지 표시?
+    console.log(permission);
 
     const selectedCatNo = Number(selectedCatId);
 
