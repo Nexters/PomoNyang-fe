@@ -3,7 +3,7 @@ import { Fragment, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { CatType } from '@/entities/cat';
-import { useCats } from '@/features/cat';
+import { useCats, useSelectCat } from '@/features/cat';
 import { PATH } from '@/shared/constants';
 import { Button, Frame, Icon, IconName, SelectGroup, SelectGroupItem } from '@/shared/ui';
 import { cn } from '@/shared/utils';
@@ -41,10 +41,29 @@ const Selection = () => {
     [originCats],
   );
   const [selectedCatId, setSelectedCatId] = useState<string | undefined>(undefined);
+  const { mutate: selectCat } = useSelectCat();
+
+  const handleClickBackButton = () => {
+    navigate(PATH.ONBOARDING);
+  };
+
+  const handleClickSelectButton = () => {
+    if (!selectedCatId) return;
+
+    const selectedCatNo = Number(selectedCatId);
+
+    selectCat(selectedCatNo);
+    navigate(PATH.NAMING, {
+      state: {
+        selectedCatId,
+        selectedCatNo,
+      },
+    });
+  };
 
   return (
     <Frame>
-      <Frame.NavBar title="고양이 선택" onBack={() => navigate(PATH.ONBOARDING)} />
+      <Frame.NavBar title="고양이 선택" onBack={handleClickBackButton} />
 
       <div className="w-full flex flex-col gap-[42px]">
         <div className="flex flex-col gap-1">
@@ -88,18 +107,7 @@ const Selection = () => {
       </div>
 
       <Frame.BottomBar>
-        <Button
-          disabled={!selectedCatId}
-          className="w-full"
-          onClick={() =>
-            navigate(PATH.NAMING, {
-              state: {
-                selectedCatId,
-                selectedCatNo: Number(selectedCatId),
-              },
-            })
-          }
-        >
+        <Button disabled={!selectedCatId} className="w-full" onClick={handleClickSelectButton}>
           이 고양이와 함께하기
         </Button>
       </Frame.BottomBar>
