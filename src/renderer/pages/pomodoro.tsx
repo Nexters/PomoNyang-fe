@@ -37,14 +37,14 @@ const Pomodoro = () => {
     !(localStorage.getItem('showGuide') === 'false'),
   );
 
-  const { data: userData } = useUser();
-  const { data: categoriesData } = useCategories();
+  const { data: user } = useUser();
+  const { data: categories } = useCategories();
   const { mutate: updateCategory } = useUpdateCategory();
 
   const changeTimeDialogProps = useDisclosure();
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
-  const categoryData = categoriesData?.find((category) => category.title === currentCategory);
+  const categoryData = categories?.find((category) => category.title === currentCategory);
 
   const currentFocusMinutes =
     parseIsoDuration(categoryData?.focusTime).hours * 60 +
@@ -70,9 +70,7 @@ const Pomodoro = () => {
           />
           {/* TODO: 고양이 유형에 따라 다른 이미지 */}
           <div className="w-[240px] h-[240px] bg-background-secondary" />
-          <div className="header-4 text-text-tertiary">
-            {catName(userData?.cat?.type ?? 'CHEESE')}
-          </div>
+          <div className="header-4 text-text-tertiary">{catName(user?.cat?.type ?? 'CHEESE')}</div>
           <div className="flex flex-col p-lg gap-md">
             <Button
               variant="tertiary"
@@ -136,7 +134,7 @@ const Pomodoro = () => {
             }}
             className="flex flex-col gap-4 mt-lg px-lg"
           >
-            {categoriesData?.map((category) => {
+            {categories?.map((category) => {
               const categoryFocusTime =
                 parseIsoDuration(category.focusTime).hours * 60 +
                 parseIsoDuration(category.focusTime).minutes;
@@ -199,7 +197,7 @@ const Pomodoro = () => {
               ? { focusTime: `PT${minutes}M` }
               : { restTime: `PT${minutes}M` };
           updateCategory({
-            no: categoriesData?.find((_category) => _category.title === category)?.no ?? 0,
+            no: categories?.find((_category) => _category.title === category)?.no ?? 0,
             body,
           });
         }}
