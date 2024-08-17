@@ -28,6 +28,13 @@ type Mode = 'focus' | 'rest-wait' | 'rest';
 
 const GUARD_TIME = 1000 * 60 * 1; // 1분
 
+const catNameMap = (type: CatType) => {
+  if (type === 'CHEESE') return '치즈냥';
+  if (type === 'BLACK') return '까만냥';
+  if (type === 'THREE_COLOR') return '삼색냥';
+  return '';
+};
+
 const Pomodoro = () => {
   const [mode, setMode] = useState<Mode | null>(null);
 
@@ -82,13 +89,6 @@ const Pomodoro = () => {
 };
 
 export default Pomodoro;
-
-const catNameMap = (type: CatType) => {
-  if (type === 'CHEESE') return '치즈냥';
-  if (type === 'BLACK') return '까만냥';
-  if (type === 'THREE_COLOR') return '삼색냥';
-  return '';
-};
 
 type HomeScreenProps = {
   setMode: (mode: Mode) => void;
