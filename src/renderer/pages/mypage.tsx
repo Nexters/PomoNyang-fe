@@ -39,7 +39,8 @@ const MyPage = () => {
           </div>
         </div>
 
-        <ActionButton onClick={() => window.open('https://naver.com', '_target')}>
+        {/* TODO: 설문지 링크로 변경 */}
+        <ActionButton onClick={() => window.open('https://nexters.co.kr/', '_target')}>
           <span className="body-sb text-text-primary">의견 보내기</span>
         </ActionButton>
       </div>
