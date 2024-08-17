@@ -36,7 +36,6 @@ const Pomodoro = () => {
 
   const { time, start, stop } = useTimer(minutesToMs(currentFocusMinutes), END_TIME, {
     onFinish: () => {
-      console.log(mode);
       if (mode === 'focus') {
         setMode('rest-wait');
       }
