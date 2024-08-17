@@ -3,28 +3,25 @@ import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useRenameSelectedCat } from '@/features/cat';
-import { useCats } from '@/features/cat/hooks/use-cats';
+import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
 import { Button, Frame, Tooltip } from '@/shared/ui';
 
 const Naming = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const fromMyCatPage = location.state?.fromMyCatPage ?? false;
 
-  const { data: cats } = useCats();
+  const { data: user } = useUser();
   const { mutate: renameSelectedCat } = useRenameSelectedCat();
 
   const [typedCatName, setTypedCatName] = useState('');
   const errorMessage = useMemo(() => getErrorMessage(typedCatName), [typedCatName]);
 
-  // FIXME: 고양이 선택 페이지에서 넘어온게 아니면 redirect 해야할지도?
-  const selectedCatName = useMemo(() => {
-    const { selectedCatNo } = location.state ?? {};
-    return cats?.find((cat) => cat.no === selectedCatNo)?.name;
-  }, [location.state, cats]);
+  const selectedCatName = user?.cat?.name;
 
   const handleClickBackButton = () => {
-    navigate(PATH.SELECTION);
+    navigate(fromMyCatPage ? PATH.MY_CAT : PATH.SELECTION);
   };
   const handleClickCompleteButton = () => {
     if (errorMessage) return;
@@ -32,7 +29,7 @@ const Naming = () => {
     if (typedCatName.length > 0) {
       renameSelectedCat(typedCatName);
     }
-    navigate(PATH.POMODORO);
+    navigate(fromMyCatPage ? PATH.MY_CAT : PATH.POMODORO);
   };
 
   return (

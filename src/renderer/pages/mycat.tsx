@@ -8,6 +8,13 @@ const MyCat = () => {
   const navigate = useNavigate();
   const { data: user } = useUser();
 
+  const handleClickEditNameButton = () => {
+    navigate(PATH.NAMING, { state: { fromMyCatPage: true } });
+  };
+  const handleClickChangeCatButton = () => {
+    navigate(PATH.SELECTION, { state: { fromMyCatPage: true } });
+  };
+
   return (
     <Frame>
       <Frame.NavBar title="나의 고양이" onBack={() => navigate(PATH.MY_PAGE)} />
@@ -27,7 +34,7 @@ const MyCat = () => {
           <div className="w-full flex justify-center items-center">
             <button
               className="flex gap-1 justify-center items-center p-3"
-              onClick={() => navigate(PATH.NAMING)}
+              onClick={handleClickEditNameButton}
             >
               <span className="header-4 text-text-secondary">{user?.cat?.name}</span>
               <Icon name="pen" size="md" />
@@ -37,7 +44,7 @@ const MyCat = () => {
       </div>
 
       <Frame.BottomBar>
-        <Button className="w-full" variant="secondary" onClick={() => navigate(PATH.SELECTION)}>
+        <Button className="w-full" variant="secondary" onClick={handleClickChangeCatButton}>
           고양이 바꾸기
         </Button>
       </Frame.BottomBar>
