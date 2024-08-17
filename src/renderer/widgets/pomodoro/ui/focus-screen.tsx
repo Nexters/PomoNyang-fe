@@ -16,9 +16,9 @@ const toolTipContentMap: Record<string, string> = {
 
 export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: FocusScreenProps) => {
   const { minutes, seconds } = msToTime(time > 0 ? time : 0);
-  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(time < 0 ? -time : -1);
+  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(time < 0 ? -time : 0);
 
-  const isExceed = exceedMinutes >= 0 && exceedSeconds >= 0;
+  const isExceed = time < 0;
 
   return (
     <div className="relative flex flex-col h-full">
