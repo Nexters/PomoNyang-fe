@@ -1,6 +1,6 @@
-import { useState } from 'react';
-
+import { PomodoroNextAction } from '@/entities/pomodoro';
 import { Time } from '@/features/time';
+import { MAX_FOCUS_MINUTES, MIN_FOCUS_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { Button, Icon, SelectGroup, SelectGroupItem, Tooltip } from '@/shared/ui';
 import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
@@ -8,6 +8,8 @@ type RestScreenProps = {
   currentCategory: string;
   time: number;
   currentFocusMinutes: number;
+  selectedNextAction: PomodoroNextAction | undefined;
+  setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
   handleFocus: () => void;
   handleEnd: () => void;
 };
@@ -15,11 +17,12 @@ type RestScreenProps = {
 export const RestScreen = ({
   currentCategory,
   time,
-  // currentFocusMinutes,
+  currentFocusMinutes,
+  selectedNextAction,
+  setSelectedNextAction,
   handleFocus,
   handleEnd,
 }: RestScreenProps) => {
-  const [selectedAction, setSelectedAction] = useState<string>();
   const isExceed = time < 0;
   const { minutes, seconds } = msToTime(!isExceed ? time : 0);
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(isExceed ? -time : 0);
@@ -50,12 +53,7 @@ export const RestScreen = ({
             <span className="header-5 text-text-secondary">휴식시간</span>
           </div>
           <Time minutes={minutes} seconds={seconds} className="header-1 text-text-primary gap-xs" />
-          <div
-            className={cn(
-              'flex items-center gap-xs',
-              exceedMinutes === 0 && exceedSeconds === 0 ? 'opacity-0' : 'opacity-100',
-            )}
-          >
+          <div className={cn('flex items-center gap-xs', !isExceed && 'opacity-0')}>
             <Time
               minutes={exceedMinutes}
               seconds={exceedSeconds}
@@ -67,9 +65,13 @@ export const RestScreen = ({
 
         <div className="flex flex-col gap-3">
           <p className="body-sb text-text-disabled">다음부터 휴식시간을 바꿀까요?</p>
-          <SelectGroup className="flex" value={selectedAction} onValueChange={setSelectedAction}>
-            {/* TODO: -/+ 아이콘 색상 변경 */}
+          <SelectGroup
+            className="flex"
+            value={selectedNextAction}
+            onValueChange={setSelectedNextAction}
+          >
             <SelectGroupItem
+              disabled={currentFocusMinutes - MINUTES_GAP <= MIN_FOCUS_MINUTES}
               value="minus"
               className="flex flex-row justify-center items-center gap-1 py-2 px-3"
             >
@@ -77,6 +79,7 @@ export const RestScreen = ({
               <span className="body-sb text-text-tertiary">5분</span>
             </SelectGroupItem>
             <SelectGroupItem
+              disabled={currentFocusMinutes + MINUTES_GAP >= MAX_FOCUS_MINUTES}
               value="plus"
               className="flex flex-row justify-center items-center gap-1 py-2 px-3"
             >

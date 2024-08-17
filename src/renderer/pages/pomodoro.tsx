@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { PomodoroMode } from '@/entities/pomodoro';
+import { PomodoroMode, PomodoroNextAction } from '@/entities/pomodoro';
 import { useCategories } from '@/features/category';
 import { useTimer } from '@/shared/hooks';
 import { parseIsoDuration } from '@/shared/utils';
@@ -10,7 +10,7 @@ const END_TIME = -(1000 * 60 * 1); // 1분
 
 const Pomodoro = () => {
   const [mode, setMode] = useState<PomodoroMode | null>(null);
-  // const [mode, setMode] = useState<PomodoroMode | null>('rest');
+  const [selectedNextAction, setSelectedNextAction] = useState<PomodoroNextAction>();
 
   const { data: categories } = useCategories();
   useEffect(() => {
@@ -39,7 +39,10 @@ const Pomodoro = () => {
         time={time}
         currentCategory={currentCategory}
         currentFocusMinutes={currentFocusMinutes}
+        selectedNextAction={selectedNextAction}
+        setSelectedNextAction={setSelectedNextAction}
         handleFocus={() => {
+          // TODO: selectedNextAction 에 따라 focus 시간 조절 후 focus 모드로 변경
           setMode('focus');
         }}
         handleEnd={() => {
