@@ -12,6 +12,7 @@ import CloseIcon from '@/shared/assets/svgs/close.svg';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
 import MenuIcon from '@/shared/assets/svgs/menu.svg';
 import MinusIcon from '@/shared/assets/svgs/minus.svg';
+import PenIcon from '@/shared/assets/svgs/pen.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
 import PlayIcon from '@/shared/assets/svgs/play.svg';
 import PlusIcon from '@/shared/assets/svgs/plus.svg';
@@ -38,6 +39,7 @@ const icons = {
   cheer: CheerIcon,
   positive: PositiveIcon,
   stimulus: StimulusIcon,
+  pen: PenIcon,
 } as const;
 const sizes = {
   xs: 16,

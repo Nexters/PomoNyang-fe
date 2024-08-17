@@ -13,7 +13,7 @@ const MyPage = () => {
       <Frame.NavBar title="마이페이지" onBack={() => navigate(PATH.POMODORO)} />
 
       <div className="w-full flex flex-col gap-3">
-        <ActionButton onClick={() => navigate(PATH.MY_PAGE)}>
+        <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
           <span className="subBody-r text-text-tertiary">나의 고양이</span>
           <span className="header-4 text-text-primary">이이오</span>
         </ActionButton>

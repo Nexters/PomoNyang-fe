@@ -6,4 +6,5 @@ export const PATH = {
   POMODORO: '/pomodoro',
   NAMING: '/naming',
   MY_PAGE: '/mypage',
+  MY_CAT: '/mycat',
 } as const;
