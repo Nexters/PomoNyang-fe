@@ -1,13 +1,13 @@
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { Time } from '@/features/time';
-import { MAX_FOCUS_MINUTES, MIN_FOCUS_MINUTES, MINUTES_GAP } from '@/shared/constants';
+import { MIN_REST_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { Button, Icon, SelectGroup, SelectGroupItem, Tooltip } from '@/shared/ui';
 import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
 type RestScreenProps = {
   currentCategory: string;
   time: number;
-  currentFocusMinutes: number;
+  currentRestMinutes: number;
   selectedNextAction: PomodoroNextAction | undefined;
   setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
   handleFocus: () => void;
@@ -17,7 +17,7 @@ type RestScreenProps = {
 export const RestScreen = ({
   currentCategory,
   time,
-  currentFocusMinutes,
+  currentRestMinutes,
   selectedNextAction,
   setSelectedNextAction,
   handleFocus,
@@ -71,17 +71,17 @@ export const RestScreen = ({
             onValueChange={setSelectedNextAction}
           >
             <SelectGroupItem
-              disabled={currentFocusMinutes - MINUTES_GAP <= MIN_FOCUS_MINUTES}
+              disabled={currentRestMinutes - MINUTES_GAP <= MIN_REST_MINUTES}
               value="minus"
-              className="flex flex-row justify-center items-center gap-1 py-2 px-3"
+              className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
               <Icon name="minusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
               <span className="body-sb text-text-tertiary">5분</span>
             </SelectGroupItem>
             <SelectGroupItem
-              disabled={currentFocusMinutes + MINUTES_GAP >= MAX_FOCUS_MINUTES}
+              disabled={currentRestMinutes + MINUTES_GAP >= MIN_REST_MINUTES}
               value="plus"
-              className="flex flex-row justify-center items-center gap-1 py-2 px-3"
+              className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
               <Icon name="plusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
               <span className="body-sb text-text-tertiary">5분</span>
