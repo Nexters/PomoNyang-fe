@@ -10,6 +10,7 @@ const END_TIME = -(1000 * 60 * 1); // 1분
 
 const Pomodoro = () => {
   const [mode, setMode] = useState<PomodoroMode | null>(null);
+  // const [mode, setMode] = useState<PomodoroMode | null>('rest');
 
   const { data: categories } = useCategories();
   useEffect(() => {
@@ -32,7 +33,21 @@ const Pomodoro = () => {
     },
   });
 
-  if (mode === 'rest') return <RestScreen />;
+  if (mode === 'rest')
+    return (
+      <RestScreen
+        time={time}
+        currentCategory={currentCategory}
+        currentFocusMinutes={currentFocusMinutes}
+        handleFocus={() => {
+          setMode('focus');
+        }}
+        handleEnd={() => {
+          // @TODO: 서버로 뽀모도로 POST 요청
+          setMode(null);
+        }}
+      />
+    );
   if (mode === 'rest-wait') return <RestWaitScreen />;
   if (mode === 'focus')
     return (
