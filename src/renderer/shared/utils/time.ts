@@ -4,3 +4,5 @@ export const msToTime = (ms: number) => {
 
   return { minutes, seconds };
 };
+
+export const minutesToMs = (minutes: number) => minutes * 60 * 1000;

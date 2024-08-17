@@ -9,9 +9,16 @@ type FocusScreenProps = {
   handleEnd: () => void;
 };
 
+const toolTipContentMap: Record<string, string> = {
+  default: '잘 집중하고 있는 거냥?',
+  exceed: '이제 나랑 놀자냥!',
+};
+
 export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: FocusScreenProps) => {
   const { minutes, seconds } = msToTime(time > 0 ? time : 0);
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(time < 0 ? -time : 0);
+
+  const isExceed = time < 0;
 
   return (
     <div className="relative flex flex-col h-full">
@@ -23,7 +30,7 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
       </header>
       <main className="flex flex-col items-center justify-center flex-1">
         <Tooltip
-          content="잘 집중하고 있는 거냥?"
+          content={isExceed ? toolTipContentMap.exceed : toolTipContentMap.default}
           color="white"
           sideOffset={-20}
           rootProps={{ open: true }}
@@ -36,12 +43,7 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
             <span className="header-5 text-text-secondary">집중시간</span>
           </div>
           <Time minutes={minutes} seconds={seconds} className="header-1 text-text-primary gap-xs" />
-          <div
-            className={cn(
-              'flex items-center gap-xs',
-              exceedMinutes === 0 && exceedSeconds === 0 ? 'opacity-0' : 'opacity-100',
-            )}
-          >
+          <div className={cn('flex items-center gap-xs', isExceed ? 'opacity-100' : 'opacity-0')}>
             <Time
               minutes={exceedMinutes}
               seconds={exceedSeconds}
