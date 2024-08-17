@@ -26,7 +26,7 @@ const steps = [
 
 type Mode = 'focus' | 'rest-wait' | 'rest';
 
-const GUARD_TIME = 1000 * 60 * 1; // 1분
+const END_TIME = -(1000 * 60 * 1); // 1분
 
 const catNameMap = (type: CatType) => {
   if (type === 'CHEESE') return '치즈냥';
@@ -53,7 +53,7 @@ const Pomodoro = () => {
     parseIsoDuration(categoryData?.focusTime).hours * 60 +
     parseIsoDuration(categoryData?.focusTime).minutes;
 
-  const { time, start } = useTimer(1000 * 10 * 1, GUARD_TIME, {
+  const { time, start } = useTimer(1000 * 10 * 1, END_TIME, {
     onFinish: () => {
       setMode('rest-wait');
     },

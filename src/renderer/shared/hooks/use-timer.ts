@@ -13,7 +13,7 @@ const INTERVAL_MS = 100;
 /**
  * @returns time: ms 단위
  */
-export const useTimer = (initialTime: number, guardTime?: number, handler?: THandler) => {
+export const useTimer = (initialTime: number, endTime?: number, handler?: THandler) => {
   const { onStart, onResume, onStop, onPause, onFinish } = handler ?? {};
 
   const [time, setTime] = useState(initialTime);
@@ -35,11 +35,11 @@ export const useTimer = (initialTime: number, guardTime?: number, handler?: THan
 
     const now = Date.now();
     const elapsedTime = now - startTimeRef.current + accumulatedTimeRef.current;
-    const newTime = Math.max(-(guardTime ?? 0), initialTime - elapsedTime); // clamp
+    const newTime = initialTime - elapsedTime;
 
     setTime(newTime);
 
-    if (newTime <= -(guardTime ?? 0)) {
+    if (newTime <= (endTime ?? 0)) {
       onFinish?.();
       stop();
     }
