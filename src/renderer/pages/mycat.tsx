@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 
+import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
 import { Button, Frame, Icon, Tooltip } from '@/shared/ui';
 
 const MyCat = () => {
   const navigate = useNavigate();
+  const { data: user } = useUser();
+
   return (
     <Frame>
       <Frame.NavBar title="나의 고양이" onBack={() => navigate(PATH.MY_PAGE)} />
@@ -26,7 +29,7 @@ const MyCat = () => {
               className="flex gap-1 justify-center items-center p-3"
               onClick={() => navigate(PATH.NAMING)}
             >
-              <span className="header-4 text-text-secondary">이이오</span>
+              <span className="header-4 text-text-secondary">{user?.cat?.name}</span>
               <Icon name="pen" size="md" />
             </button>
           </div>
