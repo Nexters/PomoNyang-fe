@@ -6,43 +6,99 @@ import { CatType } from '@/entities/cat';
 import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
-import { useDisclosure } from '@/shared/hooks';
+import { useDisclosure, useTimer } from '@/shared/hooks';
 import { Guide, Button, Icon, Tooltip } from '@/shared/ui';
-import { createIsoDuration, getCategoryIconName, parseIsoDuration } from '@/shared/utils';
+import {
+  cn,
+  createIsoDuration,
+  getCategoryIconName,
+  msToTime,
+  padNumber,
+  parseIsoDuration,
+} from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
   { id: 'timeAdjustDiv', message: '눌러서 시간을 조정할 수 있어요' },
 ];
 
+type Mode = 'focus' | 'rest-wait' | 'rest';
+
 const Pomodoro = () => {
+  const [mode, setMode] = useState<Mode | null>('focus');
+
+  const { data: categories } = useCategories();
+  useEffect(() => {
+    setCurrentCategory(categories?.[0].title ?? '');
+  }, [categories]);
+
+  const [currentCategory, setCurrentCategory] = useState(categories?.[0].title ?? '');
+  const categoryData = categories?.find((category) => category.title === currentCategory);
+
+  const currentRestMinutes =
+    parseIsoDuration(categoryData?.restTime).hours * 60 +
+    parseIsoDuration(categoryData?.restTime).minutes;
+  const currentFocusMinutes =
+    parseIsoDuration(categoryData?.focusTime).hours * 60 +
+    parseIsoDuration(categoryData?.focusTime).minutes;
+
+  const { time, start } = useTimer(1000 * 60 * currentFocusMinutes);
+
+  if (mode === 'rest') return <RestScreen />;
+  if (mode === 'rest-wait') return <RestWaitScreen />;
+  if (mode === 'focus') return <FocusScreen time={time} currentCategory={currentCategory} />;
+
+  return (
+    <HomeScreen
+      setMode={setMode}
+      start={start}
+      currentCategory={currentCategory}
+      setCurrentCategory={setCurrentCategory}
+      currentFocusMinutes={currentFocusMinutes}
+      currentRestMinutes={currentRestMinutes}
+    />
+  );
+};
+
+export default Pomodoro;
+
+const catName = (type: CatType) => {
+  if (type === 'CHEESE') return '치즈냥';
+  if (type === 'BLACK') return '까만냥';
+  if (type === 'THREE_COLOR') return '삼색냥';
+  return '';
+};
+
+type HomeScreenProps = {
+  setMode: (mode: Mode) => void;
+  start: () => void;
+  currentCategory: string;
+  setCurrentCategory: (category: string) => void;
+  currentFocusMinutes: number;
+  currentRestMinutes: number;
+};
+
+const HomeScreen = ({
+  setMode,
+  start,
+  currentCategory,
+  setCurrentCategory,
+  currentFocusMinutes,
+  currentRestMinutes,
+}: HomeScreenProps) => {
+  const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
+
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(
     'showGuide',
     !(localStorage.getItem('showGuide') === 'false'),
   );
 
-  const { data: user } = useUser();
-  const { data: categories } = useCategories();
-  const { mutate: updateCategory } = useUpdateCategory();
-
   const changeTimeDialogProps = useDisclosure();
   const changeCategoryDrawerProps = useDisclosure();
-  const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
-  const [currentCategory, setCurrentCategory] = useState(categories?.[0].title ?? '');
-
-  useEffect(() => {
-    setCurrentCategory(categories?.[0].title ?? '');
-  }, [categories]);
-
-  const categoryData = categories?.find((category) => category.title === currentCategory);
-
-  const currentFocusMinutes =
-    parseIsoDuration(categoryData?.focusTime).hours * 60 +
-    parseIsoDuration(categoryData?.focusTime).minutes;
-  const currentRestMinutes =
-    parseIsoDuration(categoryData?.restTime).hours * 60 +
-    parseIsoDuration(categoryData?.restTime).minutes;
+  const { data: categories } = useCategories();
+  const { mutate: updateCategory } = useUpdateCategory();
+  const { data: user } = useUser();
 
   return (
     <>
@@ -99,7 +155,15 @@ const Pomodoro = () => {
               </button>
             </div>
           </div>
-          <Button variant="primary" className="p-[28px]" size="icon">
+          <Button
+            variant="primary"
+            className="p-[28px]"
+            size="icon"
+            onClick={() => {
+              setMode('focus');
+              start();
+            }}
+          >
             <Icon name="play" size="lg" />
           </Button>
         </main>
@@ -143,11 +207,78 @@ const Pomodoro = () => {
   );
 };
 
-export default Pomodoro;
+type FocusScreenProps = {
+  currentCategory: string;
+  time: number;
+};
 
-const catName = (type: CatType) => {
-  if (type === 'CHEESE') return '치즈냥';
-  if (type === 'BLACK') return '까만냥';
-  if (type === 'THREE_COLOR') return '삼색냥';
-  return '';
+const FocusScreen = ({ currentCategory, time }: FocusScreenProps) => {
+  const { minutes, seconds } = msToTime(time);
+  return (
+    <div className="relative flex flex-col h-full">
+      <header className="flex p-4">
+        <div className="flex gap-sm subBody-sb text-text-tertiary bg-background-secondary p-md rounded-xs w-[80px]">
+          <Icon name={getCategoryIconName(currentCategory)} size="sm" />
+          {currentCategory}
+        </div>
+      </header>
+      <main className="flex flex-col items-center justify-center flex-1">
+        <Tooltip
+          content="잘 집중하고 있는 거냥?"
+          color="white"
+          sideOffset={-40}
+          rootProps={{ open: true }}
+        />
+        {/* TODO: 고양이 유형에 따라 다른 이미지 */}
+        <div className="w-[240px] h-[240px] bg-background-secondary" />
+        <div className="flex flex-col items-center mt-xl">
+          <div className="flex gap-xs">
+            <Icon name="focusTime" width={20} height={20} />
+            <span className="header-5 text-text-secondary">집중시간</span>
+          </div>
+          <Time minutes={minutes} seconds={seconds} className="header-1 text-text-primary gap-xs" />
+          <div className="flex items-center gap-xs">
+            <Time
+              minutes={minutes}
+              seconds={seconds}
+              className="gap-0 text-text-accent-1 header-4"
+            />
+            <span className="text-text-accent-1 header-4">초과</span>
+          </div>
+        </div>
+      </main>
+      <div className="absolute left-0 flex flex-col items-center w-full m-auto bottom-4">
+        <Button variant="secondary" className="p-xl w-[200px]" size="lg">
+          휴식하기
+        </Button>
+        <Button variant="text-secondary" size="md">
+          집중 끝내기
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+type TimeProps = {
+  minutes: number;
+  seconds: number;
+  className?: string;
+};
+
+const Time = ({ minutes, seconds, className }: TimeProps) => {
+  return (
+    <div className={cn('flex items-center justify-center', className)}>
+      <span className="tabular-nums">{padNumber(minutes)}</span>
+      <span>:</span>
+      <span className="tabular-nums">{padNumber(seconds)}</span>
+    </div>
+  );
+};
+
+const RestScreen = () => {
+  return <div>RestScreen</div>;
+};
+
+const RestWaitScreen = () => {
+  return <div>RestWaitScreen</div>;
 };
