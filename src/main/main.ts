@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import path from 'path';
 
 import { machineId } from 'node-machine-id';
@@ -26,6 +26,16 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  // @note: 외부 링크 클릭 시 별도 브라우저로 열도록 설정함
+  // 외부 링크 여부는 url이 https://로 시작하는지로 판단함
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith('https://')) {
+      shell.openExternal(url);
+      return { action: 'deny' };
+    }
+    return { action: 'allow' };
+  });
 };
 
 // This method will be called when Electron has finished

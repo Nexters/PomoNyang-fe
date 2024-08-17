@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
 import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
+import { PATH } from '@/shared/constants';
 import { useDisclosure, useTimer } from '@/shared/hooks';
 import { Guide, Button, Icon, Tooltip } from '@/shared/ui';
 import {
@@ -105,6 +107,8 @@ const HomeScreen = ({
   currentFocusMinutes,
   currentRestMinutes,
 }: HomeScreenProps) => {
+  const navigate = useNavigate();
+
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(
@@ -123,7 +127,12 @@ const HomeScreen = ({
     <>
       <div className="flex flex-col h-full">
         <header className="flex justify-end p-4">
-          <Button variant="text-primary" size="md" className="p-[8px] rounded-none bg-gray-50">
+          <Button
+            variant="text-primary"
+            size="md"
+            className="p-[8px] rounded-none bg-gray-50"
+            onClick={() => navigate(PATH.MY_PAGE)}
+          >
             <Icon name="menu" size="md" />
           </Button>
         </header>
