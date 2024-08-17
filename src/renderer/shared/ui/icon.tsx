@@ -7,6 +7,7 @@ import CategoryStudyIcon from '@/shared/assets/svgs/category-study.svg';
 import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
 import CheckIcon from '@/shared/assets/svgs/check.svg';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
+import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
 import MenuIcon from '@/shared/assets/svgs/menu.svg';
@@ -33,6 +34,7 @@ const icons = {
   check: CheckIcon,
   minus: MinusIcon,
   plus: PlusIcon,
+  chevronRight: ChevronRightIcon,
   cheer: CheerIcon,
   positive: PositiveIcon,
   stimulus: StimulusIcon,

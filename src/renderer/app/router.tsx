@@ -3,6 +3,7 @@ import { HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
 import RootLayout from './layout';
 
 import Home from '@/pages/home';
+import MyPage from '@/pages/mypage';
 import Naming from '@/pages/naming';
 import Onboarding from '@/pages/onboarding';
 import Pomodoro from '@/pages/pomodoro';
@@ -21,6 +22,7 @@ export const Router = () => {
           <Route path={PATH.ONBOARDING} element={<Onboarding />} />
           <Route path={PATH.SELECTION} element={<Selection />} />
           <Route path={PATH.NAMING} element={<Naming />} />
+          <Route path={PATH.MY_PAGE} element={<MyPage />} />
         </Route>
       </Routes>
     </ReactRouter>
