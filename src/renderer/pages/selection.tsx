@@ -1,6 +1,6 @@
 import { Fragment, useMemo, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CatType } from '@/entities/cat';
 import { useCats, useSelectCat } from '@/features/cat';
@@ -26,7 +26,10 @@ const alarmMessageMap: Record<CatType, string> = {
 };
 
 const Selection = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const fromMyCatPage = location.state?.fromMyCatPage ?? false;
+
   const { data: originCats } = useCats();
   const cats = useMemo(
     () =>
@@ -46,7 +49,7 @@ const Selection = () => {
   const { requestPermission } = useNotification();
 
   const handleClickBackButton = () => {
-    navigate(PATH.ONBOARDING);
+    navigate(fromMyCatPage ? PATH.MY_CAT : PATH.ONBOARDING);
   };
 
   const handleClickSelectButton = async () => {
@@ -59,12 +62,7 @@ const Selection = () => {
     const selectedCatNo = Number(selectedCatId);
 
     selectCat(selectedCatNo);
-    navigate(PATH.NAMING, {
-      state: {
-        selectedCatId,
-        selectedCatNo,
-      },
-    });
+    navigate(fromMyCatPage ? PATH.MY_CAT : PATH.NAMING);
   };
 
   return (
