@@ -1,6 +1,6 @@
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { Time } from '@/features/time';
-import { MIN_REST_MINUTES, MINUTES_GAP } from '@/shared/constants';
+import { MAX_REST_MINUTES, MIN_REST_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { Button, Icon, SelectGroup, SelectGroupItem, Tooltip } from '@/shared/ui';
 import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
@@ -79,7 +79,7 @@ export const RestScreen = ({
               <span className="body-sb text-text-tertiary">5분</span>
             </SelectGroupItem>
             <SelectGroupItem
-              disabled={currentRestMinutes + MINUTES_GAP >= MIN_REST_MINUTES}
+              disabled={currentRestMinutes + MINUTES_GAP >= MAX_REST_MINUTES}
               value="plus"
               className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
