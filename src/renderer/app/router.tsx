@@ -1,4 +1,4 @@
-import { HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
+import { Navigate, HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
 
 import RootLayout from './layout';
 
@@ -8,7 +8,6 @@ import MyPage from '@/pages/mypage';
 import Naming from '@/pages/naming';
 import Onboarding from '@/pages/onboarding';
 import Pomodoro from '@/pages/pomodoro';
-import Second from '@/pages/second';
 import Selection from '@/pages/selection';
 import { PATH } from '@/shared/constants';
 
@@ -19,12 +18,12 @@ export const Router = () => {
         <Route element={<RootLayout />}>
           <Route path={PATH.HOME} element={<Home />} />
           <Route path={PATH.POMODORO} element={<Pomodoro />} />
-          <Route path={PATH.SECOND} element={<Second />} />
           <Route path={PATH.ONBOARDING} element={<Onboarding />} />
           <Route path={PATH.SELECTION} element={<Selection />} />
           <Route path={PATH.NAMING} element={<Naming />} />
           <Route path={PATH.MY_PAGE} element={<MyPage />} />
           <Route path={PATH.MY_CAT} element={<MyCat />} />
+          <Route path="*" element={<Navigate to={PATH.HOME} replace />} />
         </Route>
       </Routes>
     </ReactRouter>

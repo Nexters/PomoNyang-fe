@@ -3,9 +3,10 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { httpClient } from '../api';
+import { QUERY_KEY } from '../constants';
 import { __localStorage } from '../utils';
 
-import { useMachineId } from './machine-id';
+import { useMachineId } from './use-machine-id';
 
 type AuthToken = {
   accessToken: string;
@@ -21,12 +22,10 @@ type AuthTokenMeta = {
 
 const AUTH_TOKEN_LOCAL_STORAGE_KEY = 'authToken';
 
-export const AUTH_TOKEN_QUERY_KEY = ['authToken'];
-
 export const useAuthToken = () => {
   const deviceId = useMachineId();
   const authTokenQuery = useQuery<AuthToken | null>({
-    queryKey: AUTH_TOKEN_QUERY_KEY,
+    queryKey: QUERY_KEY.AUTH_TOKEN,
     queryFn: async ({ meta }) => {
       // deviceId 가 있어야 query 실행되므로, 없다면 에러 발생하도록 한다.
       // enabled 값에 deviceId 여부를 확인하므로 실제 에러는 발생하지는 않는다.
