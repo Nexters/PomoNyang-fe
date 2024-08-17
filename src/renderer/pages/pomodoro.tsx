@@ -81,7 +81,7 @@ const Pomodoro = () => {
 
 export default Pomodoro;
 
-const catName = (type: CatType) => {
+const catNameMap = (type: CatType) => {
   if (type === 'CHEESE') return '치즈냥';
   if (type === 'BLACK') return '까만냥';
   if (type === 'THREE_COLOR') return '삼색냥';
@@ -136,7 +136,9 @@ const HomeScreen = ({
           />
           {/* TODO: 고양이 유형에 따라 다른 이미지 */}
           <div className="w-[240px] h-[240px] bg-background-secondary" />
-          <div className="header-4 text-text-tertiary">{catName(user?.cat?.type ?? 'CHEESE')}</div>
+          <div className="header-4 text-text-tertiary">
+            {catNameMap(user?.cat?.type ?? 'CHEESE')}
+          </div>
           <div className="flex flex-col p-lg gap-md">
             <Button
               variant="tertiary"
