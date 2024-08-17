@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, RefObject } from 'react';
 
 type THandler = {
   onStart?: () => void;
   onResume?: () => void;
   onStop?: () => void;
   onPause?: () => void;
-  onFinish?: () => void;
+  onFinishRef?: RefObject<() => void>;
 };
 
 const INTERVAL_MS = 100;
@@ -14,7 +14,7 @@ const INTERVAL_MS = 100;
  * @returns time: ms 단위
  */
 export const useTimer = (initialTime: number, endTime?: number, handler?: THandler) => {
-  const { onStart, onResume, onStop, onPause, onFinish } = handler ?? {};
+  const { onStart, onResume, onStop, onPause, onFinishRef } = handler ?? {};
 
   const [time, setTime] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
@@ -40,10 +40,10 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     setTime(newTime);
 
     if (newTime <= (endTime ?? 0)) {
-      onFinish?.();
+      onFinishRef?.current?.();
       stop();
     }
-  }, [initialTime, onFinish]);
+  }, [initialTime, onFinishRef]);
 
   const run = useCallback(() => {
     if (isRunning) return;
@@ -52,7 +52,7 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     timerRef.current = window.setInterval(tick, INTERVAL_MS);
 
     setIsRunning(true);
-  }, [tick, isRunning]);
+  }, [tick, isRunning, onFinishRef]);
 
   const start = useCallback(() => {
     run();
