@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-import OfflineStatIcon from '@/shared/assets/svgs/offline-stat.svg';
 import { PATH } from '@/shared/constants';
 import { Frame, Icon, Toggle } from '@/shared/ui';
 
@@ -17,7 +16,7 @@ const MyPage = () => {
           <span className="header-4 text-text-primary">이이오</span>
         </ActionButton>
 
-        <OfflineStat />
+        {/* <OfflineStat /> */}
 
         <div className="w-full p-5 bg-background-secondary rounded-sm">
           <div className="w-full flex items-center">
@@ -53,15 +52,16 @@ const ActionButton = ({ children, onClick }: ActionButtonProps) => (
   </button>
 );
 
-const OfflineStat = () => (
-  <div className="flex flex-col justify-center items-center gap-2 py-[62px] bg-background-secondary rounded-sm">
-    <img src={OfflineStatIcon} width={100} height={100} />
-    <div className="flex flex-col gap-1 text-center">
-      <h3 className="header-5 text-text-primary">지금은 통계를 확인할 수 없어요</h3>
-      <p className="subBody-r text-text-secondary">인터넷에 연결하면 통계를 볼 수 있어요</p>
-    </div>
-  </div>
-);
+// TODO: 통계쪽 디자인 가이드 완성되면 반영 예정
+// const OfflineStat = () => (
+//   <div className="flex flex-col justify-center items-center gap-2 py-[62px] bg-background-secondary rounded-sm">
+//     <img src={OfflineStatIcon} width={100} height={100} />
+//     <div className="flex flex-col gap-1 text-center">
+//       <h3 className="header-5 text-text-primary">지금은 통계를 확인할 수 없어요</h3>
+//       <p className="subBody-r text-text-secondary">인터넷에 연결하면 통계를 볼 수 있어요</p>
+//     </div>
+//   </div>
+// );
 
 // TODO: 디자인 가이드 업데이트 가능성이 있어서 일단 작업 보류함
 // const OnlineStat = () => {
