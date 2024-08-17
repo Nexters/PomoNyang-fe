@@ -1,4 +1,4 @@
-import { HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
+import { Navigate, HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
 
 import RootLayout from './layout';
 
@@ -23,6 +23,7 @@ export const Router = () => {
           <Route path={PATH.NAMING} element={<Naming />} />
           <Route path={PATH.MY_PAGE} element={<MyPage />} />
           <Route path={PATH.MY_CAT} element={<MyCat />} />
+          <Route path="*" element={<Navigate to={PATH.HOME} replace />} />
         </Route>
       </Routes>
     </ReactRouter>
