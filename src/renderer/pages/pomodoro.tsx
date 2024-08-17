@@ -41,8 +41,43 @@ const Pomodoro = () => {
     },
   });
 
+  const handleEnd = () => {
+    stop();
+    if (categoryData?.no) {
+      const { minutes, seconds } = msToTime(minutesToMs(currentFocusMinutes) - time);
+
+      addPomodoro({
+        body: [
+          {
+            clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
+            categoryNo: categoryData?.no,
+            focusedTime: createIsoDuration({ minutes, seconds }),
+            restedTime: createIsoDuration({ minutes: 0, seconds: 0 }),
+            doneAt: new Date().toISOString(),
+          },
+        ],
+      });
+    }
+    setMode(null);
+  };
+
   if (mode === 'rest') return <RestScreen />;
-  if (mode === 'rest-wait') return <RestWaitScreen />;
+  if (mode === 'rest-wait')
+    return (
+      <RestWaitScreen
+        time={time}
+        currentCategory={currentCategory}
+        handleRest={() => {
+          stop();
+          setMode('rest');
+        }}
+        handleEnd={handleEnd}
+        handleInit={() => {
+          setMode(null);
+          // @TODO: 모달 띄워주기
+        }}
+      />
+    );
   if (mode === 'focus')
     return (
       <FocusScreen
@@ -52,25 +87,7 @@ const Pomodoro = () => {
           stop();
           setMode('rest-wait');
         }}
-        handleEnd={() => {
-          stop();
-          if (categoryData?.no) {
-            const { minutes, seconds } = msToTime(minutesToMs(currentFocusMinutes) - time);
-
-            addPomodoro({
-              body: [
-                {
-                  clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
-                  categoryNo: categoryData?.no,
-                  focusedTime: createIsoDuration({ minutes, seconds }),
-                  restedTime: createIsoDuration({ minutes: 0, seconds: 0 }),
-                  doneAt: new Date().toISOString(),
-                },
-              ],
-            });
-          }
-          setMode(null);
-        }}
+        handleEnd={handleEnd}
       />
     );
 
