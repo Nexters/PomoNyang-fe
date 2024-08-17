@@ -66,7 +66,6 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
 
   const stop = useCallback(() => {
     setIsRunning(false);
-    setTime(initialTime);
 
     _clearInterval();
     startTimeRef.current = null;
