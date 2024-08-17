@@ -6,7 +6,7 @@ import { Time } from '@/features/time';
 import { MAX_FOCUS_MINUTES, MIN_FOCUS_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { useTimer } from '@/shared/hooks';
 import { Button, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
-import { msToTime } from '@/shared/utils';
+import { minutesToMs, msToTime } from '@/shared/utils';
 
 type RestWaitScreenProps = {
   currentCategory: string;
@@ -25,20 +25,21 @@ const MAX_TIME_ON_PAGE = 1000 * 5; // 5초
 export const RestWaitScreen = ({
   currentCategory,
   currentFocusMinutes,
-  time,
+  time, // 전체 경과한 시간
   handleRest,
   handleEnd,
   handleInit,
   selectedNextAction,
   setSelectedNextAction,
 }: RestWaitScreenProps) => {
-  const { minutes, seconds } = msToTime(time > 0 ? time : 0);
-  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(time < 0 ? -time : 0);
+  // 만약 전체 경과한 시간이 설정한 focusTime 보다 크면 초과
+  const isExceed = time > minutesToMs(currentFocusMinutes);
+  const { minutes, seconds } = msToTime(isExceed ? minutesToMs(currentFocusMinutes) : time);
+  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(
+    isExceed ? time - minutesToMs(currentFocusMinutes) : 0,
+  );
 
   const onFinishRef = useRef(handleInit);
-
-  const isExceed = time < 0;
-
   const { start, stop } = useTimer(MAX_TIME_ON_PAGE, 0, {
     onFinishRef,
   });
