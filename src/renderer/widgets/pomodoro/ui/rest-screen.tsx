@@ -73,14 +73,14 @@ export const RestScreen = ({
               value="minus"
               className="flex flex-row justify-center items-center gap-1 py-2 px-3"
             >
-              <Icon name="minus" size="sm" className="text-text-tertiary" />
+              <Icon name="minusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
               <span className="body-sb text-text-tertiary">5분</span>
             </SelectGroupItem>
             <SelectGroupItem
               value="plus"
               className="flex flex-row justify-center items-center gap-1 py-2 px-3"
             >
-              <Icon name="plus" size="sm" color="fill-text-tertiary" />
+              <Icon name="plusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
               <span className="body-sb text-text-tertiary">5분</span>
             </SelectGroupItem>
           </SelectGroup>
