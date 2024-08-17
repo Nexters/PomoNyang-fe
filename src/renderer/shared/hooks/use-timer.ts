@@ -13,8 +13,8 @@ const INTERVAL_MS = 100;
 /**
  * @returns time: ms 단위
  */
-export const useTimer = (initialTime: number, handler: THandler) => {
-  const { onStart, onResume, onStop, onPause, onFinish } = handler;
+export const useTimer = (initialTime: number, endTime?: number, handler?: THandler) => {
+  const { onStart, onResume, onStop, onPause, onFinish } = handler ?? {};
 
   const [time, setTime] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
@@ -35,11 +35,11 @@ export const useTimer = (initialTime: number, handler: THandler) => {
 
     const now = Date.now();
     const elapsedTime = now - startTimeRef.current + accumulatedTimeRef.current;
-    const newTime = Math.max(0, initialTime - elapsedTime); // clamp
+    const newTime = initialTime - elapsedTime;
 
     setTime(newTime);
 
-    if (newTime <= 0) {
+    if (newTime <= (endTime ?? 0)) {
       onFinish?.();
       stop();
     }
