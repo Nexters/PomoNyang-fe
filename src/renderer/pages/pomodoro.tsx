@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { PomodoroMode } from '@/entities/pomodoro';
+import { PomodoroMode, PomodoroNextAction } from '@/entities/pomodoro';
 import { useCategories } from '@/features/category';
 import { useAddPomodoro } from '@/features/pomodoro';
 import { useUser } from '@/features/user';
@@ -13,6 +13,7 @@ const END_TIME = -(1000 * 60 * 1); // 1분
 
 const Pomodoro = () => {
   const [mode, setMode] = useState<PomodoroMode | null>(null);
+  const [selectedNextAction, setSelectedNextAction] = useState<PomodoroNextAction>();
 
   const { data: categories } = useCategories();
   const { data: user } = useUser();
@@ -41,7 +42,24 @@ const Pomodoro = () => {
     },
   });
 
-  if (mode === 'rest') return <RestScreen />;
+  if (mode === 'rest')
+    return (
+      <RestScreen
+        time={time}
+        currentCategory={currentCategory}
+        currentFocusMinutes={currentFocusMinutes}
+        selectedNextAction={selectedNextAction}
+        setSelectedNextAction={setSelectedNextAction}
+        handleFocus={() => {
+          // TODO: selectedNextAction 에 따라 focus 시간 조절 후 focus 모드로 변경
+          setMode('focus');
+        }}
+        handleEnd={() => {
+          // @TODO: 서버로 뽀모도로 POST 요청
+          setMode(null);
+        }}
+      />
+    );
   if (mode === 'rest-wait') return <RestWaitScreen />;
   if (mode === 'focus')
     return (

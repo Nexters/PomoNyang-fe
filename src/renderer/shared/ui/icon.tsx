@@ -12,10 +12,12 @@ import CloseIcon from '@/shared/assets/svgs/close.svg';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
 import MenuIcon from '@/shared/assets/svgs/menu.svg';
 import MinusIcon from '@/shared/assets/svgs/minus.svg';
+import MinusSvgIcon from '@/shared/assets/svgs/minus.svg?react';
 import PenIcon from '@/shared/assets/svgs/pen.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
 import PlayIcon from '@/shared/assets/svgs/play.svg';
 import PlusIcon from '@/shared/assets/svgs/plus.svg';
+import PlusSvgIcon from '@/shared/assets/svgs/plus.svg?react';
 import PositiveIcon from '@/shared/assets/svgs/positive.svg';
 import RestTimeIcon from '@/shared/assets/svgs/rest-time.svg';
 import StimulusIcon from '@/shared/assets/svgs/stimulus.svg';
@@ -34,7 +36,9 @@ const icons = {
   restTime: RestTimeIcon,
   check: CheckIcon,
   minus: MinusIcon,
+  minusSvg: MinusSvgIcon,
   plus: PlusIcon,
+  plusSvg: PlusSvgIcon,
   chevronRight: ChevronRightIcon,
   cheer: CheerIcon,
   positive: PositiveIcon,
@@ -61,16 +65,21 @@ export function Icon({
   name = 'placeholder',
   size = 'xs',
   className,
+  style,
   ...restProps
 }: IconProps): JSX.Element {
-  const icon = icons[name];
+  const Icon = icons[name];
   const sizeValue = sizes[size];
-  return (
+
+  return typeof Icon === 'function' ? (
+    <Icon className={className} style={{ ...style, width: sizeValue, height: sizeValue }} />
+  ) : (
     <img
-      src={icon}
+      src={Icon}
       className={cn('icon', className)}
       width={sizeValue}
       height={sizeValue}
+      style={style}
       {...restProps}
     />
   );
