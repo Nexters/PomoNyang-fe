@@ -9,7 +9,7 @@ import { createIsoDuration, minutesToMs, msToTime, parseIsoDuration } from '@/sh
 import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/pomodoro';
 
 // @TODO: 60분으로 수정
-const END_TIME = -(1000 * 60 * 1); // 1분
+const END_TIME = -(1000 * 5); // 5초
 
 const Pomodoro = () => {
   const [mode, setMode] = useState<PomodoroMode | null>(null);
@@ -18,6 +18,7 @@ const Pomodoro = () => {
   const { data: categories } = useCategories();
   const { data: user } = useUser();
   const { mutate: addPomodoro } = useAddPomodoro();
+
   useEffect(() => {
     setCurrentCategory(categories?.[0].title ?? '');
   }, [categories]);
@@ -28,26 +29,45 @@ const Pomodoro = () => {
   const currentRestMinutes =
     parseIsoDuration(categoryData?.restTime).hours * 60 +
     parseIsoDuration(categoryData?.restTime).minutes;
-  const currentFocusMinutes =
-    parseIsoDuration(categoryData?.focusTime).hours * 60 +
-    parseIsoDuration(categoryData?.focusTime).minutes;
+  // const currentFocusMinutes =
+  //   parseIsoDuration(categoryData?.focusTime).hours * 60 +
+  //   parseIsoDuration(categoryData?.focusTime).minutes;
+  const currentFocusMinutes = 0.1; // 6초
 
-  const { time, start, stop } = useTimer(1000 * 10 * 1, END_TIME, {
+  const { time, start, stop } = useTimer(minutesToMs(currentFocusMinutes), END_TIME, {
     onFinish: () => {
       if (mode === 'focus') {
         setMode('rest-wait');
       }
-
-      // @TODO: 상황별로 다른 처리
     },
   });
+
+  const handleEnd = () => {
+    stop();
+    if (categoryData?.no) {
+      const { minutes, seconds } = msToTime(minutesToMs(currentFocusMinutes) - time);
+
+      addPomodoro({
+        body: [
+          {
+            clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
+            categoryNo: categoryData?.no,
+            focusedTime: createIsoDuration({ minutes, seconds }),
+            restedTime: createIsoDuration({ minutes: 0, seconds: 0 }),
+            doneAt: new Date().toISOString(),
+          },
+        ],
+      });
+    }
+    setMode(null);
+  };
 
   if (mode === 'rest')
     return (
       <RestScreen
-        time={time}
+        time={minutesToMs(currentFocusMinutes) - time}
         currentCategory={currentCategory}
-        currentFocusMinutes={currentFocusMinutes}
+        currentRestMinutes={currentRestMinutes}
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
         handleFocus={() => {
@@ -60,7 +80,25 @@ const Pomodoro = () => {
         }}
       />
     );
-  if (mode === 'rest-wait') return <RestWaitScreen />;
+  if (mode === 'rest-wait')
+    return (
+      <RestWaitScreen
+        time={minutesToMs(currentFocusMinutes) - time} // 전체 경과 시간
+        currentCategory={currentCategory}
+        currentFocusMinutes={currentFocusMinutes}
+        selectedNextAction={selectedNextAction}
+        setSelectedNextAction={setSelectedNextAction}
+        handleRest={() => {
+          stop();
+          setMode('rest');
+        }}
+        handleEnd={handleEnd}
+        handleInit={() => {
+          setMode(null);
+          // @TODO: 모달 띄워주기
+        }}
+      />
+    );
   if (mode === 'focus')
     return (
       <FocusScreen
@@ -70,25 +108,7 @@ const Pomodoro = () => {
           stop();
           setMode('rest-wait');
         }}
-        handleEnd={() => {
-          stop();
-          if (categoryData?.no) {
-            const { minutes, seconds } = msToTime(minutesToMs(currentFocusMinutes) - time);
-
-            addPomodoro({
-              body: [
-                {
-                  clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
-                  categoryNo: categoryData?.no,
-                  focusedTime: createIsoDuration({ minutes, seconds }),
-                  restedTime: createIsoDuration({ minutes: 0, seconds: 0 }),
-                  doneAt: new Date().toISOString(),
-                },
-              ],
-            });
-          }
-          setMode(null);
-        }}
+        handleEnd={handleEnd}
       />
     );
 
