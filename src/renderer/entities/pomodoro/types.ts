@@ -5,3 +5,5 @@ export type Pomodoro = {
   restedTime: string;
   doneAt: string;
 };
+
+export type PomodoroMode = 'focus' | 'rest-wait' | 'rest';
