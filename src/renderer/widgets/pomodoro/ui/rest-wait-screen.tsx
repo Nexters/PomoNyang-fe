@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { CategoryChip } from '@/features/category';
@@ -39,9 +39,10 @@ export const RestWaitScreen = ({
     isExceed ? time - minutesToMs(currentFocusMinutes) : 0,
   );
 
-  const onFinishRef = useRef(handleInit);
   const { start, stop } = useTimer(MAX_TIME_ON_PAGE, 0, {
-    onFinishRef,
+    onFinish: () => {
+      handleInit();
+    },
   });
 
   useEffect(() => {

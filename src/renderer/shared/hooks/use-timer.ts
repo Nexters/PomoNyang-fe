@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback, useRef, RefObject } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 type THandler = {
   onStart?: () => void;
   onResume?: () => void;
   onStop?: () => void;
   onPause?: () => void;
-  onFinishRef?: RefObject<() => void>;
+  onFinish?: () => void;
 };
 
 const INTERVAL_MS = 100;
@@ -14,7 +14,8 @@ const INTERVAL_MS = 100;
  * @returns time: ms 단위
  */
 export const useTimer = (initialTime: number, endTime?: number, handler?: THandler) => {
-  const { onStart, onResume, onStop, onPause, onFinishRef } = handler ?? {};
+  const handlerRef = useRef<THandler>();
+  handlerRef.current = handler;
 
   const [time, setTime] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
@@ -40,10 +41,10 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     setTime(newTime);
 
     if (newTime <= (endTime ?? 0)) {
-      onFinishRef?.current?.();
+      handlerRef.current?.onFinish?.();
       stop();
     }
-  }, [initialTime, onFinishRef]);
+  }, [initialTime, handlerRef]);
 
   const run = useCallback(() => {
     if (isRunning) return;
@@ -52,17 +53,17 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     timerRef.current = window.setInterval(tick, INTERVAL_MS);
 
     setIsRunning(true);
-  }, [tick, isRunning, onFinishRef]);
+  }, [tick, isRunning]);
 
   const start = useCallback(() => {
     run();
-    onStart?.();
-  }, [run, onStart]);
+    handlerRef.current?.onStart?.();
+  }, [run, handlerRef]);
 
   const resume = useCallback(() => {
     run();
-    onResume?.();
-  }, [run, onResume]);
+    handlerRef.current?.onResume?.();
+  }, [run, handlerRef]);
 
   const stop = useCallback(() => {
     setIsRunning(false);
@@ -71,8 +72,8 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     startTimeRef.current = null;
     accumulatedTimeRef.current = 0;
 
-    onStop?.();
-  }, [initialTime, onStop]);
+    handlerRef.current?.onStop?.();
+  }, [initialTime, handlerRef]);
 
   const pause = useCallback(() => {
     if (!isRunning) return;
@@ -84,8 +85,8 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     }
 
     setIsRunning(false);
-    onPause?.();
-  }, [onPause, isRunning]);
+    handlerRef.current?.onPause?.();
+  }, [handlerRef, isRunning]);
 
   const _clearInterval = useCallback(() => {
     if (timerRef.current === null) return;

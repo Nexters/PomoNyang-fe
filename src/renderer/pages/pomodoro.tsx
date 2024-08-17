@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PomodoroMode, PomodoroNextAction } from '@/entities/pomodoro';
 import { useCategories } from '@/features/category';
@@ -14,7 +14,6 @@ const END_TIME = -(1000 * 5); // 5초
 const Pomodoro = () => {
   const [mode, setMode] = useState<PomodoroMode | null>(null);
   const [selectedNextAction, setSelectedNextAction] = useState<PomodoroNextAction>();
-  const onFinishRef = useRef(() => {});
 
   const { data: categories } = useCategories();
   const { data: user } = useUser();
@@ -35,16 +34,13 @@ const Pomodoro = () => {
   //   parseIsoDuration(categoryData?.focusTime).minutes;
   const currentFocusMinutes = 0.1; // 6초
 
-  useEffect(() => {
-    if (mode === 'focus') {
-      onFinishRef.current = () => {
-        setMode('rest-wait');
-      };
-    }
-  }, [mode]);
-
   const { time, start, stop } = useTimer(minutesToMs(currentFocusMinutes), END_TIME, {
-    onFinishRef,
+    onFinish: () => {
+      console.log(mode);
+      if (mode === 'focus') {
+        setMode('rest-wait');
+      }
+    },
   });
 
   const handleEnd = () => {
