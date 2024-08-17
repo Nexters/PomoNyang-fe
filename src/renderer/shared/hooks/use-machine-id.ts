@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { QUERY_KEY } from '../constants/keys';
+import { QUERY_KEY } from '../constants';
 
 export const useMachineId = () => {
   const { data: machineId } = useQuery({

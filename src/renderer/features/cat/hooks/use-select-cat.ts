@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Cat } from '@/entities/cat';
+import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
 import { useAuthClient } from '@/shared/hooks';
 
 export const useSelectCat = () => {
@@ -8,16 +9,16 @@ export const useSelectCat = () => {
   const authClient = useAuthClient();
 
   return useMutation({
-    mutationKey: ['selectCat'],
+    mutationKey: MUTATION_KEY.SELECT_CAT,
     mutationFn: async (catNo: Cat['no']) => {
       return await authClient?.put<unknown>('/api/v1/users/cats', { catNo });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['cats'],
+        queryKey: QUERY_KEY.CATS,
       });
       queryClient.invalidateQueries({
-        queryKey: ['me'],
+        queryKey: QUERY_KEY.ME,
       });
     },
   });

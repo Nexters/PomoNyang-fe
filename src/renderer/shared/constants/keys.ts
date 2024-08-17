@@ -6,7 +6,7 @@ export const QUERY_KEY = {
   CATEGORIES: ['category', 'all'],
 
   // user
-  USER: ['me'],
+  ME: ['me'],
 
   // auth
   MACHINE_ID: ['machineId'],
