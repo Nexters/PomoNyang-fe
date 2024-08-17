@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { QUERY_KEY } from '../constants/keys';
+
 export const useMachineId = () => {
   const { data: machineId } = useQuery({
-    queryKey: ['machineId'],
+    queryKey: QUERY_KEY.MACHINE_ID,
     queryFn: () => window.electronAPI.getMachineId(),
   });
 
