@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import { PomodoroNextAction } from '@/entities/pomodoro';
-import { CategoryChip } from '@/features/category/ui/category-chip';
+import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
 import { MAX_FOCUS_MINUTES, MIN_FOCUS_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { useTimer } from '@/shared/hooks';
