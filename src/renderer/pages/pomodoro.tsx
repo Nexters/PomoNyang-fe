@@ -24,8 +24,10 @@ const steps = [
 
 type Mode = 'focus' | 'rest-wait' | 'rest';
 
+const GUARD_TIME = 1000 * 60 * 1; // 1분
+
 const Pomodoro = () => {
-  const [mode, setMode] = useState<Mode | null>('focus');
+  const [mode, setMode] = useState<Mode | null>(null);
 
   const { data: categories } = useCategories();
   useEffect(() => {
@@ -42,11 +44,28 @@ const Pomodoro = () => {
     parseIsoDuration(categoryData?.focusTime).hours * 60 +
     parseIsoDuration(categoryData?.focusTime).minutes;
 
-  const { time, start } = useTimer(1000 * 60 * currentFocusMinutes);
+  const { time, start } = useTimer(1000 * 10 * 1, GUARD_TIME, {
+    onFinish: () => {
+      setMode('rest-wait');
+    },
+  });
 
   if (mode === 'rest') return <RestScreen />;
   if (mode === 'rest-wait') return <RestWaitScreen />;
-  if (mode === 'focus') return <FocusScreen time={time} currentCategory={currentCategory} />;
+  if (mode === 'focus')
+    return (
+      <FocusScreen
+        time={time}
+        currentCategory={currentCategory}
+        handleRest={() => {
+          setMode('rest-wait');
+        }}
+        handleEnd={() => {
+          // @TODO: 서버로 뽀모도로 POST 요청
+          setMode(null);
+        }}
+      />
+    );
 
   return (
     <HomeScreen
@@ -210,10 +229,14 @@ const HomeScreen = ({
 type FocusScreenProps = {
   currentCategory: string;
   time: number;
+  handleRest: () => void;
+  handleEnd: () => void;
 };
 
-const FocusScreen = ({ currentCategory, time }: FocusScreenProps) => {
-  const { minutes, seconds } = msToTime(time);
+const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: FocusScreenProps) => {
+  const { minutes, seconds } = msToTime(time > 0 ? time : 0);
+  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(time < 0 ? -time : 0);
+
   return (
     <div className="relative flex flex-col h-full">
       <header className="flex p-4">
@@ -226,7 +249,7 @@ const FocusScreen = ({ currentCategory, time }: FocusScreenProps) => {
         <Tooltip
           content="잘 집중하고 있는 거냥?"
           color="white"
-          sideOffset={-40}
+          sideOffset={-20}
           rootProps={{ open: true }}
         />
         {/* TODO: 고양이 유형에 따라 다른 이미지 */}
@@ -237,10 +260,15 @@ const FocusScreen = ({ currentCategory, time }: FocusScreenProps) => {
             <span className="header-5 text-text-secondary">집중시간</span>
           </div>
           <Time minutes={minutes} seconds={seconds} className="header-1 text-text-primary gap-xs" />
-          <div className="flex items-center gap-xs">
+          <div
+            className={cn(
+              'flex items-center gap-xs',
+              exceedMinutes === 0 && exceedSeconds === 0 ? 'opacity-0' : 'opacity-100',
+            )}
+          >
             <Time
-              minutes={minutes}
-              seconds={seconds}
+              minutes={exceedMinutes}
+              seconds={exceedSeconds}
               className="gap-0 text-text-accent-1 header-4"
             />
             <span className="text-text-accent-1 header-4">초과</span>
@@ -248,10 +276,10 @@ const FocusScreen = ({ currentCategory, time }: FocusScreenProps) => {
         </div>
       </main>
       <div className="absolute left-0 flex flex-col items-center w-full m-auto bottom-4">
-        <Button variant="secondary" className="p-xl w-[200px]" size="lg">
+        <Button variant="secondary" className="p-xl w-[200px]" size="lg" onClick={handleRest}>
           휴식하기
         </Button>
-        <Button variant="text-secondary" size="md">
+        <Button variant="text-secondary" size="md" onClick={handleEnd}>
           집중 끝내기
         </Button>
       </div>
