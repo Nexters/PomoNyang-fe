@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
+import { useFocusNotification } from '@/features/time';
 import { PATH } from '@/shared/constants';
 import { Frame, Icon, Toggle } from '@/shared/ui';
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const { isEnabled, isUnavailable, changeEnabled } = useFocusNotification();
 
   return (
     <Frame>
@@ -26,11 +28,18 @@ const MyPage = () => {
                 집중・휴식시간이 되면 고양이가 알려줘요
               </p>
             </div>
-            <Toggle />
+            <Toggle
+              disabled={isUnavailable}
+              pressed={isEnabled}
+              onPressedChange={(pressed) => {
+                console.log('pressed', pressed);
+                changeEnabled(pressed);
+              }}
+            />
           </div>
         </div>
 
-        <ActionButton onClick={() => navigate(PATH.MY_PAGE)}>
+        <ActionButton onClick={() => window.open('https://naver.com', '_target')}>
           <span className="body-sb text-text-primary">의견 보내기</span>
         </ActionButton>
       </div>

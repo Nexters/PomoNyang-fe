@@ -26,24 +26,17 @@ const toggleVariants = cva(
 const Toggle = React.forwardRef<
   React.ElementRef<typeof TogglePrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> & VariantProps<typeof toggleVariants>
->(({ className, variant, size, ...props }, ref) => {
-  const [checked, setChecked] = React.useState(false);
+>(({ className, variant, size, pressed, ...props }, ref) => {
   return (
     <TogglePrimitive.Root
       ref={ref}
-      data-state={checked ? 'on' : 'off'}
-      onClick={(e) => {
-        setChecked(e.currentTarget.dataset.state === 'on' ? false : true);
-      }}
-      onChange={(e) => {
-        console.log(e.currentTarget);
-      }}
+      data-state={pressed ? 'on' : 'off'}
       className={cn(toggleVariants({ variant, size, className }))}
       {...props}
     >
       <div
         className={cn(
-          checked ? 'translate-x-4' : 'translate-x-0',
+          pressed ? 'translate-x-4' : 'translate-x-0',
           'w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-200 ease-in-out',
         )}
       />
