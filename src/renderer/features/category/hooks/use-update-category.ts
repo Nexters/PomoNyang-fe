@@ -25,10 +25,26 @@ export const useUpdateCategory = () => {
         body,
       );
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEY.CATEGORIES,
+    onMutate: ({ no, body }) => {
+      queryClient.cancelQueries({ queryKey: QUERY_KEY.CATEGORIES });
+
+      const categories = queryClient.getQueryData<Category[]>(QUERY_KEY.CATEGORIES);
+      const foundCategory = categories?.find((category) => category.no === no);
+      if (!foundCategory) return;
+
+      const optimisticCategory: Category = { ...foundCategory, ...body };
+      queryClient.setQueryData<Category[]>(QUERY_KEY.CATEGORIES, (old) => {
+        if (old) {
+          return old.map((category) => (category.no === no ? optimisticCategory : category));
+        }
+        return old;
       });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY.CATEGORIES });
+    },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY.CATEGORIES });
     },
   });
 };

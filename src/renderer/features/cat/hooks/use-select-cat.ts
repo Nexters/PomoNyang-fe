@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Cat } from '@/entities/cat';
+import { User } from '@/entities/user';
 import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
 import { useAuthClient } from '@/shared/hooks';
 
@@ -13,13 +14,28 @@ export const useSelectCat = () => {
     mutationFn: async (catNo: Cat['no']) => {
       return await authClient?.put<unknown>('/api/v1/users/cats', { catNo });
     },
+    onMutate: (catNo) => {
+      // cancel current queries
+      queryClient.cancelQueries({ queryKey: QUERY_KEY.CATS });
+      queryClient.cancelQueries({ queryKey: QUERY_KEY.ME });
+
+      // get cat
+      const cats = queryClient.getQueryData<Cat[]>(QUERY_KEY.CATS);
+      const foundCat = cats?.find((cat) => cat.no === catNo);
+      if (!foundCat) return;
+
+      // set optimistic user
+      const user = queryClient.getQueryData<User>(QUERY_KEY.ME);
+      if (!user) return;
+
+      const optimisticUser = { ...user, cat: foundCat };
+      queryClient.setQueryData<User>(QUERY_KEY.ME, optimisticUser);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEY.CATS,
-      });
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEY.ME,
-      });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY.ME });
+    },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY.ME });
     },
   });
 };
