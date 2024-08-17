@@ -91,7 +91,7 @@ const OnboardingContent = () => {
           className="w-[200px]"
           onClick={() => {
             setIsCompleted(true);
-            navigate(PATH.HOME);
+            navigate(PATH.SELECTION);
           }}
         >
           시작하기
