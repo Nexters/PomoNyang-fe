@@ -31,7 +31,7 @@ const Pomodoro = () => {
     parseIsoDuration(categoryData?.focusTime).hours * 60 +
     parseIsoDuration(categoryData?.focusTime).minutes;
 
-  const { time, start, stop } = useTimer(minutesToMs(currentFocusMinutes), END_TIME, {
+  const { time, start, stop } = useTimer(1000 * 10 * 1, END_TIME, {
     onFinish: () => {
       if (mode === 'focus') {
         setMode('rest-wait');
