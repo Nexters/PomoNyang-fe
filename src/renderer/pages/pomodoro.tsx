@@ -33,7 +33,11 @@ const Pomodoro = () => {
 
   const { time, start, stop } = useTimer(minutesToMs(currentFocusMinutes), END_TIME, {
     onFinish: () => {
-      setMode('rest-wait');
+      if (mode === 'focus') {
+        setMode('rest-wait');
+      }
+
+      // @TODO: 상황별로 다른 처리
     },
   });
 
