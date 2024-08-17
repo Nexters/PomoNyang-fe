@@ -1,25 +1,75 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
+import { CatType } from '@/entities/cat';
+import { useCats, useSelectCat } from '@/features/cat';
 import { PATH } from '@/shared/constants';
-import { Button, Frame, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
+import { useNotification } from '@/shared/hooks';
+import { Button, Frame, Icon, IconName, SelectGroup, SelectGroupItem } from '@/shared/ui';
 import { cn } from '@/shared/utils';
+
+const adjectiveMap: Record<CatType, string> = {
+  CHEESE: '응원',
+  BLACK: '긍정',
+  THREE_COLOR: '자극',
+};
+const iconNameMap: Record<CatType, IconName> = {
+  CHEESE: 'cheer',
+  BLACK: 'positive',
+  THREE_COLOR: 'stimulus',
+};
+const alarmMessageMap: Record<CatType, string> = {
+  CHEESE: '어디갔나옹...',
+  BLACK: '어디갔나옹...',
+  THREE_COLOR: '내가 여기있는데 어디갔냐옹!',
+};
 
 const Selection = () => {
   const navigate = useNavigate();
+  const { data: originCats } = useCats();
+  const cats = useMemo(
+    () =>
+      originCats?.map((cat) => ({
+        no: cat.no,
+        name: cat.name,
+        type: cat.type,
+        id: String(cat.no),
+        iconName: iconNameMap[cat.type],
+        adjective: adjectiveMap[cat.type],
+        alarmMessage: alarmMessageMap[cat.type],
+      })) ?? [],
+    [originCats],
+  );
   const [selectedCatId, setSelectedCatId] = useState<string | undefined>(undefined);
+  const { mutate: selectCat } = useSelectCat();
+  const { requestPermission } = useNotification();
 
-  // TODO: 고양이 목록 API 호출
-  const cats = [
-    { id: '1', name: '치즈냥', adj: '응원', alarmMessage: '어디갔나옹...' },
-    { id: '2', name: '까만냥', adj: '긍정', alarmMessage: '어디갔나옹...' },
-    { id: '3', name: '삼색냥', adj: '자극', alarmMessage: '내가 여기있는데 어디갔냐옹!' },
-  ];
+  const handleClickBackButton = () => {
+    navigate(PATH.ONBOARDING);
+  };
+
+  const handleClickSelectButton = async () => {
+    if (!selectedCatId) return;
+
+    const permission = await requestPermission();
+    // TODO: 알림 허가 여부에 따른 토스트 메시지 표시?
+    console.log(permission);
+
+    const selectedCatNo = Number(selectedCatId);
+
+    selectCat(selectedCatNo);
+    navigate(PATH.NAMING, {
+      state: {
+        selectedCatId,
+        selectedCatNo,
+      },
+    });
+  };
 
   return (
     <Frame>
-      <Frame.NavBar title="고양이 선택" onBack={() => navigate(PATH.ONBOARDING)} />
+      <Frame.NavBar title="고양이 선택" onBack={handleClickBackButton} />
 
       <div className="w-full flex flex-col gap-[42px]">
         <div className="flex flex-col gap-1">
@@ -47,7 +97,7 @@ const Selection = () => {
               className="h-[80px] flex-1 flex flex-col gap-1"
             >
               <span className="flex gap-1 subBody-4 text-text-tertiary">
-                {cat.adj} <Icon size="xs" />
+                {cat.adjective} <Icon size="xs" name={cat.iconName} />
               </span>
               <span
                 className={cn(
@@ -63,19 +113,8 @@ const Selection = () => {
       </div>
 
       <Frame.BottomBar>
-        <Button
-          disabled={!selectedCatId}
-          className="w-full"
-          onClick={() =>
-            navigate(PATH.NAMING, {
-              state: {
-                selectedCatId,
-                selectedCatName: cats.find((cat) => cat.id === selectedCatId)?.name,
-              },
-            })
-          }
-        >
-          이 고양이와 시작하기
+        <Button disabled={!selectedCatId} className="w-full" onClick={handleClickSelectButton}>
+          이 고양이와 함께하기
         </Button>
       </Frame.BottomBar>
     </Frame>

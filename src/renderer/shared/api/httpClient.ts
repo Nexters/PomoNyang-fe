@@ -12,13 +12,15 @@ export const createHttpClient = (defaultHeader?: object) => {
 
   return {
     get: <T = unknown>(url: string, headers?: object) =>
-      __fetch<T, void>('get', url, { headers: mergeHeaders(headers) }),
+      __fetch<T, void>('GET', url, { headers: mergeHeaders(headers) }),
     post: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
-      __fetch<T, D>('post', url, { body, headers: mergeHeaders(headers) }),
+      __fetch<T, D>('POST', url, { body, headers: mergeHeaders(headers) }),
     put: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
-      __fetch<T, D>('put', url, { body, headers: mergeHeaders(headers) }),
+      __fetch<T, D>('PUT', url, { body, headers: mergeHeaders(headers) }),
+    patch: <T = unknown, D = unknown>(url: string, body: D, headers?: object) =>
+      __fetch<T, D>('PATCH', url, { body, headers: mergeHeaders(headers) }),
     delete: <T = unknown>(url: string, headers?: object) =>
-      __fetch<T, void>('delete', url, { headers: mergeHeaders(headers) }),
+      __fetch<T, void>('DELETE', url, { headers: mergeHeaders(headers) }),
   };
 };
 

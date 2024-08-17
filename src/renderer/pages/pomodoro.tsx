@@ -1,28 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
-import { useCategories } from '@/features/category';
+import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
-import {
-  Guide,
-  Button,
-  Icon,
-  Tooltip,
-  Drawer,
-  DrawerContent,
-  DrawerTitle,
-  DrawerFooter,
-  DrawerClose,
-  SelectGroup,
-  SelectGroupItem,
-} from '@/shared/ui';
-import { getCategoryIconName, parseIsoDuration } from '@/shared/utils';
+import { Guide, Button, Icon, Tooltip } from '@/shared/ui';
+import { createIsoDuration, getCategoryIconName, parseIsoDuration } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
@@ -31,21 +19,34 @@ const steps = [
 
 const Pomodoro = () => {
   const navigate = useNavigate();
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-
-  // @TODO: 현재 서버에서 default 값을 집중으로 주고 있어서 디자인 시안에 맞게 추후 기본으로 수정해야 함
-  const [currentCategory, setCurrentCategory] = useState('집중');
-  const [selectedCategory, setSelectedCategory] = useState(currentCategory);
 
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(
     'showGuide',
     !(localStorage.getItem('showGuide') === 'false'),
   );
 
-  const { data: userData } = useUser();
-  const { data: categoriesData } = useCategories();
+  const { data: user } = useUser();
+  const { data: categories } = useCategories();
+  const { mutate: updateCategory } = useUpdateCategory();
+
   const changeTimeDialogProps = useDisclosure();
+  const changeCategoryDrawerProps = useDisclosure();
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
+
+  const [currentCategory, setCurrentCategory] = useState(categories?.[0].title ?? '');
+
+  useEffect(() => {
+    setCurrentCategory(categories?.[0].title ?? '');
+  }, [categories]);
+
+  const categoryData = categories?.find((category) => category.title === currentCategory);
+
+  const currentFocusMinutes =
+    parseIsoDuration(categoryData?.focusTime).hours * 60 +
+    parseIsoDuration(categoryData?.focusTime).minutes;
+  const currentRestMinutes =
+    parseIsoDuration(categoryData?.restTime).hours * 60 +
+    parseIsoDuration(categoryData?.restTime).minutes;
 
   return (
     <>
@@ -69,9 +70,7 @@ const Pomodoro = () => {
           />
           {/* TODO: 고양이 유형에 따라 다른 이미지 */}
           <div className="w-[240px] h-[240px] bg-background-secondary" />
-          <div className="header-4 text-text-tertiary">
-            {catName(userData?.cat?.catType ?? 'CHEESE')}
-          </div>
+          <div className="header-4 text-text-tertiary">{catName(user?.cat?.type ?? 'CHEESE')}</div>
           <div className="flex flex-col p-lg gap-md">
             <Button
               variant="tertiary"
@@ -79,7 +78,7 @@ const Pomodoro = () => {
               size="sm"
               id="categoryButton"
               onClick={() => {
-                setIsOpenDrawer(true);
+                changeCategoryDrawerProps.onOpen();
               }}
             >
               <Icon name={getCategoryIconName(currentCategory)} size="sm" />
@@ -94,7 +93,7 @@ const Pomodoro = () => {
                 }}
               >
                 <span className="text-gray-500 body-sb">집중</span>
-                <span className="header-3 text-text-secondary">25분</span>
+                <span className="header-3 text-text-secondary">{currentFocusMinutes}분</span>
               </button>
               <div className="w-[2px] h-[20px] bg-gray-200 rounded-full" />
               <button
@@ -105,7 +104,7 @@ const Pomodoro = () => {
                 }}
               >
                 <span className="text-gray-500 body-sb">휴식</span>
-                <span className="header-3 text-text-secondary">25분</span>
+                <span className="header-3 text-text-secondary">{currentRestMinutes}분</span>
               </button>
             </div>
           </div>
@@ -114,65 +113,15 @@ const Pomodoro = () => {
           </Button>
         </main>
       </div>
-      <Drawer
-        open={isOpenDrawer}
-        onOpenChange={setIsOpenDrawer}
-        onClose={() => {
-          setSelectedCategory(currentCategory);
+      <ChangeCategoryDrawer
+        open={changeCategoryDrawerProps.isOpen}
+        onOpenChange={changeCategoryDrawerProps.setIsOpen}
+        defaultCategory={currentCategory}
+        onChangeCategory={(category) => {
+          setCurrentCategory(category);
         }}
-      >
-        <DrawerContent>
-          <div className="flex items-center justify-between gap-2 ml-xl mr-sm">
-            <DrawerTitle className="py-1 header-3">카테고리 변경</DrawerTitle>
-            <DrawerClose className="p-sm">
-              <Icon name="close" size="sm" />
-            </DrawerClose>
-          </div>
-          <SelectGroup
-            defaultValue={selectedCategory}
-            onValueChange={(value) => {
-              setSelectedCategory(value);
-            }}
-            className="flex flex-col gap-4 mt-lg px-lg"
-          >
-            {categoriesData?.map((category) => {
-              return (
-                <SelectGroupItem
-                  key={category.no}
-                  value={category.title}
-                  className="flex flex-row items-center justify-start w-full p-xl gap-md"
-                >
-                  <div className="flex gap-sm">
-                    <Icon name={getCategoryIconName(category.title)} size="sm" />
-                    <span className="body-sb text-text-primary">{category.title}</span>
-                  </div>
-                  <div className="flex items-center subBody-r text-text-tertiary gap-xs">
-                    <span>집중 {parseIsoDuration(category.focusTime).minutes}분</span>
-                    <span>|</span>
-                    <span>휴식 {parseIsoDuration(category.restTime).minutes}분</span>
-                  </div>
-                </SelectGroupItem>
-              );
-            })}
-          </SelectGroup>
+      />
 
-          <DrawerFooter>
-            <Button
-              variant="secondary"
-              className="w-full"
-              size="lg"
-              onClick={() => {
-                if (selectedCategory) {
-                  setCurrentCategory(selectedCategory);
-                }
-                setIsOpenDrawer(false);
-              }}
-            >
-              확인
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
       {showGuide && (
         <Guide
           steps={steps}
@@ -186,8 +135,17 @@ const Pomodoro = () => {
         onOpenChange={changeTimeDialogProps.setIsOpen}
         mode={clickedMode}
         category={currentCategory}
-        // FIXME: 선택한 모드의 시간값 넘겨주도록 변경
-        categoryTimeMinutes={25}
+        onChangeCategoryTime={(category, minutes) => {
+          const body =
+            clickedMode === 'focus'
+              ? { focusTime: createIsoDuration({ minutes }) }
+              : { restTime: createIsoDuration({ minutes }) };
+          updateCategory({
+            no: categories?.find((_category) => _category.title === category)?.no ?? 0,
+            body,
+          });
+        }}
+        categoryTimeMinutes={clickedMode === 'focus' ? currentFocusMinutes : currentRestMinutes}
         categoryTimeSeconds={0}
       />
     </>
