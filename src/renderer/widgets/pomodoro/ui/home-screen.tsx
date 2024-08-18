@@ -20,7 +20,6 @@ const steps = [
 
 type HomeScreenProps = {
   setMode: (mode: PomodoroMode) => void;
-  start: () => void;
   currentCategory: string;
   setCurrentCategory: (category: string) => void;
   currentFocusMinutes: number;
@@ -29,7 +28,6 @@ type HomeScreenProps = {
 
 export const HomeScreen = ({
   setMode,
-  start,
   currentCategory,
   setCurrentCategory,
   currentFocusMinutes,
@@ -119,7 +117,6 @@ export const HomeScreen = ({
             size="icon"
             onClick={() => {
               setMode('focus');
-              start();
             }}
           >
             <Icon name="play" size="lg" />
