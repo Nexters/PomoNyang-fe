@@ -53,6 +53,7 @@ const Pomodoro = () => {
     onStop: () => {
       if (mode === 'focus') {
         createNotificationByMode(user?.cat?.type ?? 'CHEESE', 'focus-end');
+        return;
       }
       if (mode === 'rest') {
         createNotificationByMode(user?.cat?.type ?? 'CHEESE', 'rest-end');
@@ -67,6 +68,7 @@ const Pomodoro = () => {
         setFocusedTime(minutesToMs(currentRestMinutes) - _time);
         setInitialTime(MAX_TIME_ON_PAGE);
         setMode('rest-wait');
+        return;
       }
       if (mode === 'rest-wait') {
         // 데이터 저장 이후,
@@ -87,6 +89,7 @@ const Pomodoro = () => {
         }
         setInitialTime(minutesToMs(currentRestMinutes));
         setMode(null);
+        return;
       }
       if (mode === 'rest') {
         // 데이터 저장 이후,
