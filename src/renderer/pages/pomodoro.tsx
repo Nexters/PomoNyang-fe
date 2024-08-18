@@ -14,7 +14,7 @@ import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/p
 
 // @TODO: 둘 다 60분으로 수정
 const END_TIME = -(1000 * 5); // 5초
-const MAX_TIME_ON_PAGE = 1000 * 60; // 5초
+const MAX_TIME_ON_PAGE = 1000 * 5; // 5초
 
 const Pomodoro = () => {
   const [selectedNextAction, setSelectedNextAction] = useState<PomodoroNextAction>();
@@ -69,8 +69,22 @@ const Pomodoro = () => {
         setMode('rest-wait');
       }
       if (mode === 'rest-wait') {
+        // 데이터 저장 이후,
         // 초기 값 변경 이후
         // 홈 화면으로 강제 이동
+        if (categoryData?.no) {
+          addPomodoro({
+            body: [
+              {
+                clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
+                categoryNo: categoryData?.no,
+                focusedTime: createIsoDuration(msToTime(focusedTime)),
+                restedTime: createIsoDuration({ minutes: 0 }),
+                doneAt: new Date().toISOString(),
+              },
+            ],
+          });
+        }
         setInitialTime(minutesToMs(currentRestMinutes));
         setMode(null);
       }
