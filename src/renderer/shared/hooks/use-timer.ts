@@ -3,12 +3,12 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 type THandler = {
   onStart?: () => void;
   onResume?: () => void;
-  onStop?: () => void;
+  onStop?: (time: number) => void;
   onPause?: () => void;
-  onFinish?: () => void;
+  onFinish?: (time: number) => void;
 };
 
-const INTERVAL_MS = 100;
+const INTERVAL_MS = 90;
 
 /**
  * @returns time: ms 단위
@@ -41,10 +41,10 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     setTime(newTime);
 
     if (newTime <= (endTime ?? 0)) {
-      handlerRef.current?.onFinish?.();
-      stop();
+      handlerRef.current?.onFinish?.(newTime);
+      stop(newTime);
     }
-  }, [initialTime, handlerRef]);
+  }, [initialTime, handlerRef, endTime]);
 
   const run = useCallback(() => {
     if (isRunning) return;
@@ -65,15 +65,23 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     handlerRef.current?.onResume?.();
   }, [run, handlerRef]);
 
-  const stop = useCallback(() => {
-    setIsRunning(false);
+  const stop = useCallback(
+    (_time?: number) => {
+      setIsRunning(false);
 
-    _clearInterval();
-    startTimeRef.current = null;
-    accumulatedTimeRef.current = 0;
+      if (startTimeRef.current) {
+        const now = Date.now();
+        const elapsedTime = now - startTimeRef?.current + accumulatedTimeRef.current;
+        const newTime = initialTime - elapsedTime;
+        handlerRef.current?.onStop?.(_time ?? newTime);
+      }
 
-    handlerRef.current?.onStop?.();
-  }, [initialTime, handlerRef]);
+      _clearInterval();
+      startTimeRef.current = null;
+      accumulatedTimeRef.current = 0;
+    },
+    [handlerRef, time],
+  );
 
   const pause = useCallback(() => {
     if (!isRunning) return;
@@ -100,7 +108,7 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
     isRunning,
     start,
     resume,
-    stop,
+    stop: () => stop(),
     pause,
   };
 };
