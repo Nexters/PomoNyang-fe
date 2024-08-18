@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Time } from '@/features/time';
 import { Button, Icon, Tooltip } from '@/shared/ui';
 import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
@@ -7,6 +9,7 @@ type FocusScreenProps = {
   time: number;
   handleRest: () => void;
   handleEnd: () => void;
+  startTimer: () => void;
 };
 
 const toolTipContentMap: Record<string, string> = {
@@ -14,11 +17,21 @@ const toolTipContentMap: Record<string, string> = {
   exceed: '이제 나랑 놀자냥!',
 };
 
-export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: FocusScreenProps) => {
+export const FocusScreen = ({
+  currentCategory,
+  time,
+  handleRest,
+  handleEnd,
+  startTimer,
+}: FocusScreenProps) => {
   const { minutes, seconds } = msToTime(time > 0 ? time : 0);
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(time < 0 ? -time : 0);
 
   const isExceed = time < 0;
+
+  useEffect(() => {
+    startTimer();
+  });
 
   return (
     <div className="relative flex flex-col h-full">
