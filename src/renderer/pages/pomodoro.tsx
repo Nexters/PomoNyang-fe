@@ -65,7 +65,7 @@ const Pomodoro = () => {
         // 초기 값 변경 이후
         // 휴식 대기 화면으로 강제 이동
         setFocusedTime(minutesToMs(currentRestMinutes) - _time);
-        setInitialTime(minutesToMs(MAX_TIME_ON_PAGE));
+        setInitialTime(MAX_TIME_ON_PAGE);
         setMode('rest-wait');
       }
       if (mode === 'rest-wait') {
