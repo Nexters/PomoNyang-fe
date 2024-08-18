@@ -1,11 +1,15 @@
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
+import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useNotification } from '@/shared/hooks';
 
 export const useFocusNotification = () => {
   const { permission, requestPermission, createNotification } = useNotification();
-  const [isEnabled, setIsEnabled] = useLocalStorage('isPushFocusEnabled', permission === 'granted');
+  const [isEnabled, setIsEnabled] = useLocalStorage(
+    LOCAL_STORAGE_KEY.PUSH_FOCUS_ENABLED,
+    permission === 'granted',
+  );
   const isUnavailable = permission === 'not-supported' || permission === 'denied';
 
   const changeEnabled = async (nextEnabled: boolean) => {

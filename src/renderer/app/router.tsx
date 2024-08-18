@@ -1,4 +1,4 @@
-import { Navigate, HashRouter as ReactRouter, Route, Routes } from 'react-router-dom';
+import { Navigate, MemoryRouter as ReactRouter, Route, Routes } from 'react-router-dom';
 
 import RootLayout from './layout';
 
