@@ -97,7 +97,7 @@ const Pomodoro = () => {
     },
   });
 
-  const handleEndFocus = () => {
+  const stopAndAddPomodoro = (focusedTime: number, restedTime: number) => {
     stop();
     if (categoryData?.no) {
       addPomodoro({
@@ -105,50 +105,26 @@ const Pomodoro = () => {
           {
             clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
             categoryNo: categoryData?.no,
-            focusedTime: createIsoDuration(msToTime(time)),
-            restedTime: createIsoDuration({ minutes: 0 }),
+            focusedTime: createIsoDuration(msToTime(focusedTime)),
+            restedTime: createIsoDuration(msToTime(restedTime)),
             doneAt: new Date().toISOString(),
           },
         ],
       });
     }
     setMode(null);
+  };
+
+  const handleEndFocus = () => {
+    stopAndAddPomodoro(time, 0);
   };
 
   const handleEndRestWait = () => {
-    stop();
-    if (categoryData?.no) {
-      addPomodoro({
-        body: [
-          {
-            clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
-            categoryNo: categoryData?.no,
-            focusedTime: createIsoDuration(msToTime(focusedTime)),
-            restedTime: createIsoDuration({ minutes: 0 }),
-            doneAt: new Date().toISOString(),
-          },
-        ],
-      });
-    }
-    setMode(null);
+    stopAndAddPomodoro(focusedTime, 0);
   };
 
   const handleEndRest = () => {
-    stop();
-    if (categoryData?.no) {
-      addPomodoro({
-        body: [
-          {
-            clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
-            categoryNo: categoryData?.no,
-            focusedTime: createIsoDuration(msToTime(focusedTime)),
-            restedTime: createIsoDuration(msToTime(time)),
-            doneAt: new Date().toISOString(),
-          },
-        ],
-      });
-    }
-    setMode(null);
+    stopAndAddPomodoro(focusedTime, time);
   };
 
   if (mode === 'rest')
