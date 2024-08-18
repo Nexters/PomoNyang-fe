@@ -21,3 +21,12 @@ export const MUTATION_KEY = {
   // category
   UPDATE_CATEGORY: ['updateCategory'],
 };
+
+export const LOCAL_STORAGE_KEY = {
+  PUSH_FOCUS_ENABLED: 'isPushFocusEnabled',
+  ONBOARDING_COMPLETED: 'isOnboardingCompleted',
+  GUIDE_SHOWN: 'isGuideShown',
+  FOCUSED_TIME: 'focusedTime',
+  RESTED_TIME: 'restedTime',
+  MODE: 'mode',
+};
