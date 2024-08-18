@@ -47,13 +47,13 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
   }, [initialTime, handlerRef, endTime]);
 
   const run = useCallback(() => {
-    if (isRunning) return;
+    if (timerRef.current !== null) return;
 
     startTimeRef.current = Date.now();
     timerRef.current = window.setInterval(tick, INTERVAL_MS);
 
     setIsRunning(true);
-  }, [tick, isRunning]);
+  }, [tick]);
 
   const start = useCallback(() => {
     run();

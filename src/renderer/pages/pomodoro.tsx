@@ -89,6 +89,7 @@ const Pomodoro = () => {
         }
         setInitialTime(minutesToMs(currentRestMinutes));
         setMode(null);
+        // @TODO: 모달 띄워주기
         return;
       }
       if (mode === 'rest') {
@@ -154,11 +155,11 @@ const Pomodoro = () => {
         currentRestMinutes={currentRestMinutes}
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
-        startTimer={start}
         handleFocus={() => {
           // TODO: selectedNextAction 에 따라 rest 시간 조절 후 focus 모드로 변경
           stopAndAddPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
           setMode('focus');
+          start();
         }}
         handleEnd={handleEndRest}
       />
@@ -171,17 +172,11 @@ const Pomodoro = () => {
         currentFocusMinutes={currentFocusMinutes}
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
-        startTimer={start}
         handleRest={() => {
+          setInitialTime(minutesToMs(currentRestMinutes));
           stop();
-          if (time > 0) {
-            setMode('rest');
-            setInitialTime(minutesToMs(currentRestMinutes));
-          } else {
-            setMode(null);
-            setInitialTime(minutesToMs(currentFocusMinutes));
-            // @TODO: 모달 띄워주기
-          }
+          setMode('rest');
+          start();
         }}
         handleEnd={handleEndRestWait}
       />
@@ -191,12 +186,12 @@ const Pomodoro = () => {
       <FocusScreen
         time={time}
         currentCategory={currentCategory}
-        startTimer={start}
         handleRest={() => {
+          setInitialTime(MAX_TIME_ON_PAGE);
           stop();
           setFocusedTime(minutesToMs(currentFocusMinutes) - time);
-          setInitialTime(MAX_TIME_ON_PAGE);
           setMode('rest-wait');
+          start();
         }}
         handleEnd={handleEndFocus}
       />
@@ -205,6 +200,7 @@ const Pomodoro = () => {
   return (
     <HomeScreen
       setMode={setMode}
+      startTimer={start}
       currentCategory={currentCategory}
       setCurrentCategory={setCurrentCategory}
       currentFocusMinutes={currentFocusMinutes}

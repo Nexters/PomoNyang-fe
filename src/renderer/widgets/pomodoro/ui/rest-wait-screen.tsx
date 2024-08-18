@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
@@ -15,7 +13,6 @@ type RestWaitScreenProps = {
   handleEnd: () => void;
   selectedNextAction: PomodoroNextAction | undefined;
   setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
-  startTimer: () => void;
 };
 
 export const RestWaitScreen = ({
@@ -26,7 +23,6 @@ export const RestWaitScreen = ({
   handleEnd,
   selectedNextAction,
   setSelectedNextAction,
-  startTimer,
 }: RestWaitScreenProps) => {
   // 만약 전체 경과한 시간이 설정한 focusTime 보다 크면 초과
   const isExceed = time > minutesToMs(currentFocusMinutes);
@@ -34,10 +30,6 @@ export const RestWaitScreen = ({
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(
     isExceed ? time - minutesToMs(currentFocusMinutes) : 0,
   );
-
-  useEffect(() => {
-    startTimer();
-  }, []);
 
   return (
     <div className="flex flex-col h-full">

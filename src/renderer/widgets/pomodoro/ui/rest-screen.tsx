@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { Time } from '@/features/time';
 import { MAX_REST_MINUTES, MIN_REST_MINUTES, MINUTES_GAP } from '@/shared/constants';
@@ -14,7 +12,6 @@ type RestScreenProps = {
   setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
   handleFocus: () => void;
   handleEnd: () => void;
-  startTimer: () => void;
 };
 
 export const RestScreen = ({
@@ -25,15 +22,10 @@ export const RestScreen = ({
   setSelectedNextAction,
   handleFocus,
   handleEnd,
-  startTimer,
 }: RestScreenProps) => {
   const isExceed = time < 0;
   const { minutes, seconds } = msToTime(!isExceed ? time : 0);
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(isExceed ? -time : 0);
-
-  useEffect(() => {
-    startTimer();
-  }, []);
 
   return (
     <div className="relative flex flex-col h-full">
