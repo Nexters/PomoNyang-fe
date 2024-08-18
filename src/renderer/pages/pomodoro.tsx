@@ -112,19 +112,21 @@ const Pomodoro = () => {
         ],
       });
     }
-    setMode(null);
   };
 
   const handleEndFocus = () => {
     stopAndAddPomodoro(time, 0);
+    setMode(null);
   };
 
   const handleEndRestWait = () => {
     stopAndAddPomodoro(focusedTime, 0);
+    setMode(null);
   };
 
   const handleEndRest = () => {
     stopAndAddPomodoro(focusedTime, time);
+    setMode(null);
   };
 
   if (mode === 'rest')
@@ -138,23 +140,7 @@ const Pomodoro = () => {
         startTimer={start}
         handleFocus={() => {
           // TODO: selectedNextAction 에 따라 rest 시간 조절 후 focus 모드로 변경
-          stop();
-          if (categoryData?.no) {
-            const _focusedTime = msToTime(focusedTime);
-            const _restedTime = msToTime(minutesToMs(currentRestMinutes) - time);
-
-            addPomodoro({
-              body: [
-                {
-                  clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
-                  categoryNo: categoryData?.no,
-                  focusedTime: createIsoDuration(_focusedTime),
-                  restedTime: createIsoDuration(_restedTime),
-                  doneAt: new Date().toISOString(),
-                },
-              ],
-            });
-          }
+          stopAndAddPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
           setMode('focus');
         }}
         handleEnd={handleEndRest}
