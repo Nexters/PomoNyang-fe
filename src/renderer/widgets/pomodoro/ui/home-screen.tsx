@@ -8,7 +8,7 @@ import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/featur
 import { catNameMap } from '@/features/pomodoro';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
-import { PATH } from '@/shared/constants';
+import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
 import { Button, Guide, Icon, Tooltip } from '@/shared/ui';
 import { getCategoryIconName, createIsoDuration } from '@/shared/utils';
@@ -37,10 +37,7 @@ export const HomeScreen = ({
 
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
-  const [showGuide, setShowGuide] = useLocalStorage<boolean>(
-    'showGuide',
-    !(localStorage.getItem('showGuide') === 'false'),
-  );
+  const [showGuide, setShowGuide] = useLocalStorage<boolean>(LOCAL_STORAGE_KEY.GUIDE_SHOWN, false);
 
   const changeTimeDialogProps = useDisclosure();
   const changeCategoryDrawerProps = useDisclosure();

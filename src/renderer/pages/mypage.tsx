@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 
 import { useFocusNotification } from '@/features/time';
+import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
 import { Frame, Icon, Toggle } from '@/shared/ui';
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const { data: user } = useUser();
   const { isEnabled, isUnavailable, changeEnabled } = useFocusNotification();
 
   return (
@@ -15,7 +17,7 @@ const MyPage = () => {
       <div className="w-full flex flex-col gap-3">
         <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
           <span className="subBody-r text-text-tertiary">나의 고양이</span>
-          <span className="header-4 text-text-primary">이이오</span>
+          <span className="header-4 text-text-primary">{user?.cat?.name}</span>
         </ActionButton>
 
         {/* <OfflineStat /> */}

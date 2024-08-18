@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
 
-import { PATH } from '@/shared/constants';
+import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
 import {
   Button,
   Carousel,
@@ -40,6 +41,7 @@ const contents = [
 const OnboardingContent = () => {
   const { currentIndex } = useCarousel();
   const navigate = useNavigate();
+  const [, setIsCompleted] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
 
   return (
     <div className="h-full flex flex-col items-center justify-center gap-12">
@@ -84,7 +86,14 @@ const OnboardingContent = () => {
       </div>
 
       <div className="flex gap-1">
-        <Button size="lg" className="w-[200px]" onClick={() => navigate(PATH.HOME)}>
+        <Button
+          size="lg"
+          className="w-[200px]"
+          onClick={() => {
+            setIsCompleted(true);
+            navigate(PATH.SELECTION);
+          }}
+        >
           시작하기
         </Button>
       </div>
