@@ -45,6 +45,10 @@ const Pomodoro = () => {
 
   const [initialTime, setInitialTime] = useState(minutesToMs(currentFocusMinutes));
 
+  useEffect(() => {
+    setInitialTime(minutesToMs(currentFocusMinutes));
+  }, [categoryData]);
+
   const { time, start, stop } = useTimer(initialTime, END_TIME, {
     onStop: () => {
       if (mode === 'focus') {
