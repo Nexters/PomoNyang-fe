@@ -59,7 +59,7 @@ export const RestWaitScreen = ({
           >
             <SelectGroupItem
               disabled={currentFocusMinutes - MINUTES_GAP <= MIN_FOCUS_MINUTES}
-              value="minus"
+              value="minus-focus-time"
               className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
               <Icon name="minusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
@@ -67,7 +67,7 @@ export const RestWaitScreen = ({
             </SelectGroupItem>
             <SelectGroupItem
               disabled={currentFocusMinutes + MINUTES_GAP >= MAX_FOCUS_MINUTES}
-              value="plus"
+              value="plus-focus-time"
               className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
               <Icon name="plusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
