@@ -5,10 +5,10 @@ type THandler = {
   onResume?: () => void;
   onStop?: () => void;
   onPause?: () => void;
-  onFinish?: (time: number) => void;
+  onFinish?: () => void;
 };
 
-const INTERVAL_MS = 90;
+const INTERVAL_MS = 100;
 
 /**
  * @returns time: ms 단위
@@ -36,12 +36,13 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
 
     const now = Date.now();
     const elapsedTime = now - startTimeRef.current + accumulatedTimeRef.current;
-    const newTime = initialTime - elapsedTime;
+    // @FIX: 테스트 용으로 1000 곱해줌
+    const newTime = initialTime - elapsedTime * 1000;
 
     setTime(newTime);
 
     if (newTime <= (endTime ?? 0)) {
-      handlerRef.current?.onFinish?.(newTime);
+      handlerRef.current?.onFinish?.();
       stop();
     }
   }, [initialTime, handlerRef, endTime]);

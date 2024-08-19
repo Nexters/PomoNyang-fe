@@ -9,12 +9,11 @@ import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useTimer } from '@/shared/hooks';
-import { createIsoDuration, minutesToMs, msToTime } from '@/shared/utils';
+import { createIsoDuration, minutesToMs, msToTime, parseIsoDuration } from '@/shared/utils';
 import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/pomodoro';
 
-// @TODO: 둘 다 60분으로 수정
-const END_TIME = -(1000 * 5); // 5초
-const MAX_TIME_ON_PAGE = 1000 * 5; // 5초
+const END_TIME = -minutesToMs(60);
+const MAX_TIME_ON_PAGE = minutesToMs(60);
 
 const Pomodoro = () => {
   const [selectedNextAction, setSelectedNextAction] = useState<PomodoroNextAction>();
@@ -37,15 +36,12 @@ const Pomodoro = () => {
   const [currentCategory, setCurrentCategory] = useState(categories?.[0].title ?? '');
   const categoryData = categories?.find((category) => category.title === currentCategory);
 
-  // const currentRestMinutes =
-  //   parseIsoDuration(categoryData?.restTime).hours * 60 +
-  //   parseIsoDuration(categoryData?.restTime).minutes;
-  // const currentFocusMinutes =
-  //   parseIsoDuration(categoryData?.focusTime).hours * 60 +
-  //   parseIsoDuration(categoryData?.focusTime).minutes;
-
-  const currentRestMinutes = 0.1; // 6초
-  const currentFocusMinutes = 0.1; // 6초
+  const currentRestMinutes =
+    parseIsoDuration(categoryData?.restTime).hours * 60 +
+    parseIsoDuration(categoryData?.restTime).minutes;
+  const currentFocusMinutes =
+    parseIsoDuration(categoryData?.focusTime).hours * 60 +
+    parseIsoDuration(categoryData?.focusTime).minutes;
 
   const [initialTime, setInitialTime] = useState(minutesToMs(currentFocusMinutes));
 
@@ -60,12 +56,12 @@ const Pomodoro = () => {
         setInitialTime(minutesToMs(currentFocusMinutes));
       }
     },
-    onFinish: (_time) => {
+    onFinish: () => {
       if (mode === 'focus') {
         // 데이터 저장 이후,
         // 초기 값 변경 이후
         // 휴식 대기 화면으로 강제 이동
-        setFocusedTime(minutesToMs(currentRestMinutes) - _time);
+        setFocusedTime(minutesToMs(currentFocusMinutes) - END_TIME);
         setInitialTime(MAX_TIME_ON_PAGE);
         setMode('rest-wait');
         return;
@@ -103,7 +99,7 @@ const Pomodoro = () => {
                 clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
                 categoryNo: categoryData?.no,
                 focusedTime: createIsoDuration(msToTime(focusedTime)),
-                restedTime: createIsoDuration(msToTime(minutesToMs(currentRestMinutes) - _time)),
+                restedTime: createIsoDuration(msToTime(minutesToMs(currentRestMinutes) - END_TIME)),
                 doneAt: new Date().toISOString(),
               },
             ],
