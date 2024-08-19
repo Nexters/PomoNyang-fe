@@ -39,7 +39,7 @@ export const HomeScreen = ({
 
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
-  const [showGuide, setShowGuide] = useLocalStorage<boolean>(LOCAL_STORAGE_KEY.GUIDE_SHOWN, false);
+  const [showGuide, setShowGuide] = useLocalStorage<boolean>(LOCAL_STORAGE_KEY.GUIDE_SHOWN, true);
 
   const changeTimeDialogProps = useDisclosure();
   const changeCategoryDrawerProps = useDisclosure();
