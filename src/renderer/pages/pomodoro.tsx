@@ -25,7 +25,7 @@ const Pomodoro = () => {
 
   const { data: categories } = useCategories();
   const { data: user } = useUser();
-  const { mutate: addPomodoro } = useAddPomodoro();
+  const { mutate: _addPomodoro } = useAddPomodoro();
 
   const { createNotificationByMode } = useFocusNotification();
 
@@ -71,17 +71,7 @@ const Pomodoro = () => {
         // 초기 값 변경 이후
         // 홈 화면으로 강제 이동
         if (categoryData?.no) {
-          addPomodoro({
-            body: [
-              {
-                clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
-                categoryNo: categoryData?.no,
-                focusedTime: createIsoDuration(msToTime(focusedTime)),
-                restedTime: createIsoDuration({ minutes: 0 }),
-                doneAt: new Date().toISOString(),
-              },
-            ],
-          });
+          addPomodoro(focusedTime, 0);
         }
         setInitialTime(minutesToMs(currentRestMinutes));
         setMode(null);
@@ -93,17 +83,7 @@ const Pomodoro = () => {
         // 초기 값 변경 이후
         // 홈 화면으로 강제 이동
         if (categoryData?.no) {
-          addPomodoro({
-            body: [
-              {
-                clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
-                categoryNo: categoryData?.no,
-                focusedTime: createIsoDuration(msToTime(focusedTime)),
-                restedTime: createIsoDuration(msToTime(minutesToMs(currentRestMinutes) - END_TIME)),
-                doneAt: new Date().toISOString(),
-              },
-            ],
-          });
+          addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - END_TIME);
         }
         setInitialTime(minutesToMs(currentFocusMinutes));
         setMode(null);
@@ -116,10 +96,9 @@ const Pomodoro = () => {
     start();
   }, [mode]);
 
-  const stopAndAddPomodoro = (focusedTime: number, restedTime: number) => {
-    stop();
+  const addPomodoro = (focusedTime: number, restedTime: number) => {
     if (categoryData?.no) {
-      addPomodoro({
+      _addPomodoro({
         body: [
           {
             clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
@@ -134,17 +113,18 @@ const Pomodoro = () => {
   };
 
   const handleEndFocus = () => {
-    stopAndAddPomodoro(time, 0);
+    stop();
+    addPomodoro(minutesToMs(currentFocusMinutes) - time, 0);
     setMode(null);
   };
 
   const handleEndRestWait = () => {
-    stopAndAddPomodoro(focusedTime, 0);
+    addPomodoro(focusedTime, 0);
     setMode(null);
   };
 
   const handleEndRest = () => {
-    stopAndAddPomodoro(focusedTime, time);
+    addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
     setMode(null);
   };
 
@@ -158,7 +138,8 @@ const Pomodoro = () => {
         setSelectedNextAction={setSelectedNextAction}
         handleFocus={() => {
           // TODO: selectedNextAction 에 따라 rest 시간 조절 후 focus 모드로 변경
-          stopAndAddPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
+          stop();
+          addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
           setMode('focus');
         }}
         handleEnd={handleEndRest}
