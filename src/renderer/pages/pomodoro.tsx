@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { PomodoroMode, PomodoroNextAction } from '@/entities/pomodoro';
-import { useCategories } from '@/features/category';
+import { useCategories, useUpdateCategory } from '@/features/category';
 import { useAddPomodoro } from '@/features/pomodoro';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
-import { LOCAL_STORAGE_KEY } from '@/shared/constants';
+import { LOCAL_STORAGE_KEY, MINUTES_GAP } from '@/shared/constants';
 import { useTimer } from '@/shared/hooks';
 import { createIsoDuration, minutesToMs, msToTime, parseIsoDuration } from '@/shared/utils';
 import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/pomodoro';
@@ -26,6 +26,7 @@ const Pomodoro = () => {
   const { data: categories } = useCategories();
   const { data: user } = useUser();
   const { mutate: _addPomodoro } = useAddPomodoro();
+  const { mutate: updateCategory } = useUpdateCategory();
 
   const { createNotificationByMode } = useFocusNotification();
 
@@ -121,22 +122,21 @@ const Pomodoro = () => {
     }
   };
 
-  const handleEndFocus = () => {
-    stop();
-    addPomodoro(minutesToMs(currentFocusMinutes) - time, 0);
-    setMode(null);
-  };
-
-  const handleEndRestWait = () => {
-    stop();
-    addPomodoro(focusedTime, 0);
-    setMode(null);
-  };
-
-  const handleEndRest = () => {
-    stop();
-    addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
-    setMode(null);
+  const updateTime = (type: 'focusTime' | 'restTime', currentMinutes: number) => {
+    if (selectedNextAction) {
+      updateCategory({
+        no: categoryData?.no ?? 0,
+        body: {
+          [type]: createIsoDuration({
+            minutes:
+              selectedNextAction === 'plus-focus-time'
+                ? currentMinutes + MINUTES_GAP
+                : currentMinutes - MINUTES_GAP,
+          }),
+        },
+      });
+      setSelectedNextAction(undefined);
+    }
   };
 
   if (mode === 'rest')
@@ -148,12 +148,17 @@ const Pomodoro = () => {
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
         handleFocus={() => {
-          // TODO: selectedNextAction 에 따라 rest 시간 조절 후 focus 모드로 변경
+          updateTime('restTime', currentRestMinutes);
           stop();
           addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
           setMode('focus');
         }}
-        handleEnd={handleEndRest}
+        handleEnd={() => {
+          updateTime('restTime', currentRestMinutes);
+          stop();
+          addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
+          setMode(null);
+        }}
       />
     );
   if (mode === 'rest-wait')
@@ -165,11 +170,17 @@ const Pomodoro = () => {
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
         handleRest={() => {
-          setInitialTime(minutesToMs(currentRestMinutes));
+          updateTime('focusTime', currentFocusMinutes);
           stop();
+          setInitialTime(minutesToMs(currentRestMinutes));
           setMode('rest');
         }}
-        handleEnd={handleEndRestWait}
+        handleEnd={() => {
+          updateTime('focusTime', currentFocusMinutes);
+          stop();
+          addPomodoro(focusedTime, 0);
+          setMode(null);
+        }}
       />
     );
   if (mode === 'focus')
@@ -183,7 +194,11 @@ const Pomodoro = () => {
           setFocusedTime(minutesToMs(currentFocusMinutes) - time);
           setMode('rest-wait');
         }}
-        handleEnd={handleEndFocus}
+        handleEnd={() => {
+          stop();
+          addPomodoro(minutesToMs(currentFocusMinutes) - time, 0);
+          setMode(null);
+        }}
       />
     );
 
