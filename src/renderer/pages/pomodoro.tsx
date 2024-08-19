@@ -49,6 +49,7 @@ const Pomodoro = () => {
     onStop: () => {
       if (mode === 'focus') {
         createNotificationByMode(user?.cat?.type ?? 'CHEESE', 'focus-end');
+        setInitialTime(MAX_TIME_ON_PAGE);
         return;
       }
       if (mode === 'rest') {
@@ -92,7 +93,11 @@ const Pomodoro = () => {
   });
 
   useEffect(() => {
-    if (!mode) return;
+    if (!mode) {
+      setInitialTime(minutesToMs(currentFocusMinutes));
+      setFocusedTime(0);
+      return;
+    }
     start();
   }, [mode]);
 
@@ -119,11 +124,13 @@ const Pomodoro = () => {
   };
 
   const handleEndRestWait = () => {
+    stop();
     addPomodoro(focusedTime, 0);
     setMode(null);
   };
 
   const handleEndRest = () => {
+    stop();
     addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
     setMode(null);
   };
