@@ -115,6 +115,11 @@ const Pomodoro = () => {
     },
   });
 
+  useEffect(() => {
+    if (!mode) return;
+    start();
+  }, [mode]);
+
   const stopAndAddPomodoro = (focusedTime: number, restedTime: number) => {
     stop();
     if (categoryData?.no) {
@@ -159,7 +164,6 @@ const Pomodoro = () => {
           // TODO: selectedNextAction 에 따라 rest 시간 조절 후 focus 모드로 변경
           stopAndAddPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
           setMode('focus');
-          start();
         }}
         handleEnd={handleEndRest}
       />
@@ -176,7 +180,6 @@ const Pomodoro = () => {
           setInitialTime(minutesToMs(currentRestMinutes));
           stop();
           setMode('rest');
-          start();
         }}
         handleEnd={handleEndRestWait}
       />
@@ -191,7 +194,6 @@ const Pomodoro = () => {
           stop();
           setFocusedTime(minutesToMs(currentFocusMinutes) - time);
           setMode('rest-wait');
-          start();
         }}
         handleEnd={handleEndFocus}
       />
