@@ -1,3 +1,5 @@
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
@@ -49,7 +51,32 @@ export const RestWaitScreen = ({
             </div>
           )}
         </div>
-        <div className="w-[240px] h-[240px] bg-background-secondary" />
+        <div className="relative w-[240px] h-[240px]">
+          <DotLottieReact
+            src="src/renderer/shared/assets/lotties/loti_complete_focus.json"
+            autoplay
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              width: '240px',
+              height: '240px',
+            }}
+          />
+          {isExceed && (
+            <DotLottieReact
+              src="src/renderer/shared/assets/lotties/loti_particle.json"
+              autoplay
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: '240px',
+                height: '240px',
+              }}
+            />
+          )}
+        </div>
         <div className="flex flex-col gap-3">
           <p className="body-sb text-text-disabled">다음부터 집중시간을 바꿀까요?</p>
           <SelectGroup
