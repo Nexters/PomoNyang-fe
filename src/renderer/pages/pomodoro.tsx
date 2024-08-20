@@ -5,10 +5,11 @@ import { useLocalStorage } from 'usehooks-ts';
 import { PomodoroMode, PomodoroNextAction } from '@/entities/pomodoro';
 import { useCategories, useUpdateCategory } from '@/features/category';
 import { useAddPomodoro } from '@/features/pomodoro';
+import { TimeoutDialog } from '@/features/pomodoro/ui/timeout-dialog';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { LOCAL_STORAGE_KEY, MINUTES_GAP } from '@/shared/constants';
-import { useTimer } from '@/shared/hooks';
+import { useDisclosure, useTimer } from '@/shared/hooks';
 import { createIsoDuration, minutesToMs, msToTime, parseIsoDuration } from '@/shared/utils';
 import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/pomodoro';
 
@@ -16,9 +17,24 @@ const END_TIME_ON_FOCUS_PAGE = -minutesToMs(60);
 const END_TIME_ON_REST_WAIT_PAGE = -minutesToMs(60);
 const END_TIME_ON_REST_PAGE = -minutesToMs(30);
 
+const timeoutMessageMap: Record<
+  Exclude<PomodoroMode, 'focus'>,
+  { title: string; description: string }
+> = {
+  'rest-wait': {
+    title: '집중을 끝내고 돌아왔어요',
+    description: '너무 오랜 시간동안 대기화면에 머물러서 홈화면으로 이동되었어요.',
+  },
+  rest: {
+    title: '휴식을 끝내고 돌아왔어요',
+    description: '너무 오랜 시간동안 휴식하고 있어서 홈화면으로 이동되었어요.',
+  },
+};
+
 const Pomodoro = () => {
   const [selectedNextAction, setSelectedNextAction] = useState<PomodoroNextAction>();
 
+  const [timeoutMode, setTimeoutMode] = useState<Exclude<PomodoroMode, 'focus'> | null>(null);
   const [mode, setMode] = useLocalStorage<PomodoroMode | null>(LOCAL_STORAGE_KEY.MODE, null);
 
   // 단위 ms
@@ -30,6 +46,7 @@ const Pomodoro = () => {
   const { mutate: updateCategory } = useUpdateCategory();
 
   const { createNotificationByMode } = useFocusNotification();
+  const timeoutDialogProps = useDisclosure();
 
   useEffect(() => {
     setCurrentCategory(categories?.[0].title ?? '');
@@ -88,6 +105,8 @@ const Pomodoro = () => {
         setEndTime(END_TIME_ON_REST_PAGE);
         setMode(null);
         // @TODO: 모달 띄워주기
+        setTimeoutMode('rest-wait');
+        timeoutDialogProps.onOpen();
         return;
       }
       if (mode === 'rest') {
@@ -99,6 +118,8 @@ const Pomodoro = () => {
         }
         setInitialTime(minutesToMs(currentFocusMinutes));
         setEndTime(END_TIME_ON_FOCUS_PAGE);
+        setTimeoutMode('rest');
+        timeoutDialogProps.onOpen();
         setMode(null);
       }
     },
@@ -212,14 +233,24 @@ const Pomodoro = () => {
     );
 
   return (
-    <HomeScreen
-      setMode={setMode}
-      startTimer={start}
-      currentCategory={currentCategory}
-      setCurrentCategory={setCurrentCategory}
-      currentFocusMinutes={currentFocusMinutes}
-      currentRestMinutes={currentRestMinutes}
-    />
+    <>
+      <HomeScreen
+        setMode={setMode}
+        startTimer={start}
+        currentCategory={currentCategory}
+        setCurrentCategory={setCurrentCategory}
+        currentFocusMinutes={currentFocusMinutes}
+        currentRestMinutes={currentRestMinutes}
+      />
+      {timeoutMode && (
+        <TimeoutDialog
+          open={timeoutDialogProps.isOpen}
+          onOpenChange={timeoutDialogProps.setIsOpen}
+          title={timeoutMessageMap[timeoutMode].title}
+          description={timeoutMessageMap[timeoutMode].description}
+        />
+      )}
+    </>
   );
 };
 
