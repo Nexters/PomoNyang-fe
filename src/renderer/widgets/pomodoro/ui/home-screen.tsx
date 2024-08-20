@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
+import { CatType } from '@/entities/cat';
 import { PomodoroMode } from '@/entities/pomodoro';
 import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
 import { catNameMap } from '@/features/pomodoro';
@@ -18,6 +19,15 @@ const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
   { id: 'timeAdjustDiv', message: '눌러서 시간을 조정할 수 있어요' },
 ];
+const getTooltipMessages = (catType?: CatType) => {
+  if (catType === 'THREE_COLOR')
+    return [
+      '"시간이 없어서"는 변명이다냥',
+      '휴대폰 그만보고 집중하라냥',
+      '기회란 금새 왔다 사라진다냥',
+    ];
+  return ['나랑 함께할 시간이다냥!', '자주 와서 쓰다듬어 달라냥', '집중이 잘 될 거 같다냥'];
+};
 
 type HomeScreenProps = {
   setMode: (mode: PomodoroMode) => void;
@@ -54,6 +64,13 @@ export const HomeScreen = ({
     stateMachines: 'State Machine_Home',
     userCatType: user?.cat?.type,
   });
+  const [tooltipMessage, setTooltipMessage] = useState('');
+
+  useEffect(() => {
+    const messages = getTooltipMessages(user?.cat?.type);
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    setTooltipMessage(messages[randomIndex]);
+  }, [user?.cat?.type]);
 
   return (
     <>
@@ -70,7 +87,7 @@ export const HomeScreen = ({
         </header>
         <main className="flex flex-col gap-[25px] items-center justify-center flex-1">
           <Tooltip
-            content="오랜만이다냥"
+            content={tooltipMessage}
             color="white"
             sideOffset={-40}
             rootProps={{ open: !showGuide }}
