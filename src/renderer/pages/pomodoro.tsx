@@ -12,8 +12,9 @@ import { useTimer } from '@/shared/hooks';
 import { createIsoDuration, minutesToMs, msToTime, parseIsoDuration } from '@/shared/utils';
 import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/pomodoro';
 
-const END_TIME = -minutesToMs(60);
-const MAX_TIME_ON_PAGE = minutesToMs(60);
+const END_TIME_ON_FOCUS_PAGE = -minutesToMs(60);
+const END_TIME_ON_REST_WAIT_PAGE = -minutesToMs(60);
+const END_TIME_ON_REST_PAGE = -minutesToMs(30);
 
 const Pomodoro = () => {
   const [selectedNextAction, setSelectedNextAction] = useState<PomodoroNextAction>();
@@ -45,21 +46,24 @@ const Pomodoro = () => {
     parseIsoDuration(categoryData?.focusTime).minutes;
 
   const [initialTime, setInitialTime] = useState(minutesToMs(currentFocusMinutes));
+  const [endTime, setEndTime] = useState(END_TIME_ON_FOCUS_PAGE); // 끝나는 시간
 
   useEffect(() => {
     setInitialTime(minutesToMs(currentFocusMinutes));
   }, [categoryData]);
 
-  const { time, start, stop } = useTimer(initialTime, END_TIME, {
+  const { time, start, stop } = useTimer(initialTime, endTime, {
     onStop: () => {
       if (mode === 'focus') {
         createNotificationByMode(user?.cat?.type ?? 'CHEESE', 'focus-end');
-        setInitialTime(MAX_TIME_ON_PAGE);
+        setInitialTime(0);
+        setEndTime(END_TIME_ON_REST_WAIT_PAGE);
         return;
       }
       if (mode === 'rest') {
         createNotificationByMode(user?.cat?.type ?? 'CHEESE', 'rest-end');
         setInitialTime(minutesToMs(currentFocusMinutes));
+        setEndTime(END_TIME_ON_FOCUS_PAGE);
       }
     },
     onFinish: () => {
@@ -67,8 +71,9 @@ const Pomodoro = () => {
         // 데이터 저장 이후,
         // 초기 값 변경 이후
         // 휴식 대기 화면으로 강제 이동
-        setFocusedTime(minutesToMs(currentFocusMinutes) - END_TIME);
-        setInitialTime(MAX_TIME_ON_PAGE);
+        setFocusedTime(minutesToMs(currentFocusMinutes) - endTime);
+        setInitialTime(0);
+        setEndTime(END_TIME_ON_REST_WAIT_PAGE);
         setMode('rest-wait');
         return;
       }
@@ -80,6 +85,7 @@ const Pomodoro = () => {
           addPomodoro(focusedTime, 0);
         }
         setInitialTime(minutesToMs(currentRestMinutes));
+        setEndTime(END_TIME_ON_REST_PAGE);
         setMode(null);
         // @TODO: 모달 띄워주기
         return;
@@ -89,9 +95,10 @@ const Pomodoro = () => {
         // 초기 값 변경 이후
         // 홈 화면으로 강제 이동
         if (categoryData?.no) {
-          addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - END_TIME);
+          addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - endTime);
         }
         setInitialTime(minutesToMs(currentFocusMinutes));
+        setEndTime(END_TIME_ON_FOCUS_PAGE);
         setMode(null);
       }
     },
@@ -101,6 +108,7 @@ const Pomodoro = () => {
     if (!mode) {
       setInitialTime(minutesToMs(currentFocusMinutes));
       setFocusedTime(0);
+      setEndTime(END_TIME_ON_FOCUS_PAGE);
       return;
     }
     start();
@@ -170,8 +178,9 @@ const Pomodoro = () => {
         setSelectedNextAction={setSelectedNextAction}
         handleRest={() => {
           updateCategoryTime('focusTime', currentFocusMinutes);
-          stop();
           setInitialTime(minutesToMs(currentRestMinutes));
+          setEndTime(END_TIME_ON_REST_PAGE);
+          stop();
           setMode('rest');
         }}
         handleEnd={() => {
@@ -188,7 +197,8 @@ const Pomodoro = () => {
         time={time}
         currentCategory={currentCategory}
         handleRest={() => {
-          setInitialTime(MAX_TIME_ON_PAGE);
+          setInitialTime(0);
+          setEndTime(END_TIME_ON_REST_WAIT_PAGE);
           stop();
           setFocusedTime(minutesToMs(currentFocusMinutes) - time);
           setMode('rest-wait');
