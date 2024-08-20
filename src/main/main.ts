@@ -45,12 +45,13 @@ const createWindow = () => {
   return mainWindow;
 };
 
-const trayIcon: Record<string, string> = {
-  cat: path.join(__dirname, '../../src/shared/assets/main/tray-cat.png'),
-  focus: path.join(__dirname, '../../src/shared/assets/main/tray-focus.png'),
+const trayIconMap: Record<string, string> = {
+  cat: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEuSURBVHgB1ZRNTsMwEIXfmBCxzBF8A1hCYeFIlC1HCNyAI7QnQNygR8i+IFcCdd0bEG7QJVRNhiENKM4PoemGvoXljD3fOOMZA/9dVDXw9MIAmYHnTyicJU1ObE811uoGjJiu5otWID+d34H5vlhJoPywCs1hmbIC0xuDCmn4Mvte99zQuC7NxXFl2ZoQ74XtSCZlWB6YIxlbgMRaNsOBpqtXHBbfqUKXund0S7cDGQF2VPWEPYAcNALZDk7QT1ouLqgBsWaDfgqQfpg6ELRz/lygkkLuq4ySBqAfy7jEtpKOKrffD1BabCll84DtNXb5FfHj2UTMEf4ixpiG89GvwHzfdDCSs0dOz7pe8jcHt3T5HNeX2oJvXhUjUKlPOhbLV37f5HWJ4XmLPEV7qU80zGLwaU45uQAAAABJRU5ErkJggg',
+  focus:
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAF5SURBVHgBxZRBTsJAGIXfTEkJEWNJ3LiyG1dugJWCizbGvTcQb4AnQE+AnoB7iKRdaHRXbiBx44qAG40F+jttLdgMbYGNL5nm78ybN99kJgP8l+i+VibL0LN8HCuIevW2cDqYTTpZXpYaZBmaCLFEVV50cpOdPdrYiNCbtGJhAQK1sAlhSOeOls9it+z06QprEU6n5cQxoiZ1j5vrBeamA6SJsTZ1TwypW1rc3yqgMdMe0EPN37KGZI2hqBXfu5SQrCMdnuuIZoWrsz7SpYUHl0BIvVoHhAbWlaKWBOU4RhjQbRLmy3PPo3KxZY8biRMKe8D2AZIDoUdlDlkqVUSr/rqLwMiRPYz6MiH3bMnoU0VhQXh1OamSlwOZ+TIQXztm3DmUJxelwLvEawNldinOfT4IpkISzy9q36uo17Hhvz8BJffMeejnmxzoDiO3DR5c6nEsAwkSd7IBXrjAbt3A1n7Y+fUODJ9tfH/cpD1hmSKnqdNrR1/F+wOB4H1F8tsNAAAAAABJRU5ErkJggg==',
 };
 const getTrayIcon = (icon: string): NativeImage => {
-  return nativeImage.createFromPath(trayIcon[icon] ?? trayIcon['cat']);
+  return nativeImage.createFromDataURL(trayIconMap[icon] ?? trayIconMap['cat']);
 };
 
 const createTray = (mainWindow: BrowserWindow) => {
