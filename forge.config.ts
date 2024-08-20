@@ -10,6 +10,7 @@ import type { ForgeConfig } from '@electron-forge/shared-types';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    icon: 'src/shared/assets/icons/icon',
   },
   rebuildConfig: {},
   makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
