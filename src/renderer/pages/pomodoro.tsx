@@ -123,20 +123,19 @@ const Pomodoro = () => {
   };
 
   const updateCategoryTime = (type: 'focusTime' | 'restTime', currentMinutes: number) => {
-    if (selectedNextAction) {
-      updateCategory({
-        no: categoryData?.no ?? 0,
-        body: {
-          [type]: createIsoDuration({
-            minutes:
-              selectedNextAction === 'plus'
-                ? currentMinutes + MINUTES_GAP
-                : currentMinutes - MINUTES_GAP,
-          }),
-        },
-      });
-      setSelectedNextAction(undefined);
-    }
+    if (!selectedNextAction || !categoryData?.no) return;
+    updateCategory({
+      no: categoryData?.no,
+      body: {
+        [type]: createIsoDuration({
+          minutes:
+            selectedNextAction === 'plus'
+              ? currentMinutes + MINUTES_GAP
+              : currentMinutes - MINUTES_GAP,
+        }),
+      },
+    });
+    setSelectedNextAction(undefined);
   };
 
   if (mode === 'rest')
