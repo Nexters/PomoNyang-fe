@@ -36,7 +36,8 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
 
     const now = Date.now();
     const elapsedTime = now - startTimeRef.current + accumulatedTimeRef.current;
-    const newTime = initialTime - elapsedTime;
+    // @FIX: 테스트 용으로 1000 곱해줌
+    const newTime = initialTime - elapsedTime * 1000;
 
     setTime(newTime);
 
@@ -44,16 +45,16 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
       handlerRef.current?.onFinish?.();
       stop();
     }
-  }, [initialTime, handlerRef]);
+  }, [initialTime, handlerRef, endTime]);
 
   const run = useCallback(() => {
-    if (isRunning) return;
+    if (timerRef.current !== null) return;
 
     startTimeRef.current = Date.now();
     timerRef.current = window.setInterval(tick, INTERVAL_MS);
 
     setIsRunning(true);
-  }, [tick, isRunning]);
+  }, [tick]);
 
   const start = useCallback(() => {
     run();
@@ -68,12 +69,11 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
   const stop = useCallback(() => {
     setIsRunning(false);
 
+    handlerRef.current?.onStop?.();
     _clearInterval();
     startTimeRef.current = null;
     accumulatedTimeRef.current = 0;
-
-    handlerRef.current?.onStop?.();
-  }, [initialTime, handlerRef]);
+  }, [handlerRef, time]);
 
   const pause = useCallback(() => {
     if (!isRunning) return;

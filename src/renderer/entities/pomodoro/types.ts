@@ -8,4 +8,4 @@ export type Pomodoro = {
 
 export type PomodoroMode = 'focus' | 'rest-wait' | 'rest';
 
-export type PomodoroNextAction = 'plus-focus-time' | 'minus-focus-time';
+export type PomodoroNextAction = 'plus' | 'minus';

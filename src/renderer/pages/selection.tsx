@@ -1,10 +1,12 @@
 import { Fragment, useMemo, useState } from 'react';
 
+import { useRive } from '@rive-app/react-canvas';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CatType } from '@/entities/cat';
 import { useCats, useSelectCat } from '@/features/cat';
 import appIconImage from '@/shared/assets/images/app-icon.png';
+import catSelectMotionRiveFile from '@/shared/assets/rivs/cat_select_ver2.0.riv';
 import { PATH } from '@/shared/constants';
 import { useNotification } from '@/shared/hooks';
 import { Button, Frame, Icon, IconName, SelectGroup, SelectGroupItem } from '@/shared/ui';
@@ -25,6 +27,7 @@ const alarmMessageMap: Record<CatType, string> = {
   BLACK: '어디갔나옹...',
   THREE_COLOR: '내가 여기있는데 어디갔냐옹!',
 };
+const RIVE_STATE_MACHINE_NAME = 'State Machine_selectCat';
 
 const Selection = () => {
   const location = useLocation();
@@ -48,6 +51,19 @@ const Selection = () => {
   const [selectedCatId, setSelectedCatId] = useState<string | undefined>(undefined);
   const { mutate: selectCat } = useSelectCat();
   const { requestPermission } = useNotification();
+
+  const { rive, RiveComponent } = useRive({
+    src: catSelectMotionRiveFile,
+    stateMachines: RIVE_STATE_MACHINE_NAME,
+    autoplay: true,
+  });
+  const [cheeseCatInput, blackCatInput, calicoCatInput] =
+    rive?.stateMachineInputs(RIVE_STATE_MACHINE_NAME) ?? [];
+  const catTypeInputMap = {
+    CHEESE: cheeseCatInput,
+    BLACK: blackCatInput,
+    THREE_COLOR: calicoCatInput,
+  };
 
   const handleClickBackButton = () => {
     navigate(fromMyCatPage ? PATH.MY_CAT : PATH.ONBOARDING);
@@ -85,10 +101,29 @@ const Selection = () => {
           ))}
 
           {/* TODO: 아래를 선택한 고양이 이미지 에셋으로 변경 */}
-          <div className="w-full h-[240px] bg-background-secondary" />
+          <RiveComponent className="w-full h-[240px]" />
         </div>
 
-        <SelectGroup className="flex" value={selectedCatId} onValueChange={setSelectedCatId}>
+        <SelectGroup
+          className="flex"
+          value={selectedCatId}
+          onValueChange={(nextCatId) => {
+            setSelectedCatId((prevCatId) => {
+              const prevCat = cats.find((cat) => cat.id === prevCatId);
+              const nextCat = cats.find((cat) => cat.id === nextCatId);
+
+              // 다음 고양이 선택이 있으면 해당 input을 fire
+              // 없으면 처음으로 돌아가기 위해 이전 고양이의 input을 fire
+              if (nextCat) {
+                catTypeInputMap[nextCat.type]?.fire();
+              } else if (prevCat) {
+                catTypeInputMap[prevCat.type]?.fire();
+              }
+
+              return nextCatId;
+            });
+          }}
+        >
           {cats.map((cat) => (
             <SelectGroupItem
               key={cat.id}

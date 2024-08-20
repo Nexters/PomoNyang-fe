@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
+import completeFocusLottie from '@/shared/assets/lotties/loti_complete_focus.json?url';
+import particleLottie from '@/shared/assets/lotties/loti_particle.json?url';
 import { MAX_FOCUS_MINUTES, MIN_FOCUS_MINUTES, MINUTES_GAP } from '@/shared/constants';
-import { useTimer } from '@/shared/hooks';
 import { Button, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
 import { minutesToMs, msToTime } from '@/shared/utils';
 
@@ -14,13 +15,9 @@ type RestWaitScreenProps = {
   time: number;
   handleRest: () => void;
   handleEnd: () => void;
-  handleInit: () => void;
   selectedNextAction: PomodoroNextAction | undefined;
   setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
 };
-
-// @TODO: 60분으로 수정
-const MAX_TIME_ON_PAGE = 1000 * 5; // 5초
 
 export const RestWaitScreen = ({
   currentCategory,
@@ -28,7 +25,6 @@ export const RestWaitScreen = ({
   time, // 전체 경과한 시간
   handleRest,
   handleEnd,
-  handleInit,
   selectedNextAction,
   setSelectedNextAction,
 }: RestWaitScreenProps) => {
@@ -38,20 +34,6 @@ export const RestWaitScreen = ({
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(
     isExceed ? time - minutesToMs(currentFocusMinutes) : 0,
   );
-
-  const { start, stop } = useTimer(MAX_TIME_ON_PAGE, 0, {
-    onFinish: () => {
-      handleInit();
-    },
-  });
-
-  useEffect(() => {
-    start();
-
-    return () => {
-      stop();
-    };
-  }, []);
 
   return (
     <div className="flex flex-col h-full">
@@ -71,7 +53,32 @@ export const RestWaitScreen = ({
             </div>
           )}
         </div>
-        <div className="w-[240px] h-[240px] bg-background-secondary" />
+        <div className="relative w-[240px] h-[240px]">
+          <DotLottieReact
+            src={completeFocusLottie}
+            autoplay
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              width: '240px',
+              height: '240px',
+            }}
+          />
+          {isExceed && (
+            <DotLottieReact
+              src={particleLottie}
+              autoplay
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: '240px',
+                height: '240px',
+              }}
+            />
+          )}
+        </div>
         <div className="flex flex-col gap-3">
           <p className="body-sb text-text-disabled">다음부터 집중시간을 바꿀까요?</p>
           <SelectGroup
@@ -81,7 +88,7 @@ export const RestWaitScreen = ({
           >
             <SelectGroupItem
               disabled={currentFocusMinutes - MINUTES_GAP <= MIN_FOCUS_MINUTES}
-              value="minus"
+              value="minus-focus-time"
               className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
               <Icon name="minusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
@@ -89,7 +96,7 @@ export const RestWaitScreen = ({
             </SelectGroupItem>
             <SelectGroupItem
               disabled={currentFocusMinutes + MINUTES_GAP >= MAX_FOCUS_MINUTES}
-              value="plus"
+              value="plus-focus-time"
               className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
               <Icon name="plusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
