@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CatType } from '@/entities/cat';
 import { useCats, useSelectCat } from '@/features/cat';
+import appIconImage from '@/shared/assets/images/app-icon.png';
 import catSelectMotionRiveFile from '@/shared/assets/rivs/cat_select_ver2.0.riv';
 import { PATH } from '@/shared/constants';
 import { useNotification } from '@/shared/hooks';
@@ -176,8 +177,7 @@ const AlarmSample = ({ appName = '모하냥', time = '지금', message }: AlarmS
         'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
       )}
     >
-      {/* TODO: 앱 아이콘으로 변경 */}
-      <div className="w-[38px] h-[38px] rounded-xs bg-white" />
+      <img src={appIconImage} width={38} height={38} />
 
       <div className="flex flex-col flex-1">
         <div className="flex justify-between">
