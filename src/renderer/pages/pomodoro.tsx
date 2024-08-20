@@ -122,21 +122,20 @@ const Pomodoro = () => {
     }
   };
 
-  const updateTime = (type: 'focusTime' | 'restTime', currentMinutes: number) => {
-    if (selectedNextAction) {
-      updateCategory({
-        no: categoryData?.no ?? 0,
-        body: {
-          [type]: createIsoDuration({
-            minutes:
-              selectedNextAction === 'plus-focus-time'
-                ? currentMinutes + MINUTES_GAP
-                : currentMinutes - MINUTES_GAP,
-          }),
-        },
-      });
-      setSelectedNextAction(undefined);
-    }
+  const updateCategoryTime = (type: 'focusTime' | 'restTime', currentMinutes: number) => {
+    if (!selectedNextAction || !categoryData?.no) return;
+    updateCategory({
+      no: categoryData?.no,
+      body: {
+        [type]: createIsoDuration({
+          minutes:
+            selectedNextAction === 'plus'
+              ? currentMinutes + MINUTES_GAP
+              : currentMinutes - MINUTES_GAP,
+        }),
+      },
+    });
+    setSelectedNextAction(undefined);
   };
 
   if (mode === 'rest')
@@ -148,13 +147,13 @@ const Pomodoro = () => {
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
         handleFocus={() => {
-          updateTime('restTime', currentRestMinutes);
+          updateCategoryTime('restTime', currentRestMinutes);
           stop();
           addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
           setMode('focus');
         }}
         handleEnd={() => {
-          updateTime('restTime', currentRestMinutes);
+          updateCategoryTime('restTime', currentRestMinutes);
           stop();
           addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
           setMode(null);
@@ -170,13 +169,13 @@ const Pomodoro = () => {
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
         handleRest={() => {
-          updateTime('focusTime', currentFocusMinutes);
+          updateCategoryTime('focusTime', currentFocusMinutes);
           stop();
           setInitialTime(minutesToMs(currentRestMinutes));
           setMode('rest');
         }}
         handleEnd={() => {
-          updateTime('focusTime', currentFocusMinutes);
+          updateCategoryTime('focusTime', currentFocusMinutes);
           stop();
           addPomodoro(focusedTime, 0);
           setMode(null);
