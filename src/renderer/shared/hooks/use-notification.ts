@@ -19,9 +19,12 @@ export const useNotification = () => {
   };
 
   // TODO: 아이콘도 넣고 개선 필요
-  const createNotification = (title: string, options?: NotificationOptions) => {
+  const createNotification = (body: string, options?: NotificationOptions) => {
     if (permission === 'granted') {
-      return new Notification(title, options);
+      return new Notification('모하냥', {
+        body,
+        ...options,
+      });
     }
   };
 
