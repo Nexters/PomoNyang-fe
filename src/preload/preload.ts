@@ -5,6 +5,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { IElectronAPI } from '../shared/type';
 
 const electronAPI: IElectronAPI = {
+  showWindow: () => ipcRenderer.send('show-window'),
   getMachineId: () => ipcRenderer.invoke('get-machine-id'),
 };
 
