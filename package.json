@@ -1,8 +1,8 @@
 {
-  "name": "my-app",
-  "productName": "my-app",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "name": "mohanyang",
+  "productName": "mohanyang",
+  "version": "0.0.1",
+  "description": "Pomodoro timer desktop app with cat",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -41,12 +41,20 @@
     "vite": "^5.0.12",
     "vite-plugin-svgr": "^4.2.0"
   },
-  "keywords": [],
   "author": {
     "name": "leeharyung",
     "email": "lhr4884@naver.com"
   },
-  "license": "MIT",
+  "contributors": [
+    {
+      "name": "leeharyung",
+      "email": "lhr4884@naver.com"
+    },
+    {
+      "name": "young-do cho",
+      "email": "yd199323@gmail.com"
+    }
+  ],
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.8.8",
     "@radix-ui/react-dialog": "^1.1.1",
