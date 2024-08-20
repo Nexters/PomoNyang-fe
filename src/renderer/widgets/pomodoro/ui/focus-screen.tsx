@@ -1,4 +1,7 @@
 import { Time } from '@/features/time';
+import { useUser } from '@/features/user';
+import catFocusMotionRiveFile from '@/shared/assets/rivs/cat_focus.riv';
+import { useRiveCat } from '@/shared/hooks';
 import { Button, Icon, Tooltip } from '@/shared/ui';
 import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
@@ -20,6 +23,13 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
 
   const isExceed = time < 0;
 
+  const { data: user } = useUser();
+  const { RiveComponent, clickCatInput } = useRiveCat({
+    src: catFocusMotionRiveFile,
+    stateMachines: 'State Machine_Focus',
+    userCatType: user?.cat?.type,
+  });
+
   return (
     <div className="relative flex flex-col h-full">
       <header className="flex p-4">
@@ -35,8 +45,12 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
           sideOffset={-20}
           rootProps={{ open: true }}
         />
-        {/* TODO: 고양이 유형에 따라 다른 이미지 */}
-        <div className="w-[240px] h-[240px] bg-background-secondary" />
+        <RiveComponent
+          className="w-full h-[240px]"
+          onClick={() => {
+            clickCatInput?.fire();
+          }}
+        />
         <div className="flex flex-col items-center mt-xl">
           <div className="flex gap-xs">
             <Icon name="focusTime" width={20} height={20} />
