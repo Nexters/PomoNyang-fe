@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { useRive } from '@rive-app/react-canvas';
 import { useNavigate } from 'react-router-dom';
 
-import { CatType } from '@/entities/cat';
 import { useUser } from '@/features/user';
 import catSelectMotionRiveFile from '@/shared/assets/rivs/cat_select_ver2.0.riv';
 import { PATH } from '@/shared/constants';
+import { userCatTypeAliasMap } from '@/shared/hooks';
 import { Button, Frame, Icon, Tooltip } from '@/shared/ui';
 
 const MyCat = () => {
@@ -31,11 +31,6 @@ const MyCat = () => {
     if (!rive || !userCatType) return;
 
     // 선택페이지 고양이가 자동으로 선택되도록 설정
-    const userCatTypeAliasMap: Record<CatType, string> = {
-      CHEESE: 'cheese',
-      BLACK: 'black',
-      THREE_COLOR: 'calico',
-    };
     const userCatTypeAlias = userCatTypeAliasMap[userCatType];
     const clickCatInput = rive.stateMachineInputs('State Machine_selectCat').find((input) => {
       return input.name.toLowerCase().includes(userCatTypeAlias);

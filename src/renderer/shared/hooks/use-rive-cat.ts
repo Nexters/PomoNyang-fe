@@ -4,7 +4,7 @@ import { useRive, StateMachineInput, StateMachineInputType } from '@rive-app/rea
 
 import { CatType } from '@/entities/cat';
 
-const userCatTypeAliasMap: Record<CatType, string> = {
+export const userCatTypeAliasMap: Record<CatType, string> = {
   CHEESE: 'cheese',
   BLACK: 'black',
   THREE_COLOR: 'calico',
