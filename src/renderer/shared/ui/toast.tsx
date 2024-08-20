@@ -14,7 +14,9 @@ export const ToastViewport = forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={cn(
-      'fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]',
+      // @note: 기존 코드는 비교용으로 주석처리. 참고로 기존 것은 화면 해상도에 따라 나타나는 위치가 달랐음
+      // 'fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]',
+      'fixed bottom-0 left-[50%] translate-x-[-50%] z-[100] flex max-h-screen w-full max-w-[400px] flex-col-reverse p-4 pb-12',
       className,
     )}
     {...props}
