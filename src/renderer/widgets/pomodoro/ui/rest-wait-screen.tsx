@@ -1,10 +1,7 @@
-import { useEffect } from 'react';
-
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
 import { MAX_FOCUS_MINUTES, MIN_FOCUS_MINUTES, MINUTES_GAP } from '@/shared/constants';
-import { useTimer } from '@/shared/hooks';
 import { Button, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
 import { minutesToMs, msToTime } from '@/shared/utils';
 
@@ -14,13 +11,9 @@ type RestWaitScreenProps = {
   time: number;
   handleRest: () => void;
   handleEnd: () => void;
-  handleInit: () => void;
   selectedNextAction: PomodoroNextAction | undefined;
   setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
 };
-
-// @TODO: 60분으로 수정
-const MAX_TIME_ON_PAGE = 1000 * 5; // 5초
 
 export const RestWaitScreen = ({
   currentCategory,
@@ -28,7 +21,6 @@ export const RestWaitScreen = ({
   time, // 전체 경과한 시간
   handleRest,
   handleEnd,
-  handleInit,
   selectedNextAction,
   setSelectedNextAction,
 }: RestWaitScreenProps) => {
@@ -38,20 +30,6 @@ export const RestWaitScreen = ({
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(
     isExceed ? time - minutesToMs(currentFocusMinutes) : 0,
   );
-
-  const { start, stop } = useTimer(MAX_TIME_ON_PAGE, 0, {
-    onFinish: () => {
-      handleInit();
-    },
-  });
-
-  useEffect(() => {
-    start();
-
-    return () => {
-      stop();
-    };
-  }, []);
 
   return (
     <div className="flex flex-col h-full">

@@ -20,7 +20,7 @@ const steps = [
 
 type HomeScreenProps = {
   setMode: (mode: PomodoroMode) => void;
-  start: () => void;
+  startTimer: () => void;
   currentCategory: string;
   setCurrentCategory: (category: string) => void;
   currentFocusMinutes: number;
@@ -29,7 +29,7 @@ type HomeScreenProps = {
 
 export const HomeScreen = ({
   setMode,
-  start,
+  startTimer,
   currentCategory,
   setCurrentCategory,
   currentFocusMinutes,
@@ -39,7 +39,7 @@ export const HomeScreen = ({
 
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
-  const [showGuide, setShowGuide] = useLocalStorage<boolean>(LOCAL_STORAGE_KEY.GUIDE_SHOWN, false);
+  const [showGuide, setShowGuide] = useLocalStorage<boolean>(LOCAL_STORAGE_KEY.GUIDE_SHOWN, true);
 
   const changeTimeDialogProps = useDisclosure();
   const changeCategoryDrawerProps = useDisclosure();
@@ -116,7 +116,7 @@ export const HomeScreen = ({
             size="icon"
             onClick={() => {
               setMode('focus');
-              start();
+              startTimer();
             }}
           >
             <Icon name="play" size="lg" />
