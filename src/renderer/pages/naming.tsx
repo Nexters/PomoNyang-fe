@@ -4,7 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useRenameSelectedCat } from '@/features/cat';
 import { useUser } from '@/features/user';
+import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { PATH } from '@/shared/constants';
+import { useRiveCat } from '@/shared/hooks';
 import { Button, Frame, Tooltip } from '@/shared/ui';
 
 const Naming = () => {
@@ -19,6 +21,12 @@ const Naming = () => {
   const errorMessage = useMemo(() => getErrorMessage(typedCatName), [typedCatName]);
 
   const selectedCatName = user?.cat?.name;
+
+  const { RiveComponent, clickCatInput } = useRiveCat({
+    src: catHomeMotionRiveFile,
+    stateMachines: 'State Machine_Home',
+    userCatType: user?.cat?.type,
+  });
 
   const handleClickBackButton = () => {
     navigate(fromMyCatPage ? PATH.MY_CAT : PATH.SELECTION);
@@ -43,10 +51,13 @@ const Naming = () => {
             sideOffset={-20}
             rootProps={{ open: true }}
             arrowProps={{ width: 14, height: 9 }}
-          >
-            <div className=" h-[240px] bg-background-secondary" />
-          </Tooltip>
-
+          />
+          <RiveComponent
+            className="w-full h-[240px]"
+            onClick={() => {
+              clickCatInput?.fire();
+            }}
+          />
           <div className="relative flex flex-col gap-2">
             <label className="subBody-4 text-text-secondary">내 고양이의 이름</label>
             <input

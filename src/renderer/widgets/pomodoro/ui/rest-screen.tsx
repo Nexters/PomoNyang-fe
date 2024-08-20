@@ -1,6 +1,9 @@
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { Time } from '@/features/time';
+import { useUser } from '@/features/user';
+import catRestMotionRiveFile from '@/shared/assets/rivs/cat_rest.riv';
 import { MAX_REST_MINUTES, MIN_REST_MINUTES, MINUTES_GAP } from '@/shared/constants';
+import { useRiveCat } from '@/shared/hooks';
 import { Button, Icon, SelectGroup, SelectGroupItem, Tooltip } from '@/shared/ui';
 import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
@@ -27,6 +30,13 @@ export const RestScreen = ({
   const { minutes, seconds } = msToTime(!isExceed ? time : 0);
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(isExceed ? -time : 0);
 
+  const { data: user } = useUser();
+  const { RiveComponent, clickCatInput } = useRiveCat({
+    src: catRestMotionRiveFile,
+    stateMachines: 'State Machine_Home',
+    userCatType: user?.cat?.type,
+  });
+
   return (
     <div className="relative flex flex-col h-full">
       <header className="flex px-5 py-2">
@@ -42,11 +52,13 @@ export const RestScreen = ({
           color="white"
           sideOffset={-20}
           rootProps={{ open: true }}
-        >
-          {/* TODO: 고양이 유형에 따라 다른 이미지 */}
-          <div className="w-[240px] h-[240px] bg-background-secondary" />
-        </Tooltip>
-
+        />
+        <RiveComponent
+          className="w-full h-[240px]"
+          onClick={() => {
+            clickCatInput?.fire();
+          }}
+        />
         <div className="flex flex-col items-center py-3">
           <div className="flex gap-xs">
             <Icon name="restTime" width={20} height={20} />
@@ -72,7 +84,7 @@ export const RestScreen = ({
           >
             <SelectGroupItem
               disabled={currentRestMinutes - MINUTES_GAP <= MIN_REST_MINUTES}
-              value="minus"
+              value="minus-focus-time"
               className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
               <Icon name="minusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
@@ -80,7 +92,7 @@ export const RestScreen = ({
             </SelectGroupItem>
             <SelectGroupItem
               disabled={currentRestMinutes + MINUTES_GAP >= MAX_REST_MINUTES}
-              value="plus"
+              value="plus-focus-time"
               className="flex flex-row items-center justify-center gap-1 px-3 py-2"
             >
               <Icon name="plusSvg" size="sm" className="[&>path]:stroke-icon-tertiary" />
