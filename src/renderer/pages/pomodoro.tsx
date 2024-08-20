@@ -129,7 +129,7 @@ const Pomodoro = () => {
         body: {
           [type]: createIsoDuration({
             minutes:
-              selectedNextAction === 'plus-focus-time'
+              selectedNextAction === 'plus'
                 ? currentMinutes + MINUTES_GAP
                 : currentMinutes - MINUTES_GAP,
           }),
