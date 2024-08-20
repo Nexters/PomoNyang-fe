@@ -15,6 +15,10 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       webSecurity: false,
     },
+    width: 400,
+    minWidth: 400,
+    height: 800,
+    minHeight: 800,
   });
 
   // and load the index.html of the app.
