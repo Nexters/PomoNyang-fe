@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { StateMachineInput, StateMachineInputType, useRive } from '@rive-app/react-canvas';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
+import { CatType } from '@/entities/cat';
 import { PomodoroMode } from '@/entities/pomodoro';
 import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
 import { catNameMap } from '@/features/pomodoro';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
+import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
 import { Button, Guide, Icon, Tooltip } from '@/shared/ui';
@@ -17,6 +20,12 @@ const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
   { id: 'timeAdjustDiv', message: '눌러서 시간을 조정할 수 있어요' },
 ];
+const RIVE_STATE_MACHINE_NAME = 'State Machine_Home';
+const userCatTypeAliasMap: Record<CatType, string> = {
+  CHEESE: 'cheese',
+  BLACK: 'black',
+  THREE_COLOR: 'calico',
+};
 
 type HomeScreenProps = {
   setMode: (mode: PomodoroMode) => void;
@@ -48,6 +57,35 @@ export const HomeScreen = ({
   const { mutate: updateCategory } = useUpdateCategory();
   const { data: user } = useUser();
 
+  const { rive, RiveComponent } = useRive({
+    src: catHomeMotionRiveFile,
+    stateMachines: RIVE_STATE_MACHINE_NAME,
+  });
+  const [clickInput, setClickInput] = useState<StateMachineInput>();
+
+  useEffect(() => {
+    const userCatType = user?.cat?.type;
+    if (!rive || !userCatType) return;
+
+    const userCatTypeAlias = userCatTypeAliasMap[userCatType];
+    const inputs = rive.stateMachineInputs(RIVE_STATE_MACHINE_NAME);
+
+    const booleanInputs = inputs.filter((input) => input.type === StateMachineInputType.Boolean);
+    const triggerInputs = inputs.filter((input) => input.type === StateMachineInputType.Trigger);
+
+    // boolean input들 중 user의 고양이 타입에 해당하는 input만 true로 설정
+    booleanInputs.forEach((input) => {
+      input.value = input.name.toLowerCase().includes(userCatTypeAlias);
+    });
+    // trigger input들 중 user의 고양이 타입에 해당하는 input을 클릭할 수 있도록 설정
+    const clickInput = triggerInputs.find((input) => {
+      return input.name.toLowerCase().includes(userCatTypeAlias);
+    });
+    setClickInput(clickInput);
+
+    rive.play();
+  }, [rive, user?.cat?.type]);
+
   return (
     <>
       <div className="flex flex-col h-full">
@@ -68,8 +106,13 @@ export const HomeScreen = ({
             sideOffset={-40}
             rootProps={{ open: !showGuide }}
           />
-          {/* TODO: 고양이 유형에 따라 다른 이미지 */}
-          <div className="w-[240px] h-[240px] bg-background-secondary" />
+          <RiveComponent
+            className="w-full h-[240px]"
+            onClick={() => {
+              clickInput?.fire();
+            }}
+          />
+
           <div className="header-4 text-text-tertiary">
             {catNameMap(user?.cat?.type ?? 'CHEESE')}
           </div>
