@@ -1,3 +1,4 @@
+import Autoplay from 'embla-carousel-autoplay';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -18,7 +19,7 @@ import { cn } from '@/shared/utils';
 
 const Onboarding = () => {
   return (
-    <Carousel className="w-full h-full" opts={{ loop: true }}>
+    <Carousel className="w-full h-full" opts={{ loop: true }} plugins={[Autoplay({ delay: 3000 })]}>
       {/* @note: useCarousel를 사용하기 위해 별도 컴포넌트로 분리 */}
       <OnboardingContent />
     </Carousel>
