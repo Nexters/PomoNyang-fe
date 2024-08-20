@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, NativeImage, nativeImage, shell, Tray } from 'electron';
 import path from 'path';
 
 import { machineId } from 'node-machine-id';
@@ -44,7 +44,27 @@ const createWindow = () => {
   return mainWindow;
 };
 
+const trayIcon: Record<string, string> = {
+  cat: path.join(__dirname, '../../src/shared/assets/main/tray-cat.png'),
+  focus: path.join(__dirname, '../../src/shared/assets/main/tray-focus.png'),
+};
+const getTrayIcon = (icon: string): NativeImage => {
+  return nativeImage.createFromPath(trayIcon[icon] ?? trayIcon['cat']);
+};
+
+const createTray = (mainWindow: BrowserWindow) => {
+  const tray = new Tray(getTrayIcon('cat'));
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '모하냥 열기', click: () => mainWindow.show() },
+    { type: 'separator' },
+    { label: '종료', role: 'quit' },
+  ]);
+  tray.setContextMenu(contextMenu);
+  return tray;
+};
+
 let mainWindow: BrowserWindow | null = null;
+let tray: Tray | null = null;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -73,11 +93,18 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 app.whenReady().then(() => {
+  if (mainWindow) {
+    tray = createTray(mainWindow);
+  }
+
   // event handling
   ipcMain.handle('get-machine-id', async () => {
     return await machineId(true);
   });
   ipcMain.on('show-window', () => {
     mainWindow?.show();
+  });
+  ipcMain.handle('change-tray-icon', (event, icon: string) => {
+    tray?.setImage(getTrayIcon(icon));
   });
 });
