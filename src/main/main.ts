@@ -2,6 +2,15 @@ import { app, BrowserWindow, ipcMain, Menu, NativeImage, nativeImage, shell, Tra
 import path from 'path';
 
 import { machineId } from 'node-machine-id';
+import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
+
+updateElectronApp({
+  updateSource: {
+    type: UpdateSourceType.ElectronPublicUpdateService,
+    repo: 'Nexters/PomoNyang-fe',
+    host: 'https://update.electronjs.org',
+  },
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {

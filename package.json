@@ -1,7 +1,7 @@
 {
   "name": "mohanyang",
   "productName": "mohanyang",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.5",
   "description": "Pomodoro timer desktop app with cat",
   "main": ".vite/build/main.js",
   "scripts": {
@@ -20,6 +20,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron-forge/plugin-vite": "^7.4.0",
+    "@electron-forge/publisher-github": "^7.4.0",
     "@electron/fuses": "^1.8.0",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
@@ -27,6 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.1",
     "autoprefixer": "^10.4.19",
+    "dotenv": "^16.4.5",
     "electron": "31.2.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^9.1.0",
@@ -55,6 +57,7 @@
       "email": "yd199323@gmail.com"
     }
   ],
+  "license": "MIT",
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.8.8",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -80,6 +83,7 @@
     "react-router-dom": "^6.25.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "update-electron-app": "^3.0.0",
     "usehooks-ts": "^3.1.0",
     "vaul": "^0.9.1"
   }

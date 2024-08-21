@@ -6,12 +6,21 @@ import { MakerZIP } from '@electron-forge/maker-zip';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import type { ForgeConfig } from '@electron-forge/shared-types';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     icon: 'src/shared/assets/icons/icon',
     osxSign: {},
+    osxNotarize: {
+      // @see: https://www.electronforge.io/guides/code-signing/code-signing-macos#option-2-using-an-app-store-connect-api-key
+      appleApiKey: process.env.APPLE_API_KEY as string,
+      appleApiKeyId: process.env.APPLE_API_KEY_ID as string,
+      appleApiIssuer: process.env.APPLE_API_ISSUER as string,
+    },
   },
   rebuildConfig: {},
   makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
@@ -48,6 +57,18 @@ const config: ForgeConfig = {
       [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
+  ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'Nexters',
+          name: 'PomoNyang-fe',
+        },
+        draft: true,
+      },
+    },
   ],
 };
 
