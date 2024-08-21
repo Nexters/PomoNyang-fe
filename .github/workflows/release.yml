@@ -1,13 +1,9 @@
 name: Release
+# @see: https://dev.to/erikhofer/build-and-publish-a-multi-platform-electron-app-on-github-3lnd
 on:
   push:
-    branches:
-      - feature/ready-to-release
-# @see: https://dev.to/erikhofer/build-and-publish-a-multi-platform-electron-app-on-github-3lnd
-# on:
-#   push:
-#     tags:
-#       - 'v*'
+    tags:
+      - 'v*'
 
 jobs:
   publish_on_linux:
@@ -20,12 +16,10 @@ jobs:
           cache: 'yarn'
       - name: install dependencies
         run: yarn install
-      - name: build
-        run: yarn run make
-      # - name: publish
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: yarn run publish
+      - name: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn run publish
 
   publish_on_mac:
     runs-on: macos-latest
@@ -47,16 +41,13 @@ jobs:
           echo "${{ secrets.APPLE_API_KEY_CONTENT }}" > authKey.p8
           APPLE_API_KEY=$(realpath authKey.p8)
           echo "APPLE_API_KEY=$APPLE_API_KEY" >> $GITHUB_ENV
-      - name: build
+      - name: publish
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           APPLE_API_KEY: ${{ env.APPLE_API_KEY }}
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
-        run: DEBUG=* yarn run make
-        # - name: publish
-        #   env:
-        #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #   run: yarn run publish
+        run: DEBUG=* yarn run publish
 
   publish_on_win:
     runs-on: windows-latest
@@ -67,9 +58,7 @@ jobs:
           node-version: 18
       - name: install dependencies
         run: yarn install
-      - name: build
-        run: yarn run make
-      # - name: publish
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: yarn run publish
+      - name: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn run publish
