@@ -89,7 +89,8 @@ const Naming = () => {
 const specialCharRegex = /[~!@#$%^&*()_+|<>?:{}\s]/;
 
 const getErrorMessage = (name: string) => {
-  if (name.length === 0) return '';
+  if (name.length === 0) return ' ';
+  if (name.startsWith(' ')) return '고양이 이름은 빈 칸이 될 수 없어요';
   if (specialCharRegex.test(name)) return '고양이 이름에는 공백, 특수문자가 들어갈 수 없어요';
   if (name.length > 10) return '고양이 이름은 10글자를 넘길 수 없어요';
   return '';
