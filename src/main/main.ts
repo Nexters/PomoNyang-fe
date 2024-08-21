@@ -29,8 +29,8 @@ const createWindow = () => {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // // Open the DevTools.
+  // mainWindow.webContents.openDevTools();
 
   // @note: 외부 링크 클릭 시 별도 브라우저로 열도록 설정함
   // 외부 링크 여부는 url이 https://로 시작하는지로 판단함
