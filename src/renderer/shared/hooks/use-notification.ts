@@ -15,13 +15,18 @@ export const useNotification = () => {
 
     const permission = await Notification.requestPermission();
     setPermission(permission);
+    // @note: notification이 처음 생성되었을때 권한여부를 물어본다.
+    createNotification('반갑다냥');
     return permission;
   };
 
-  // TODO: 아이콘도 넣고 개선 필요
-  const createNotification = (title: string, options?: NotificationOptions) => {
+  // TODO: 아이콘도 넣고 개선 필요 -> 앱아이콘이 설정되면 알아서 보임
+  const createNotification = (body: string, options?: NotificationOptions) => {
     if (permission === 'granted') {
-      return new Notification(title, options);
+      return new Notification('모하냥', {
+        body,
+        ...options,
+      });
     }
   };
 

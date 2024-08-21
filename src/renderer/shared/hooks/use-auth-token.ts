@@ -17,7 +17,6 @@ type AuthToken = {
 type AuthTokenMeta = {
   command: 'refresh-all' | 'refresh-access';
   refreshToken: string;
-  retryCount: number;
 };
 
 const AUTH_TOKEN_LOCAL_STORAGE_KEY = 'authToken';
@@ -52,17 +51,12 @@ export const useAuthToken = () => {
       // 그렇지 않다면 유효하다고 판단하고 값 반환
       return prevAuthToken;
     },
+    // @note: 토큰 갱신 n초(=2의 지수배)로 재시도하고자 아래와 같이 설정함
+    retry: Infinity,
+    retryDelay: (retryCount) => getExponentialBackoff(retryCount),
     refetchInterval: (query) => {
       const currAuthToken = query.state.data;
-      // 만약 auth token 이 없다면, n초(=2의 지수배) 후 다시 시도
-      if (!currAuthToken) {
-        const retryCount = (query.options.meta as AuthTokenMeta).retryCount;
-        query.options.meta = {
-          ...query.options.meta,
-          retryCount: retryCount + 1,
-        };
-        return getExponentialBackoff(retryCount);
-      }
+      if (!currAuthToken) return 1000;
 
       // 다음 access token, refresh token 만료 시점까지 남은 시간 계산
       const accessTokenDiff = getDiffFromNow(new Date(currAuthToken.accessTokenExpiredAt));
@@ -70,13 +64,11 @@ export const useAuthToken = () => {
 
       // 만약 access token, refresh token 둘 중 하나라도 만료 시점이 지났다면, 모두 갱신
       if (accessTokenDiff <= 0 || refreshTokenDiff <= 0) {
-        const retryCount = (query.options.meta as AuthTokenMeta).retryCount;
         query.options.meta = {
           ...query.options.meta,
           command: 'refresh-all',
-          retryCount: retryCount + 1,
         };
-        return getExponentialBackoff(retryCount);
+        return 1000;
       }
 
       // 만약 access token 만료가 더 가깝다면, access token 갱신
@@ -85,7 +77,6 @@ export const useAuthToken = () => {
           ...query.options.meta,
           command: 'refresh-access',
           refreshToken: currAuthToken.refreshToken,
-          retryCount: 0,
         };
         return accessTokenDiff;
       }
@@ -94,14 +85,12 @@ export const useAuthToken = () => {
       query.options.meta = {
         ...query.options.meta,
         command: 'refresh-all',
-        retryCount: 0,
       };
       return refreshTokenDiff;
     },
     meta: {
       command: 'refresh-all',
       refreshToken: '',
-      retryCount: 0,
     } as AuthTokenMeta,
     enabled: !!deviceId,
   });

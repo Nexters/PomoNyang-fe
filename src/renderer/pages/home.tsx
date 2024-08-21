@@ -10,7 +10,7 @@ import { cn } from '@/shared/utils';
 
 const Home = () => {
   const navigate = useNavigate();
-  const [isCompleted] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
+  const [isCompletedOnboarding] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
   const [isMinTimePassed, setIsMinTimePassed] = useState(false);
   const { data: user } = useUser();
 
@@ -19,10 +19,10 @@ const Home = () => {
 
   useEffect(() => {
     if (!user) return;
-    if (!isCompleted) return navigate(PATH.ONBOARDING);
+    if (!isCompletedOnboarding) return navigate(PATH.ONBOARDING);
     if (!user.cat) return navigate(PATH.SELECTION);
     navigate(PATH.POMODORO);
-  }, [isCompleted, user]);
+  }, [isCompletedOnboarding, user]);
 
   return (
     <div
