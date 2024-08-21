@@ -38,7 +38,7 @@ export const Dialog = ({
         />
         <DialogPrimitive.Content
           className={cn(
-            fullScreen && 'fixed left-[50%] top-0 bottom-0 translate-x-[-50%]',
+            fullScreen && 'fixed left-[50%] top-0 bottom-0 translate-x-[-50%] pt-[56px]',
             !fullScreen &&
               'fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] p-[20px] rounded-md shadow-lg',
             'z-50 w-full max-w-md bg-background-primary',
