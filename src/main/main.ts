@@ -57,7 +57,15 @@ const getTrayIcon = (icon: string): NativeImage => {
 const createTray = (mainWindow: BrowserWindow) => {
   const tray = new Tray(getTrayIcon('cat'));
   const contextMenu = Menu.buildFromTemplate([
-    { label: '모하냥 열기', click: () => mainWindow.show() },
+    {
+      label: '모하냥 열기',
+      click: () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+          mainWindow = createWindow();
+        }
+        mainWindow?.show();
+      },
+    },
     { type: 'separator' },
     { label: '종료', role: 'quit' },
   ]);
