@@ -8,6 +8,7 @@ updateElectronApp({
   updateSource: {
     type: UpdateSourceType.ElectronPublicUpdateService,
     repo: 'Nexters/PomoNyang-fe',
+    host: 'https://update.electronjs.org',
   },
 });
 
