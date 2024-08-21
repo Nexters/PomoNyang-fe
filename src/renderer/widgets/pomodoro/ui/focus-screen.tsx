@@ -46,7 +46,7 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
           rootProps={{ open: true }}
         />
         <RiveComponent
-          className="w-full h-[240px]"
+          className="w-full h-[240px] cursor-pointer select-none"
           onClick={() => {
             clickCatInput?.fire();
           }}

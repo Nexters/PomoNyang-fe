@@ -54,7 +54,7 @@ export const RestScreen = ({
           rootProps={{ open: true }}
         />
         <RiveComponent
-          className="w-full h-[240px]"
+          className="w-full h-[240px] cursor-pointer select-none"
           onClick={() => {
             clickCatInput?.fire();
           }}

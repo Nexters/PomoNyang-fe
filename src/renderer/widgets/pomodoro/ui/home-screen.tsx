@@ -93,7 +93,7 @@ export const HomeScreen = ({
             rootProps={{ open: !showGuide }}
           />
           <RiveComponent
-            className="w-full h-[240px]"
+            className="w-full h-[240px] cursor-pointer select-none"
             onClick={() => {
               clickCatInput?.fire();
             }}
