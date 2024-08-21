@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
+import OfflineStatIcon from '@/shared/assets/svgs/offline-stat.svg';
 import { PATH } from '@/shared/constants';
 import { Frame, Icon, Toggle } from '@/shared/ui';
 
@@ -23,7 +24,7 @@ const MyPage = () => {
           <span className="header-4 text-text-primary">{user?.cat?.name}</span>
         </ActionButton>
 
-        {/* <OfflineStat /> */}
+        <ReadyForStat />
 
         <div className="w-full p-5 rounded-sm bg-background-secondary">
           <div className="flex items-center w-full">
@@ -64,6 +65,19 @@ const ActionButton = ({ children, onClick }: ActionButtonProps) => (
     <span className="flex flex-col items-start flex-1">{children}</span>
     <Icon name="chevronRight" size="md" />
   </button>
+);
+
+const ReadyForStat = () => (
+  <div className="flex flex-col justify-center items-center gap-2 py-[62px] bg-background-secondary rounded-sm">
+    <img src={OfflineStatIcon} width={100} height={100} />
+    <div className="flex flex-col gap-1 text-center">
+      <h3 className="header-5 text-text-primary">통계 기능을 준비하고 있어요</h3>
+      <p className="subBody-r text-text-secondary">
+        집중시간을 모아보는 통계가
+        <br />곧 업데이트될 예정이에요
+      </p>
+    </div>
+  </div>
 );
 
 // TODO: 통계쪽 디자인 가이드 완성되면 반영 예정
