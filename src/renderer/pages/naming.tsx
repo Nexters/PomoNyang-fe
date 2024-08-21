@@ -43,8 +43,8 @@ const Naming = () => {
   return (
     <Frame>
       <Frame.NavBar onBack={handleClickBackButton} />
-      <div className="h-full flex justify-center items-center">
-        <div className="w-full flex flex-col gap-10">
+      <div className="flex items-center justify-center h-full">
+        <div className="flex flex-col w-full gap-10">
           <Tooltip
             content="반갑다냥! 내 이름을 지어줄래냥?"
             color="white"
@@ -63,7 +63,7 @@ const Naming = () => {
             <input
               value={typedCatName}
               placeholder={selectedCatName}
-              className="body-sb text-text-primary placeholder:text-text-disabled p-lg rounded-sm caret-text-accent-1"
+              className="rounded-sm body-sb text-text-primary placeholder:text-text-disabled p-lg caret-text-accent-1"
               onChange={(e) => setTypedCatName(e.target.value)}
             />
             {errorMessage && (
@@ -78,7 +78,7 @@ const Naming = () => {
       </div>
       <Frame.BottomBar>
         <Button className="w-full" disabled={!!errorMessage} onClick={handleClickCompleteButton}>
-          완료
+          확인
         </Button>
       </Frame.BottomBar>
     </Frame>
