@@ -68,7 +68,7 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
           </div>
         </div>
       </main>
-      <div className="absolute left-0 flex flex-col items-center w-full m-auto bottom-4">
+      <div className="flex flex-col items-center w-full pb-5">
         <Button
           variant={isExceed ? 'primary' : 'secondary'}
           className="p-xl w-[200px]"
