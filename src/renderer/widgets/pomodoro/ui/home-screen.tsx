@@ -91,6 +91,7 @@ export const HomeScreen = ({
             color="white"
             sideOffset={-40}
             rootProps={{ open: !showGuide }}
+            arrowProps={{ width: 14, height: 9 }}
           />
           <RiveComponent
             className="w-full h-[240px] cursor-pointer select-none"
