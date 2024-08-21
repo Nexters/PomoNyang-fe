@@ -101,7 +101,7 @@ const Selection = () => {
           ))}
 
           {/* TODO: 아래를 선택한 고양이 이미지 에셋으로 변경 */}
-          <RiveComponent className="w-full h-[240px]" />
+          <RiveComponent className="w-full h-[240px] select-none" />
         </div>
 
         <SelectGroup

@@ -44,9 +44,10 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
           color="white"
           sideOffset={-20}
           rootProps={{ open: true }}
+          arrowProps={{ width: 14, height: 9 }}
         />
         <RiveComponent
-          className="w-full h-[240px]"
+          className="w-full h-[240px] cursor-pointer select-none"
           onClick={() => {
             clickCatInput?.fire();
           }}

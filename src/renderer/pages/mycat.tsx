@@ -52,7 +52,7 @@ const MyCat = () => {
             arrowProps={{ width: 14, height: 9 }}
           />
 
-          <RiveComponent className="w-full h-[240px]" />
+          <RiveComponent className="w-full h-[240px] select-none" />
 
           <div className="w-full flex justify-center items-center">
             <button
