@@ -157,7 +157,12 @@ export const HomeScreen = ({
         onOpenChange={changeCategoryDrawerProps.setIsOpen}
         defaultCategory={currentCategory}
         onChangeCategory={(category) => {
+          if (category === currentCategory) return;
           setCurrentCategory(category);
+          toast({
+            icon: <Icon name="check" size="sm" className="[&>path]:stroke-icon-tertiary" />,
+            message: '카테고리를 변경했어요',
+          });
         }}
       />
 
