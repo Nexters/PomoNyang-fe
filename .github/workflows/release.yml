@@ -19,6 +19,7 @@ jobs:
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_API_SERVER_URL: ${{ secrets.VITE_API_SERVER_URL }}
         run: yarn run publish
 
   publish_on_mac:
@@ -44,6 +45,7 @@ jobs:
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_API_SERVER_URL: ${{ secrets.VITE_API_SERVER_URL }}
           APPLE_API_KEY: ${{ env.APPLE_API_KEY }}
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
@@ -61,4 +63,5 @@ jobs:
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_API_SERVER_URL: ${{ secrets.VITE_API_SERVER_URL }}
         run: yarn run publish
