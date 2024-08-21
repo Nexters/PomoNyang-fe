@@ -5,7 +5,7 @@ import CategoryBookIcon from '@/shared/assets/svgs/category-book.svg';
 import CategoryDefaultIcon from '@/shared/assets/svgs/category-default.svg';
 import CategoryStudyIcon from '@/shared/assets/svgs/category-study.svg';
 import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
-import CheckIcon from '@/shared/assets/svgs/check.svg';
+import CheckIcon from '@/shared/assets/svgs/check.svg?react';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
 import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';
