@@ -9,6 +9,7 @@ import { Icon } from './icon';
 export type DialogProps = {
   open: boolean;
   title?: string;
+  hasCloseButton?: boolean;
   fullScreen?: boolean;
   animated?: boolean;
   children: React.ReactNode;
@@ -18,6 +19,7 @@ export type DialogProps = {
 export const Dialog = ({
   open,
   title,
+  hasCloseButton = true,
   fullScreen = false,
   animated = true,
   children,
@@ -36,23 +38,26 @@ export const Dialog = ({
         />
         <DialogPrimitive.Content
           className={cn(
-            fullScreen && 'fixed left-[50%] top-0 bottom-0 translate-x-[-50%]',
+            fullScreen && 'fixed left-[50%] top-0 bottom-0 translate-x-[-50%] pt-[56px]',
             !fullScreen &&
               'fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] p-[20px] rounded-md shadow-lg',
-            'z-50 w-full max-w-md bg-background-primary pt-[56px]',
+            'z-50 w-full max-w-md bg-background-primary',
+
             animated &&
               'duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
           )}
         >
-          <DialogPrimitive.Close
-            className={cn(
-              fullScreen && 'absolute top-[10px] right-[8px] p-2',
-              !fullScreen && 'absolute top-[20px] right-[20px] p-2',
-            )}
-          >
-            <Icon name="close" size="md" />
-            <span className="sr-only">닫기</span>
-          </DialogPrimitive.Close>
+          {hasCloseButton && (
+            <DialogPrimitive.Close
+              className={cn(
+                fullScreen && 'absolute top-[10px] right-[8px] p-2',
+                !fullScreen && 'absolute top-[20px] right-[20px] p-2',
+              )}
+            >
+              <Icon name="close" size="md" />
+              <span className="sr-only">닫기</span>
+            </DialogPrimitive.Close>
+          )}
 
           <DialogPrimitive.Title
             className={cn(
