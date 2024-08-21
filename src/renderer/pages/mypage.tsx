@@ -5,6 +5,9 @@ import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
 import { Frame, Icon, Toggle } from '@/shared/ui';
 
+const SURVEY_LINK =
+  'https://docs.google.com/forms/d/e/1FAIpQLSdoFxWJ7TFTU0-HKZEeqmDxz5ZprYtRz08FwrzNgDWnkNaOeA/viewform';
+
 const MyPage = () => {
   const navigate = useNavigate();
   const { data: user } = useUser();
@@ -14,7 +17,7 @@ const MyPage = () => {
     <Frame>
       <Frame.NavBar title="마이페이지" onBack={() => navigate(PATH.POMODORO)} />
 
-      <div className="w-full flex flex-col gap-3">
+      <div className="flex flex-col w-full gap-3">
         <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
           <span className="subBody-r text-text-tertiary">나의 고양이</span>
           <span className="header-4 text-text-primary">{user?.cat?.name}</span>
@@ -22,9 +25,9 @@ const MyPage = () => {
 
         {/* <OfflineStat /> */}
 
-        <div className="w-full p-5 bg-background-secondary rounded-sm">
-          <div className="w-full flex items-center">
-            <div className="flex-1 flex flex-col justify-start">
+        <div className="w-full p-5 rounded-sm bg-background-secondary">
+          <div className="flex items-center w-full">
+            <div className="flex flex-col justify-start flex-1">
               <h3 className="body-sb text-text-primary">집중시간 알림받기</h3>
               <p className="subBody-r text-text-tertiary">
                 집중・휴식시간이 되면 고양이가 알려줘요
@@ -41,8 +44,7 @@ const MyPage = () => {
           </div>
         </div>
 
-        {/* TODO: 설문지 링크로 변경 */}
-        <ActionButton onClick={() => window.open('https://nexters.co.kr/', '_target')}>
+        <ActionButton onClick={() => window.open(SURVEY_LINK, '_target')}>
           <span className="body-sb text-text-primary">의견 보내기</span>
         </ActionButton>
       </div>
@@ -85,7 +87,7 @@ const ActionButton = ({ children, onClick }: ActionButtonProps) => (
 //       { name: '휴식', time: '1시간 5분' },
 //     ],
 //   }
-//   return <div className='w-full p-5 bg-background-secondary rounded-sm'>
+//   return <div className='w-full p-5 rounded-sm bg-background-secondary'>
 //     <div>
 
 //     </div>
