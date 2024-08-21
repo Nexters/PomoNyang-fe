@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
+import { useUser } from '@/features/user';
 import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
 import {
   Button,
@@ -41,6 +42,7 @@ const contents = [
 const OnboardingContent = () => {
   const { currentIndex } = useCarousel();
   const navigate = useNavigate();
+  const { data: user } = useUser();
   const [, setIsCompleted] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
 
   return (
@@ -91,7 +93,8 @@ const OnboardingContent = () => {
           className="w-[200px]"
           onClick={() => {
             setIsCompleted(true);
-            navigate(PATH.SELECTION);
+            // @note: 고양이가 없을때만 다음 페이지가 선택페이지가 되도록
+            navigate(!user?.cat ? PATH.SELECTION : PATH.POMODORO);
           }}
         >
           시작하기

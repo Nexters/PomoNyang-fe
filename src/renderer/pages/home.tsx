@@ -8,15 +8,15 @@ import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
 
 const Home = () => {
   const navigate = useNavigate();
-  const [isCompleted] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
+  const [isCompletedOnboarding] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
   const { data: user } = useUser();
 
   useEffect(() => {
     if (!user) return;
-    if (!isCompleted) return navigate(PATH.ONBOARDING);
+    if (!isCompletedOnboarding) return navigate(PATH.ONBOARDING);
     if (!user.cat) return navigate(PATH.SELECTION);
     navigate(PATH.POMODORO);
-  }, [isCompleted, user]);
+  }, [isCompletedOnboarding, user]);
 
   return <div>loading... 🐈 🐈‍⬛</div>;
 };
