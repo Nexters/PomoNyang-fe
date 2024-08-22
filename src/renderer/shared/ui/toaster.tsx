@@ -8,10 +8,10 @@ export function Toaster() {
 
   return (
     <ToastProvider>
-      {toasts.map(({ id, message, iconName = 'clock', ...props }) => {
+      {toasts.map(({ id, message, iconName, iconClassName, ...props }) => {
         return (
           <Toast key={id} {...props}>
-            <Icon name={iconName} size="md" />
+            <Icon size="md" name={iconName} className={iconClassName} />
             <ToastTitle>{message}</ToastTitle>
             <ToastClose />
           </Toast>

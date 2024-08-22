@@ -7,15 +7,7 @@ import onboardingImage1 from '@/shared/assets/images/onboarding-1.png';
 import onboardingImage2 from '@/shared/assets/images/onboarding-2.png';
 import onboardingImage3 from '@/shared/assets/images/onboarding-3.png';
 import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
-import {
-  Button,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  useCarousel,
-} from '@/shared/ui';
+import { Button, Carousel, CarouselContent, CarouselItem, useCarousel } from '@/shared/ui';
 import { cn } from '@/shared/utils';
 
 const Onboarding = () => {
@@ -53,10 +45,10 @@ const OnboardingContent = () => {
   const [, setIsCompleted] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
 
   return (
-    <div className="h-full flex flex-col items-center justify-center gap-12">
+    <div className="flex flex-col items-center justify-center h-full gap-12">
       <div
         className={cn(
-          'w-full flex flex-col justify-center items-center gap-8 overflow-hidden',
+          'w-full flex flex-col justify-center items-center gap-3xl overflow-hidden',
           // TODO: 가운데 정렬하고 최소 간격으로 하고 싶은데 잘 안되서 일단 주석처리함
           // 'h-sm:pt-[40px] h-md:pt-[60px] h-lg:pt-[100px] h-xl:pt-[140px]',
         )}
@@ -69,15 +61,12 @@ const OnboardingContent = () => {
 
                 <div className="flex flex-col gap-2 text-center">
                   <h2 className="header-4 text-text-primary">{title}</h2>
-                  <p className="body-r text-text-secondary whitespace-pre-line">{description}</p>
+                  <p className="whitespace-pre-line body-r text-text-secondary">{description}</p>
                 </div>
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-
-        <CarouselPrevious />
-        <CarouselNext />
 
         <ul className="flex gap-2">
           {contents.map((_, index) => (

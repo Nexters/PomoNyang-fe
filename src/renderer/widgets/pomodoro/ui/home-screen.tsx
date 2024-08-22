@@ -6,13 +6,12 @@ import { useLocalStorage } from 'usehooks-ts';
 import { CatType } from '@/entities/cat';
 import { PomodoroMode } from '@/entities/pomodoro';
 import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
-import { catNameMap } from '@/features/pomodoro';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
 import { useDisclosure, useRiveCat } from '@/shared/hooks';
-import { Button, Guide, Icon, Tooltip } from '@/shared/ui';
+import { Button, Guide, Icon, Tooltip, useToast } from '@/shared/ui';
 import { getCategoryIconName, createIsoDuration } from '@/shared/utils';
 
 const steps = [
@@ -59,6 +58,8 @@ export const HomeScreen = ({
   const { mutate: updateCategory } = useUpdateCategory();
   const { data: user } = useUser();
 
+  const { toast } = useToast();
+
   const { RiveComponent, clickCatInput } = useRiveCat({
     src: catHomeMotionRiveFile,
     stateMachines: 'State Machine_Home',
@@ -100,9 +101,7 @@ export const HomeScreen = ({
             }}
           />
 
-          <div className="header-4 text-text-tertiary">
-            {catNameMap(user?.cat?.type ?? 'CHEESE')}
-          </div>
+          <div className="header-4 text-text-tertiary">{user?.cat?.name}</div>
           <div className="flex flex-col p-lg gap-md">
             <Button
               variant="tertiary"
@@ -158,7 +157,13 @@ export const HomeScreen = ({
         onOpenChange={changeCategoryDrawerProps.setIsOpen}
         defaultCategory={currentCategory}
         onChangeCategory={(category) => {
+          if (category === currentCategory) return;
           setCurrentCategory(category);
+          toast({
+            iconName: 'check',
+            iconClassName: '[&>path]:stroke-icon-tertiary',
+            message: '카테고리를 변경했어요',
+          });
         }}
       />
 
@@ -175,14 +180,25 @@ export const HomeScreen = ({
         onOpenChange={changeTimeDialogProps.setIsOpen}
         mode={clickedMode}
         category={currentCategory}
-        onChangeCategoryTime={(category, minutes) => {
+        onChangeCategoryTime={async (category, minutes) => {
+          if (clickedMode === 'focus' && minutes === currentFocusMinutes) return;
+          if (clickedMode === 'rest' && minutes === currentRestMinutes) return;
+
+          const categoryNo = categories?.find((_category) => _category.title === category)?.no;
+          if (!categoryNo) return;
+
           const body =
             clickedMode === 'focus'
               ? { focusTime: createIsoDuration({ minutes }) }
               : { restTime: createIsoDuration({ minutes }) };
           updateCategory({
-            no: categories?.find((_category) => _category.title === category)?.no ?? 0,
+            no: categoryNo,
             body,
+          });
+          toast({
+            iconName: 'check',
+            iconClassName: '[&>path]:stroke-icon-tertiary',
+            message: toastMessageMap[clickedMode],
           });
         }}
         categoryTimeMinutes={clickedMode === 'focus' ? currentFocusMinutes : currentRestMinutes}
@@ -190,4 +206,9 @@ export const HomeScreen = ({
       />
     </>
   );
+};
+
+const toastMessageMap: Record<'focus' | 'rest', string> = {
+  focus: '집중 시간을 변경했어요',
+  rest: '휴식 시간을 변경했어요',
 };

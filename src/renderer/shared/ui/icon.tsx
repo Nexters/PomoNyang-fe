@@ -5,7 +5,7 @@ import CategoryBookIcon from '@/shared/assets/svgs/category-book.svg';
 import CategoryDefaultIcon from '@/shared/assets/svgs/category-default.svg';
 import CategoryStudyIcon from '@/shared/assets/svgs/category-study.svg';
 import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
-import CheckIcon from '@/shared/assets/svgs/check.svg';
+import CheckIcon from '@/shared/assets/svgs/check.svg?react';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
 import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';
@@ -20,6 +20,7 @@ import PlayIcon from '@/shared/assets/svgs/play.svg';
 import PlusIcon from '@/shared/assets/svgs/plus.svg';
 import PlusSvgIcon from '@/shared/assets/svgs/plus.svg?react';
 import PositiveIcon from '@/shared/assets/svgs/positive.svg';
+import ReadyForStatIcon from '@/shared/assets/svgs/ready-for-stat.svg';
 import RestTimeIcon from '@/shared/assets/svgs/rest-time.svg';
 import StimulusIcon from '@/shared/assets/svgs/stimulus.svg';
 
@@ -46,6 +47,7 @@ const icons = {
   stimulus: StimulusIcon,
   pen: PenIcon,
   clock: ClockIcon,
+  readyForStat: ReadyForStatIcon,
 } as const;
 const sizes = {
   xs: 16,
