@@ -129,6 +129,9 @@ export const usePomodoro = ({
   }, [pomodoroCycles]);
 
   useEffect(() => {
+    // NOTE: 현재 진행중인 사이클이 없으면 setInterval을 실행할 필요가 없음
+    if (!pomodoroCycles.length) return;
+
     const interval = setInterval(() => {
       const currentCycle = pomodoroCycles[pomodoroCycles.length - 1];
       if (!currentCycle) return;
@@ -150,7 +153,7 @@ export const usePomodoro = ({
           endPomodoro();
         }
       }
-    }, 100);
+    }, 250);
 
     return () => clearInterval(interval);
   }, [pomodoroCycles, startRestWait, endPomodoro]);
