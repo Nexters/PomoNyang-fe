@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from 'react';
-
 import { useLocalStorage } from 'usehooks-ts';
+
+import { useInterval } from '@/shared/hooks';
 
 // 집중 시작 - 시작 시각: Date.now(), 목표시간: 25 * 60 * 1000(25분, 형식 미정), 모드: focus, 끝난시간: Null로 로컬에 저장
 
@@ -48,7 +48,7 @@ export type PomodoroParams = {
   /** 휴식 초과 최대시간. (단위는 ms) */
   restExceedMaxTime: number;
   // TODO:
-  submitPomodoro: (cycles: PomodoroCycle[]) => void;
+  onEndPomodoro: (cycles: PomodoroCycle[]) => void;
 };
 
 const isNotNil = <T>(value: T): value is NonNullable<T> => value !== null && value !== undefined;
@@ -77,6 +77,7 @@ export const usePomodoro = ({
   restWaitExceedMaxTime,
   restTime,
   restExceedMaxTime,
+  onEndPomodoro,
 }: PomodoroParams) => {
   const [pomodoroCycles, setPomodoroCycles] = useLocalStorage<PomodoroCycle[]>(
     'pomodoro-cycles',
@@ -87,7 +88,7 @@ export const usePomodoro = ({
     exceeded: 0,
   });
 
-  const startFocus = useCallback(() => {
+  const startFocus = () => {
     const nextCycles = updateCycles(pomodoroCycles, {
       startAt: Date.now(),
       goalTime: focusTime,
@@ -95,9 +96,9 @@ export const usePomodoro = ({
       mode: 'focus',
     });
     setPomodoroCycles(nextCycles);
-  }, [focusTime, focusExceedMaxTime, pomodoroCycles]);
+  };
 
-  const startRestWait = useCallback(() => {
+  const startRestWait = () => {
     const nextCycles = updateCycles(pomodoroCycles, {
       startAt: Date.now(),
       goalTime: 0,
@@ -105,9 +106,9 @@ export const usePomodoro = ({
       mode: 'rest-wait',
     });
     setPomodoroCycles(nextCycles);
-  }, [restWaitExceedMaxTime, pomodoroCycles]);
+  };
 
-  const startRest = useCallback(() => {
+  const startRest = () => {
     const nextCycles = updateCycles(pomodoroCycles, {
       startAt: Date.now(),
       goalTime: restTime,
@@ -115,24 +116,18 @@ export const usePomodoro = ({
       mode: 'rest',
     });
     setPomodoroCycles(nextCycles);
-  }, [restTime, restExceedMaxTime, pomodoroCycles]);
+  };
 
-  const endPomodoro = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const endPomodoro = () => {
     const endedCycles = updateCycles(pomodoroCycles);
+    onEndPomodoro(endedCycles);
 
-    // TODO: 값 서버에 전달용으로 변환 후 전달
-    // submitPomodoro(endedCycles);
-
-    // 초기화
+    // 상위로 전달했으니 데이터 초기화
     setPomodoroCycles([]);
-  }, [pomodoroCycles]);
+  };
 
-  useEffect(() => {
-    // NOTE: 현재 진행중인 사이클이 없으면 setInterval을 실행할 필요가 없음
-    if (!pomodoroCycles.length) return;
-
-    const interval = setInterval(() => {
+  useInterval(
+    () => {
       const currentCycle = pomodoroCycles[pomodoroCycles.length - 1];
       if (!currentCycle) return;
 
@@ -153,10 +148,9 @@ export const usePomodoro = ({
           endPomodoro();
         }
       }
-    }, 250);
-
-    return () => clearInterval(interval);
-  }, [pomodoroCycles, startRestWait, endPomodoro]);
+    },
+    pomodoroCycles.length > 0 ? 250 : null,
+  );
 
   return {
     pomodoroTime,
