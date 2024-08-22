@@ -86,11 +86,12 @@ const Naming = () => {
 };
 
 // 특수문자 및 공백 여부 확인 정규식
+const spaceRegex = /^\s+$/;
 const specialCharRegex = /[~!@#$%^&*()_+|<>?:{}\s]/;
 
 const getErrorMessage = (name: string) => {
   if (name.length === 0) return '';
-  if (name === ' ') return '고양이 이름은 빈 칸이 될 수 없어요';
+  if (spaceRegex.test(name)) return '고양이 이름은 빈 칸이 될 수 없어요';
   if (specialCharRegex.test(name)) return '고양이 이름에는 공백, 특수문자가 들어갈 수 없어요';
   if (name.length > 10) return '고양이 이름은 10글자를 넘길 수 없어요';
   return '';
