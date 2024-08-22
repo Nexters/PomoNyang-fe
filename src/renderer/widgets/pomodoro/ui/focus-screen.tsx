@@ -68,8 +68,13 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
           </div>
         </div>
       </main>
-      <div className="absolute bottom-4 left-0 m-auto flex w-full flex-col items-center">
-        <Button variant="secondary" className="w-[200px] p-xl" size="lg" onClick={handleRest}>
+      <div className="flex w-full flex-col items-center pb-5">
+        <Button
+          variant={isExceed ? 'primary' : 'secondary'}
+          className="w-[200px] p-xl"
+          size="lg"
+          onClick={handleRest}
+        >
           휴식하기
         </Button>
         <Button variant="text-secondary" size="md" onClick={handleEnd}>

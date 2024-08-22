@@ -5,6 +5,9 @@ import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
 import { Frame, Icon, Toggle } from '@/shared/ui';
 
+const SURVEY_LINK =
+  'https://docs.google.com/forms/d/e/1FAIpQLSdoFxWJ7TFTU0-HKZEeqmDxz5ZprYtRz08FwrzNgDWnkNaOeA/viewform';
+
 const MyPage = () => {
   const navigate = useNavigate();
   const { data: user } = useUser();
@@ -20,7 +23,7 @@ const MyPage = () => {
           <span className="header-4 text-text-primary">{user?.cat?.name}</span>
         </ActionButton>
 
-        {/* <OfflineStat /> */}
+        <ReadyForStat />
 
         <div className="w-full rounded-sm bg-background-secondary p-5">
           <div className="flex w-full items-center">
@@ -41,8 +44,7 @@ const MyPage = () => {
           </div>
         </div>
 
-        {/* TODO: 설문지 링크로 변경 */}
-        <ActionButton onClick={() => window.open('https://nexters.co.kr/', '_target')}>
+        <ActionButton onClick={() => window.open(SURVEY_LINK, '_target')}>
           <span className="body-sb text-text-primary">의견 보내기</span>
         </ActionButton>
       </div>
@@ -62,6 +64,19 @@ const ActionButton = ({ children, onClick }: ActionButtonProps) => (
     <span className="flex flex-1 flex-col items-start">{children}</span>
     <Icon name="chevronRight" size="md" />
   </button>
+);
+
+const ReadyForStat = () => (
+  <div className="flex flex-col items-center justify-center gap-2 rounded-sm bg-background-secondary py-[62px]">
+    <Icon name="readyForStat" width={100} height={100} />
+    <div className="flex flex-col gap-1 text-center">
+      <h3 className="header-5 text-text-primary">통계 기능을 준비하고 있어요</h3>
+      <p className="subBody-r text-text-secondary">
+        집중시간을 모아보는 통계가
+        <br />곧 업데이트될 예정이에요
+      </p>
+    </div>
+  </div>
 );
 
 // TODO: 통계쪽 디자인 가이드 완성되면 반영 예정
@@ -85,7 +100,7 @@ const ActionButton = ({ children, onClick }: ActionButtonProps) => (
 //       { name: '휴식', time: '1시간 5분' },
 //     ],
 //   }
-//   return <div className='w-full p-5 bg-background-secondary rounded-sm'>
+//   return <div className='w-full p-5 rounded-sm bg-background-secondary'>
 //     <div>
 
 //     </div>
