@@ -7,7 +7,7 @@ type CategoryChipProps = {
 
 export const CategoryChip = ({ category }: CategoryChipProps) => {
   return (
-    <div className="flex gap-sm subBody-sb text-text-tertiary bg-background-secondary p-md rounded-xs w-[80px]">
+    <div className="subBody-sb flex w-[80px] gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary">
       <Icon name={getCategoryIconName(category)} size="sm" />
       {category}
     </div>

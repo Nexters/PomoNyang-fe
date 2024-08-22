@@ -66,7 +66,7 @@ export const Guide = ({ steps, handler }: TGuideProps) => {
     <div className="fixed inset-0 cursor-pointer" onClick={handleGuideClick}>
       {/* 2. 빵꾸 뚫을 영역 */}
       <div
-        className="absolute duration-300 rounded-xs w-fit transition-position"
+        className="transition-position absolute w-fit rounded-xs duration-300"
         style={{
           // boxShadow로 뷰포트 덮는 검정 반투명 영역 만들고 가이드 하려는 영역 빵꾸 뚫기
           boxShadow: `0 0 0 100vmax rgba(0, 0, 0, 0.5),
@@ -81,8 +81,8 @@ export const Guide = ({ steps, handler }: TGuideProps) => {
       {/* 3. 툴팁 메세지 */}
       <div
         className={cn(
-          'bg-white rounded-xs p-md text-text-secondary transition-position duration-300',
-          isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0',
+          'transition-position rounded-xs bg-white p-md text-text-secondary duration-300',
+          isAnimating ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100',
         )}
         style={{
           position: 'absolute',
@@ -93,7 +93,7 @@ export const Guide = ({ steps, handler }: TGuideProps) => {
       >
         {steps[currentGuideIndex].message}
         <div
-          className="absolute w-0 h-0"
+          className="absolute h-0 w-0"
           style={{
             bottom: '-8px',
             left: '50%',

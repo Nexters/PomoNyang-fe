@@ -75,18 +75,18 @@ export const HomeScreen = ({
 
   return (
     <>
-      <div className="flex flex-col h-full">
+      <div className="flex h-full flex-col">
         <header className="flex justify-end p-4">
           <Button
             variant="text-primary"
             size="md"
-            className="p-[8px] rounded-none bg-gray-50"
+            className="rounded-none bg-gray-50 p-[8px]"
             onClick={() => navigate(PATH.MY_PAGE)}
           >
             <Icon name="menu" size="md" />
           </Button>
         </header>
-        <main className="flex flex-col gap-[25px] items-center justify-center flex-1">
+        <main className="flex flex-1 flex-col items-center justify-center gap-[25px]">
           <Tooltip
             content={tooltipMessage}
             color="white"
@@ -95,17 +95,17 @@ export const HomeScreen = ({
             arrowProps={{ width: 14, height: 9 }}
           />
           <RiveComponent
-            className="w-full h-[240px] cursor-pointer select-none"
+            className="h-[240px] w-full cursor-pointer select-none"
             onClick={() => {
               clickCatInput?.fire();
             }}
           />
 
           <div className="header-4 text-text-tertiary">{user?.cat?.name}</div>
-          <div className="flex flex-col p-lg gap-md">
+          <div className="flex flex-col gap-md p-lg">
             <Button
               variant="tertiary"
-              className="w-[80px] mx-auto"
+              className="mx-auto w-[80px]"
               size="sm"
               id="categoryButton"
               onClick={() => {
@@ -115,26 +115,26 @@ export const HomeScreen = ({
               <Icon name={getCategoryIconName(currentCategory)} size="sm" />
               {currentCategory}
             </Button>
-            <div className="flex items-center p-xs gap-md" id="timeAdjustDiv">
+            <div className="flex items-center gap-md p-xs" id="timeAdjustDiv">
               <button
-                className="flex items-center cursor-pointer p-sm gap-sm"
+                className="flex cursor-pointer items-center gap-sm p-sm"
                 onClick={() => {
                   setClickedMode('focus');
                   changeTimeDialogProps.onOpen();
                 }}
               >
-                <span className="text-gray-500 body-sb">집중</span>
+                <span className="body-sb text-gray-500">집중</span>
                 <span className="header-3 text-text-secondary">{currentFocusMinutes}분</span>
               </button>
-              <div className="w-[2px] h-[20px] bg-gray-200 rounded-full" />
+              <div className="h-[20px] w-[2px] rounded-full bg-gray-200" />
               <button
-                className="flex items-center cursor-pointer p-sm gap-sm"
+                className="flex cursor-pointer items-center gap-sm p-sm"
                 onClick={() => {
                   setClickedMode('rest');
                   changeTimeDialogProps.onOpen();
                 }}
               >
-                <span className="text-gray-500 body-sb">휴식</span>
+                <span className="body-sb text-gray-500">휴식</span>
                 <span className="header-3 text-text-secondary">{currentRestMinutes}분</span>
               </button>
             </div>

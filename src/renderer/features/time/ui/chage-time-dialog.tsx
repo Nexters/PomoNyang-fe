@@ -81,27 +81,27 @@ export const ChangeTimeDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} fullScreen animated={false}>
-      <div className="flex flex-col h-full">
-        <div className="flex flex-col items-center justify-center flex-1 gap-8">
+      <div className="flex h-full flex-col">
+        <div className="flex flex-1 flex-col items-center justify-center gap-8">
           <div className="flex items-center justify-center gap-2 px-4 py-2">
             <Icon name={getCategoryIconName(category)} size="sm" />
             <span className="body-sb text-text-secondary">{category}</span>
           </div>
 
-          <div className="relative flex items-center justify-center gap-3 select-none">
+          <div className="relative flex select-none items-center justify-center gap-3">
             <Button
               variant="primary"
               size="none"
-              className="p-2 rounded-sm"
+              className="rounded-sm p-2"
               disabled={isMinMinutes}
               onClick={decreaseMinutes}
             >
               <Icon name="minus" size="md" />
             </Button>
 
-            <div className="flex items-center justify-center gap-3 px-4 py-5 rounded-md bg-background-secondary">
+            <div className="flex items-center justify-center gap-3 rounded-md bg-background-secondary px-4 py-5">
               <Icon name={mode === 'focus' ? 'focusTime' : 'restTime'} size="md" />
-              <div className="flex justify-center items-center gap-0.5 header-1 text-text-primary tabular-nums">
+              <div className="header-1 flex items-center justify-center gap-0.5 tabular-nums text-text-primary">
                 <span>{padNumber(minutes)}</span>
                 {/* @note: 콜론 가운데 정렬이 되지 않아 이렇게 표시함 */}
                 <span className="mt-[-8px]">:</span>
@@ -112,7 +112,7 @@ export const ChangeTimeDialog = ({
             <Button
               variant="primary"
               size="none"
-              className="p-2 rounded-sm"
+              className="rounded-sm p-2"
               disabled={isMaxMinutes}
               onClick={increaseMinutes}
             >
@@ -120,7 +120,7 @@ export const ChangeTimeDialog = ({
             </Button>
 
             <div className="absolute bottom-0 left-0 w-full">
-              <div className="absolute left-0 w-full text-center top-3 subBody-r text-text-accent-1">
+              <div className="subBody-r absolute left-0 top-3 w-full text-center text-text-accent-1">
                 {errorMessage}
               </div>
             </div>
@@ -128,7 +128,7 @@ export const ChangeTimeDialog = ({
         </div>
 
         <div className="w-full pb-[54px] text-center">
-          <Button variant="secondary" size="icon" className="p-7 aspect-square" onClick={applyTime}>
+          <Button variant="secondary" size="icon" className="aspect-square p-7" onClick={applyTime}>
             <Icon name="check" size="lg" />
           </Button>
         </div>

@@ -86,7 +86,7 @@ const Selection = () => {
     <Frame>
       <Frame.NavBar title="고양이 선택" onBack={handleClickBackButton} />
 
-      <div className="w-full flex flex-col gap-[42px]">
+      <div className="flex w-full flex-col gap-[42px]">
         <div className="flex flex-col gap-1">
           <h1 className="header-3 text-text-primary">어떤 고양이와 함께할까요?</h1>
           <p className="body-r text-text-secondary">언제든지 다른 고양이와 함께할 수 있어요</p>
@@ -101,7 +101,7 @@ const Selection = () => {
           ))}
 
           {/* TODO: 아래를 선택한 고양이 이미지 에셋으로 변경 */}
-          <RiveComponent className="w-full h-[240px] select-none" />
+          <RiveComponent className="h-[240px] w-full select-none" />
         </div>
 
         <SelectGroup
@@ -128,9 +128,9 @@ const Selection = () => {
             <SelectGroupItem
               key={cat.id}
               value={cat.id}
-              className="h-[80px] flex-1 flex flex-col gap-1"
+              className="flex h-[80px] flex-1 flex-col gap-1"
             >
-              <span className="flex gap-1 subBody-4 text-text-tertiary">
+              <span className="subBody-4 flex gap-1 text-text-tertiary">
                 {cat.adjective} <Icon size="xs" name={cat.iconName} />
               </span>
               <span
@@ -157,7 +157,7 @@ const Selection = () => {
 
 const AlarmEmpty = () => {
   return (
-    <div className="w-full h-[72px] rounded-xs bg-background-secondary flex justify-center items-center text-center text-gray-400 body-r whitespace-pre-line">
+    <div className="body-r flex h-[72px] w-full items-center justify-center whitespace-pre-line rounded-xs bg-background-secondary text-center text-gray-400">
       {'고양이를 선택하면\n딴 짓 방해알림 예시를 보여드려요'}
     </div>
   );
@@ -172,17 +172,17 @@ const AlarmSample = ({ appName = '모하냥', time = '지금', message }: AlarmS
   return (
     <div
       className={cn(
-        'w-full h-[72px] rounded-xs bg-background-secondary flex items-center gap-[10px] px-[14px]',
-        'animate-in fade-in-0 slide-in-from-bottom-2 duration-700',
+        'flex h-[72px] w-full items-center gap-[10px] rounded-xs bg-background-secondary px-[14px]',
+        'duration-700 animate-in fade-in-0 slide-in-from-bottom-2',
         'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
       )}
     >
       <img src={appIconImage} width={38} height={38} />
 
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-1 flex-col">
         <div className="flex justify-between">
           <h3 className="subBody-sb text-gray-900">{appName}</h3>
-          <p className="caption-r text-gray-300 pr-2">{time}</p>
+          <p className="caption-r pr-2 text-gray-300">{time}</p>
         </div>
         <p className="subBody-r text-gray-900">{message}</p>
       </div>

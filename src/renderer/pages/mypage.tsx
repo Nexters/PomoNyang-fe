@@ -17,7 +17,7 @@ const MyPage = () => {
     <Frame>
       <Frame.NavBar title="마이페이지" onBack={() => navigate(PATH.POMODORO)} />
 
-      <div className="flex flex-col w-full gap-3">
+      <div className="flex w-full flex-col gap-3">
         <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
           <span className="subBody-r text-text-tertiary">나의 고양이</span>
           <span className="header-4 text-text-primary">{user?.cat?.name}</span>
@@ -25,9 +25,9 @@ const MyPage = () => {
 
         <ReadyForStat />
 
-        <div className="w-full p-5 rounded-sm bg-background-secondary">
-          <div className="flex items-center w-full">
-            <div className="flex flex-col justify-start flex-1">
+        <div className="w-full rounded-sm bg-background-secondary p-5">
+          <div className="flex w-full items-center">
+            <div className="flex flex-1 flex-col justify-start">
               <h3 className="body-sb text-text-primary">집중시간 알림받기</h3>
               <p className="subBody-r text-text-tertiary">
                 집중・휴식시간이 되면 고양이가 알려줘요
@@ -58,16 +58,16 @@ type ActionButtonProps = {
 };
 const ActionButton = ({ children, onClick }: ActionButtonProps) => (
   <button
-    className="flex items-center w-full p-5 rounded-sm bg-background-secondary"
+    className="flex w-full items-center rounded-sm bg-background-secondary p-5"
     onClick={onClick}
   >
-    <span className="flex flex-col items-start flex-1">{children}</span>
+    <span className="flex flex-1 flex-col items-start">{children}</span>
     <Icon name="chevronRight" size="md" />
   </button>
 );
 
 const ReadyForStat = () => (
-  <div className="flex flex-col justify-center items-center gap-2 py-[62px] bg-background-secondary rounded-sm">
+  <div className="flex flex-col items-center justify-center gap-2 rounded-sm bg-background-secondary py-[62px]">
     <Icon name="readyForStat" width={100} height={100} />
     <div className="flex flex-col gap-1 text-center">
       <h3 className="header-5 text-text-primary">통계 기능을 준비하고 있어요</h3>

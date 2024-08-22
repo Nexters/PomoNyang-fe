@@ -16,7 +16,7 @@ export const ToastViewport = forwardRef<
     className={cn(
       // @note: 기존 코드는 비교용으로 주석처리. 참고로 기존 것은 화면 해상도에 따라 나타나는 위치가 달랐음
       // 'fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]',
-      'fixed bottom-0 left-[50%] translate-x-[-50%] z-[100] flex max-h-screen w-full max-w-[400px] flex-col-reverse p-4 pb-12',
+      'fixed bottom-0 left-[50%] z-[100] flex max-h-screen w-full max-w-[400px] translate-x-[-50%] flex-col-reverse p-4 pb-12',
       className,
     )}
     {...props}
@@ -35,7 +35,7 @@ export const Toast = forwardRef<
       ref={ref}
       className={cn(
         'group pointer-events-auto relative flex w-full items-center justify-start gap-2 overflow-hidden shadow-lg',
-        'rounded-sm p-4 bg-gray-900 text-white opacity-90 subBody-r text-left',
+        'subBody-r rounded-sm bg-gray-900 p-4 text-left text-white opacity-90',
         'transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full',
         className,
       )}
@@ -59,7 +59,7 @@ export const ToastClose = forwardRef<
     toast-close=""
     {...props}
   >
-    <X className="w-4 h-4" />
+    <X className="h-4 w-4" />
   </ToastPrimitives.Close>
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;

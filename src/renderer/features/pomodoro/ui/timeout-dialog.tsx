@@ -10,7 +10,7 @@ export const TimeoutDialog = ({ open, onOpenChange, title, description }: Timeou
     <Dialog open={open} onOpenChange={onOpenChange} hasCloseButton={false}>
       <div className="flex flex-col gap-xl">
         <div>
-          <div className="header-4 text-text-primary py-[7.5px]">{title}</div>
+          <div className="header-4 py-[7.5px] text-text-primary">{title}</div>
           <div className="subBody-r text-text-secondary">{description}</div>
         </div>
         <Button
