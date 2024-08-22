@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
-import OfflineStatIcon from '@/shared/assets/svgs/offline-stat.svg';
 import { PATH } from '@/shared/constants';
 import { Frame, Icon, Toggle } from '@/shared/ui';
 
@@ -69,7 +68,7 @@ const ActionButton = ({ children, onClick }: ActionButtonProps) => (
 
 const ReadyForStat = () => (
   <div className="flex flex-col justify-center items-center gap-2 py-[62px] bg-background-secondary rounded-sm">
-    <img src={OfflineStatIcon} width={100} height={100} />
+    <Icon name="readyForStat" width={100} height={100} />
     <div className="flex flex-col gap-1 text-center">
       <h3 className="header-5 text-text-primary">통계 기능을 준비하고 있어요</h3>
       <p className="subBody-r text-text-secondary">

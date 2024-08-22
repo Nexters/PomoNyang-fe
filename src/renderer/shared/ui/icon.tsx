@@ -20,6 +20,7 @@ import PlayIcon from '@/shared/assets/svgs/play.svg';
 import PlusIcon from '@/shared/assets/svgs/plus.svg';
 import PlusSvgIcon from '@/shared/assets/svgs/plus.svg?react';
 import PositiveIcon from '@/shared/assets/svgs/positive.svg';
+import ReadyForStatIcon from '@/shared/assets/svgs/ready-for-stat.svg';
 import RestTimeIcon from '@/shared/assets/svgs/rest-time.svg';
 import StimulusIcon from '@/shared/assets/svgs/stimulus.svg';
 
@@ -46,6 +47,7 @@ const icons = {
   stimulus: StimulusIcon,
   pen: PenIcon,
   clock: ClockIcon,
+  readyForStat: ReadyForStatIcon,
 } as const;
 const sizes = {
   xs: 16,
