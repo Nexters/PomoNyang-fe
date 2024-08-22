@@ -7,8 +7,8 @@ type FrameProps = {
 };
 export const Frame = ({ children }: FrameProps) => {
   return (
-    <div className="w-full h-full relative pt-[56px] pb-[112px] overflow-y-auto">
-      <div className="p-5 h-full">{children}</div>
+    <div className="relative h-full w-full overflow-y-auto pb-[112px] pt-[56px]">
+      <div className="h-full p-5">{children}</div>
     </div>
   );
 };
@@ -19,10 +19,10 @@ type NavBarProps = {
 };
 const NavBar = ({ title, onBack }: NavBarProps) => {
   return (
-    <div className="absolute top-0 left-0 w-full h-[56px] flex justify-center items-center p-2">
+    <div className="absolute left-0 top-0 flex h-[56px] w-full items-center justify-center p-2">
       {onBack && (
         <button
-          className="absolute top-2 left-2 flex justify-center items-center w-[40px] h-[40px]"
+          className="absolute left-2 top-2 flex h-[40px] w-[40px] items-center justify-center"
           onClick={onBack}
         >
           <Icon name="back" size="md" />
@@ -37,7 +37,7 @@ type BottomBarProps = {
   children: ReactNode;
 };
 const BottomBar = ({ children }: BottomBarProps) => {
-  return <div className="absolute bottom-0 left-0 w-full h-[112px] px-5 py-6">{children}</div>;
+  return <div className="absolute bottom-0 left-0 h-[112px] w-full px-5 py-6">{children}</div>;
 };
 
 Frame.NavBar = NavBar;

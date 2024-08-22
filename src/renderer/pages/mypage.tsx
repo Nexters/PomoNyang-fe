@@ -14,7 +14,7 @@ const MyPage = () => {
     <Frame>
       <Frame.NavBar title="마이페이지" onBack={() => navigate(PATH.POMODORO)} />
 
-      <div className="w-full flex flex-col gap-3">
+      <div className="flex w-full flex-col gap-3">
         <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
           <span className="subBody-r text-text-tertiary">나의 고양이</span>
           <span className="header-4 text-text-primary">{user?.cat?.name}</span>
@@ -22,9 +22,9 @@ const MyPage = () => {
 
         {/* <OfflineStat /> */}
 
-        <div className="w-full p-5 bg-background-secondary rounded-sm">
-          <div className="w-full flex items-center">
-            <div className="flex-1 flex flex-col justify-start">
+        <div className="w-full rounded-sm bg-background-secondary p-5">
+          <div className="flex w-full items-center">
+            <div className="flex flex-1 flex-col justify-start">
               <h3 className="body-sb text-text-primary">집중시간 알림받기</h3>
               <p className="subBody-r text-text-tertiary">
                 집중・휴식시간이 되면 고양이가 알려줘요
@@ -56,10 +56,10 @@ type ActionButtonProps = {
 };
 const ActionButton = ({ children, onClick }: ActionButtonProps) => (
   <button
-    className="flex items-center w-full p-5 rounded-sm bg-background-secondary"
+    className="flex w-full items-center rounded-sm bg-background-secondary p-5"
     onClick={onClick}
   >
-    <span className="flex flex-col items-start flex-1">{children}</span>
+    <span className="flex flex-1 flex-col items-start">{children}</span>
     <Icon name="chevronRight" size="md" />
   </button>
 );

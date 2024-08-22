@@ -36,24 +36,24 @@ export const RestWaitScreen = ({
   );
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       <header className="h-[56px]" />
-      <main className="flex flex-col items-center justify-center flex-1 gap-5">
+      <main className="flex flex-1 flex-col items-center justify-center gap-5">
         <div className="flex flex-col items-center justify-center gap-sm">
           <CategoryChip category={currentCategory} />
-          <Time minutes={minutes} seconds={seconds} className="header-1 text-text-primary gap-xs" />
+          <Time minutes={minutes} seconds={seconds} className="header-1 gap-xs text-text-primary" />
           {isExceed && (
             <div className="flex items-center gap-xs">
               <Time
                 minutes={exceedMinutes}
                 seconds={exceedSeconds}
-                className="gap-0 text-text-accent-1 header-4"
+                className="header-4 gap-0 text-text-accent-1"
               />
-              <span className="text-text-accent-1 header-4">초과</span>
+              <span className="header-4 text-text-accent-1">초과</span>
             </div>
           )}
         </div>
-        <div className="relative w-[240px] h-[240px]">
+        <div className="relative h-[240px] w-[240px]">
           <DotLottieReact
             src={completeFocusLottie}
             autoplay
@@ -105,8 +105,8 @@ export const RestWaitScreen = ({
           </SelectGroup>
         </div>
       </main>
-      <div className="flex flex-col items-center w-full pb-5">
-        <Button variant="primary" className="p-xl w-[200px]" size="lg" onClick={handleRest}>
+      <div className="flex w-full flex-col items-center pb-5">
+        <Button variant="primary" className="w-[200px] p-xl" size="lg" onClick={handleRest}>
           휴식 시작하기
         </Button>
         <Button variant="text-secondary" size="md" onClick={handleEnd}>

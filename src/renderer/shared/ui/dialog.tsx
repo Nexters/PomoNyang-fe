@@ -38,9 +38,9 @@ export const Dialog = ({
         />
         <DialogPrimitive.Content
           className={cn(
-            fullScreen && 'fixed left-[50%] top-0 bottom-0 translate-x-[-50%] pt-[56px]',
+            fullScreen && 'fixed bottom-0 left-[50%] top-0 translate-x-[-50%] pt-[56px]',
             !fullScreen &&
-              'fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] p-[20px] rounded-md shadow-lg',
+              'fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-md p-[20px] shadow-lg',
             'z-50 w-full max-w-md bg-background-primary',
 
             animated &&
@@ -50,8 +50,8 @@ export const Dialog = ({
           {hasCloseButton && (
             <DialogPrimitive.Close
               className={cn(
-                fullScreen && 'absolute top-[10px] right-[8px] p-2',
-                !fullScreen && 'absolute top-[20px] right-[20px] p-2',
+                fullScreen && 'absolute right-[8px] top-[10px] p-2',
+                !fullScreen && 'absolute right-[20px] top-[20px] p-2',
               )}
             >
               <Icon name="close" size="md" />
@@ -62,10 +62,10 @@ export const Dialog = ({
           <DialogPrimitive.Title
             className={cn(
               fullScreen &&
-                'absolute top-0 left-0 right-0 h-[56px] flex justify-center items-center',
+                'absolute left-0 right-0 top-0 flex h-[56px] items-center justify-center',
               !fullScreen &&
-                'absolute top-[20px] left-[20px] h-[40px] flex justify-start items-center',
-              'header-4 text-text-primary pointer-events-none',
+                'absolute left-[20px] top-[20px] flex h-[40px] items-center justify-start',
+              'header-4 pointer-events-none text-text-primary',
             )}
           >
             {title}

@@ -27,7 +27,7 @@ const Home = () => {
   return (
     <div
       className={cn(
-        'w-full h-full bg-[#FFE9BF] flex justify-center items-center transition-opacity duration-500',
+        'flex h-full w-full items-center justify-center bg-[#FFE9BF] transition-opacity duration-500',
         isMinTimePassed ? 'opacity-100' : 'opacity-0',
       )}
     >

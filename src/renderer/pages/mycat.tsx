@@ -42,8 +42,8 @@ const MyCat = () => {
     <Frame>
       <Frame.NavBar title="나의 고양이" onBack={() => navigate(PATH.MY_PAGE)} />
 
-      <div className="h-full flex justify-center items-center">
-        <div className="w-full flex flex-col">
+      <div className="flex h-full items-center justify-center">
+        <div className="flex w-full flex-col">
           <Tooltip
             content="사냥놀이를 하고싶다냥"
             color="white"
@@ -52,11 +52,11 @@ const MyCat = () => {
             arrowProps={{ width: 14, height: 9 }}
           />
 
-          <RiveComponent className="w-full h-[240px] select-none" />
+          <RiveComponent className="h-[240px] w-full select-none" />
 
-          <div className="w-full flex justify-center items-center">
+          <div className="flex w-full items-center justify-center">
             <button
-              className="flex gap-1 justify-center items-center p-3"
+              className="flex items-center justify-center gap-1 p-3"
               onClick={handleClickEditNameButton}
             >
               <span className="header-4 text-text-secondary">{user?.cat?.name}</span>

@@ -20,7 +20,7 @@ import { cn } from '@/shared/utils';
 
 const Onboarding = () => {
   return (
-    <Carousel className="w-full h-full" opts={{ loop: true }} plugins={[Autoplay({ delay: 3000 })]}>
+    <Carousel className="h-full w-full" opts={{ loop: true }} plugins={[Autoplay({ delay: 3000 })]}>
       {/* @note: useCarousel를 사용하기 위해 별도 컴포넌트로 분리 */}
       <OnboardingContent />
     </Carousel>
@@ -53,10 +53,10 @@ const OnboardingContent = () => {
   const [, setIsCompleted] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
 
   return (
-    <div className="h-full flex flex-col items-center justify-center gap-12">
+    <div className="flex h-full flex-col items-center justify-center gap-12">
       <div
         className={cn(
-          'w-full flex flex-col justify-center items-center gap-8 overflow-hidden',
+          'flex w-full flex-col items-center justify-center gap-8 overflow-hidden',
           // TODO: 가운데 정렬하고 최소 간격으로 하고 싶은데 잘 안되서 일단 주석처리함
           // 'h-sm:pt-[40px] h-md:pt-[60px] h-lg:pt-[100px] h-xl:pt-[140px]',
         )}
@@ -64,12 +64,12 @@ const OnboardingContent = () => {
         <CarouselContent>
           {contents.map(({ title, description, imageSrc }, index) => (
             <CarouselItem key={index}>
-              <div className="flex flex-col items-center justify-center gap-8 select-none">
+              <div className="flex select-none flex-col items-center justify-center gap-8">
                 <img src={imageSrc} width={240} height={240} />
 
                 <div className="flex flex-col gap-2 text-center">
                   <h2 className="header-4 text-text-primary">{title}</h2>
-                  <p className="body-r text-text-secondary whitespace-pre-line">{description}</p>
+                  <p className="body-r whitespace-pre-line text-text-secondary">{description}</p>
                 </div>
               </div>
             </CarouselItem>
@@ -84,7 +84,7 @@ const OnboardingContent = () => {
             <li
               key={index}
               className={cn(
-                'w-2 h-2 rounded-full',
+                'h-2 w-2 rounded-full',
                 index === currentIndex ? 'bg-background-tertiary' : 'bg-background-secondary',
               )}
             />
