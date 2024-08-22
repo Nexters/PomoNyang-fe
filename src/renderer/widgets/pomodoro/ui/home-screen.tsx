@@ -55,7 +55,7 @@ export const HomeScreen = ({
   const changeCategoryDrawerProps = useDisclosure();
 
   const { data: categories } = useCategories();
-  const { mutateAsync: updateCategory } = useUpdateCategory();
+  const { mutate: updateCategory } = useUpdateCategory();
   const { data: user } = useUser();
 
   const { toast } = useToast();
@@ -187,7 +187,7 @@ export const HomeScreen = ({
             clickedMode === 'focus'
               ? { focusTime: createIsoDuration({ minutes }) }
               : { restTime: createIsoDuration({ minutes }) };
-          await updateCategory({
+          updateCategory({
             no: categories?.find((_category) => _category.title === category)?.no ?? 0,
             body,
           });
