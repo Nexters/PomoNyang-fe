@@ -43,8 +43,8 @@ const Naming = () => {
   return (
     <Frame>
       <Frame.NavBar onBack={handleClickBackButton} />
-      <div className="h-full flex justify-center items-center">
-        <div className="w-full flex flex-col gap-10">
+      <div className="flex h-full items-center justify-center">
+        <div className="flex w-full flex-col gap-10">
           <Tooltip
             content="반갑다냥! 내 이름을 지어줄래냥?"
             color="white"
@@ -53,7 +53,7 @@ const Naming = () => {
             arrowProps={{ width: 14, height: 9 }}
           />
           <RiveComponent
-            className="w-full h-[240px] cursor-pointer select-none"
+            className="h-[240px] w-full cursor-pointer select-none"
             onClick={() => {
               clickCatInput?.fire();
             }}
@@ -63,12 +63,12 @@ const Naming = () => {
             <input
               value={typedCatName}
               placeholder={selectedCatName}
-              className="body-sb text-text-primary placeholder:text-text-disabled p-lg rounded-sm caret-text-accent-1"
+              className="body-sb rounded-sm p-lg text-text-primary caret-text-accent-1 placeholder:text-text-disabled"
               onChange={(e) => setTypedCatName(e.target.value)}
             />
             {errorMessage && (
               <div className="absolute bottom-[-8px] left-0 w-full">
-                <div className="absolute top-0 left-0 caption-r text-accent-red">
+                <div className="caption-r absolute left-0 top-0 text-accent-red">
                   {errorMessage}
                 </div>
               </div>
@@ -78,7 +78,7 @@ const Naming = () => {
       </div>
       <Frame.BottomBar>
         <Button className="w-full" disabled={!!errorMessage} onClick={handleClickCompleteButton}>
-          완료
+          확인
         </Button>
       </Frame.BottomBar>
     </Frame>
@@ -86,10 +86,12 @@ const Naming = () => {
 };
 
 // 특수문자 및 공백 여부 확인 정규식
+const spaceRegex = /^\s+$/;
 const specialCharRegex = /[~!@#$%^&*()_+|<>?:{}\s]/;
 
 const getErrorMessage = (name: string) => {
   if (name.length === 0) return '';
+  if (spaceRegex.test(name)) return '고양이 이름은 빈 칸이 될 수 없어요';
   if (specialCharRegex.test(name)) return '고양이 이름에는 공백, 특수문자가 들어갈 수 없어요';
   if (name.length > 10) return '고양이 이름은 10글자를 넘길 수 없어요';
   return '';

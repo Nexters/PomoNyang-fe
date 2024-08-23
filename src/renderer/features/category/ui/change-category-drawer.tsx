@@ -43,8 +43,8 @@ export const ChangeCategoryDrawer = ({
       }}
     >
       <DrawerContent>
-        <div className="flex items-center justify-between gap-2 ml-xl mr-sm">
-          <DrawerTitle className="py-1 header-3">카테고리 변경</DrawerTitle>
+        <div className="ml-xl mr-sm flex items-center justify-between gap-2">
+          <DrawerTitle className="header-3 py-1">카테고리 변경</DrawerTitle>
           <DrawerClose className="p-sm">
             <Icon name="close" size="sm" />
           </DrawerClose>
@@ -54,7 +54,7 @@ export const ChangeCategoryDrawer = ({
           onValueChange={(value) => {
             setSelectedCategory(value);
           }}
-          className="flex flex-col gap-4 mt-lg px-lg"
+          className="mt-lg flex flex-col gap-4 px-lg"
         >
           {categories?.map((category) => {
             const focusTime =
@@ -67,13 +67,13 @@ export const ChangeCategoryDrawer = ({
               <SelectGroupItem
                 key={category.no}
                 value={category.title}
-                className="flex flex-row items-center justify-start w-full p-xl gap-md"
+                className="flex w-full flex-row items-center justify-start gap-md p-xl"
               >
                 <div className="flex gap-sm">
                   <Icon name={getCategoryIconName(category.title)} size="sm" />
                   <span className="body-sb text-text-primary">{category.title}</span>
                 </div>
-                <div className="flex items-center subBody-r text-text-tertiary gap-xs">
+                <div className="subBody-r flex items-center gap-xs text-text-tertiary">
                   <span>집중 {focusTime}분</span>
                   <span>|</span>
                   <span>휴식 {restTime}분</span>

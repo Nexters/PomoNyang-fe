@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 
 const RootLayout = () => {
   return (
-    <div className="max-w-md m-auto bg-background-primary h-dvh font-pretendard">
+    <div className="m-auto h-dvh max-w-md bg-background-primary font-pretendard">
       <Outlet />
     </div>
   );

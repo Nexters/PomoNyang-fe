@@ -37,7 +37,7 @@ const Toggle = React.forwardRef<
       <div
         className={cn(
           pressed ? 'translate-x-4' : 'translate-x-0',
-          'w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-200 ease-in-out',
+          'h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-200 ease-in-out',
         )}
       />
     </TogglePrimitive.Root>

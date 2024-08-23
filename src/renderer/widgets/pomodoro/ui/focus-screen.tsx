@@ -31,14 +31,14 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
   });
 
   return (
-    <div className="relative flex flex-col h-full">
+    <div className="relative flex h-full flex-col">
       <header className="flex p-4">
-        <div className="flex gap-sm subBody-sb text-text-tertiary bg-background-secondary p-md rounded-xs w-[80px]">
+        <div className="subBody-sb flex w-[80px] gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary">
           <Icon name={getCategoryIconName(currentCategory)} size="sm" />
           {currentCategory}
         </div>
       </header>
-      <main className="flex flex-col items-center justify-center flex-1">
+      <main className="flex flex-1 flex-col items-center justify-center">
         <Tooltip
           content={isExceed ? toolTipContentMap.exceed : toolTipContentMap.default}
           color="white"
@@ -47,29 +47,34 @@ export const FocusScreen = ({ currentCategory, time, handleRest, handleEnd }: Fo
           arrowProps={{ width: 14, height: 9 }}
         />
         <RiveComponent
-          className="w-full h-[240px] cursor-pointer select-none"
+          className="h-[240px] w-full cursor-pointer select-none"
           onClick={() => {
             clickCatInput?.fire();
           }}
         />
-        <div className="flex flex-col items-center mt-xl">
+        <div className="mt-xl flex flex-col items-center">
           <div className="flex gap-xs">
             <Icon name="focusTime" width={20} height={20} />
             <span className="header-5 text-text-secondary">집중시간</span>
           </div>
-          <Time minutes={minutes} seconds={seconds} className="header-1 text-text-primary gap-xs" />
+          <Time minutes={minutes} seconds={seconds} className="header-1 gap-xs text-text-primary" />
           <div className={cn('flex items-center gap-xs', isExceed ? 'opacity-100' : 'opacity-0')}>
             <Time
               minutes={exceedMinutes}
               seconds={exceedSeconds}
-              className="gap-0 text-text-accent-1 header-4"
+              className="header-4 gap-0 text-text-accent-1"
             />
-            <span className="text-text-accent-1 header-4">초과</span>
+            <span className="header-4 text-text-accent-1">초과</span>
           </div>
         </div>
       </main>
-      <div className="absolute left-0 flex flex-col items-center w-full m-auto bottom-4">
-        <Button variant="secondary" className="p-xl w-[200px]" size="lg" onClick={handleRest}>
+      <div className="flex w-full flex-col items-center pb-5">
+        <Button
+          variant={isExceed ? 'primary' : 'secondary'}
+          className="w-[200px] p-xl"
+          size="lg"
+          onClick={handleRest}
+        >
           휴식하기
         </Button>
         <Button variant="text-secondary" size="md" onClick={handleEnd}>
