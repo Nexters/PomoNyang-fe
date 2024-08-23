@@ -7,12 +7,13 @@ import completeFocusLottie from '@/shared/assets/lotties/loti_complete_focus.jso
 import particleLottie from '@/shared/assets/lotties/loti_particle.json?url';
 import { MAX_FOCUS_MINUTES, MIN_FOCUS_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { Button, Icon, SelectGroup, SelectGroupItem } from '@/shared/ui';
-import { minutesToMs, msToTime } from '@/shared/utils';
+import { msToTime } from '@/shared/utils';
 
 type RestWaitScreenProps = {
   currentCategory: string;
   currentFocusMinutes: number;
-  time: number;
+  elapsedTime: number;
+  exceededTime: number;
   handleRest: () => void;
   handleEnd: () => void;
   selectedNextAction: PomodoroNextAction | undefined;
@@ -22,18 +23,17 @@ type RestWaitScreenProps = {
 export const RestWaitScreen = ({
   currentCategory,
   currentFocusMinutes,
-  time, // 전체 경과한 시간
+  elapsedTime,
+  exceededTime,
   handleRest,
   handleEnd,
   selectedNextAction,
   setSelectedNextAction,
 }: RestWaitScreenProps) => {
   // 만약 전체 경과한 시간이 설정한 focusTime 보다 크면 초과
-  const isExceed = time > minutesToMs(currentFocusMinutes);
-  const { minutes, seconds } = msToTime(isExceed ? minutesToMs(currentFocusMinutes) : time);
-  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(
-    isExceed ? time - minutesToMs(currentFocusMinutes) : 0,
-  );
+  const isExceed = exceededTime > 0;
+  const { minutes, seconds } = msToTime(elapsedTime);
+  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(exceededTime);
 
   return (
     <div className="flex h-full flex-col">
