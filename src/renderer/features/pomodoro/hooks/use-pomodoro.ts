@@ -150,6 +150,7 @@ export const usePomodoro = ({
     // 상위로 전달했으니 cycle 데이터 초기화
     setPomodoroCycles([]);
     setPomodoroTime(defaultPomodoroTime);
+    setCalledOnceExceedGoalTime(false);
   };
 
   useInterval(
