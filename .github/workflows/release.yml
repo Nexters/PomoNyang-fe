@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to trigger on'
+        required: true
+        type: string
 
 jobs:
   publish_on_linux:
