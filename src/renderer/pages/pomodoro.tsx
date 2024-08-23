@@ -50,14 +50,14 @@ const Pomodoro = () => {
   const { mutate: updateCategory } = useUpdateCategory();
   const { mutate: savePomodoro } = useAddPomodoro();
 
-  const [currentCategory, setCurrentCategory] = useState(categories?.[0]?.title || '');
+  const [currentCategory, setCurrentCategory] = useState(categories?.[0]);
+  const currentCategoryTitle = currentCategory?.title || '';
   useEffect(() => {
-    setCurrentCategory(categories?.[0]?.title || '');
+    setCurrentCategory(categories?.[0]);
   }, [categories]);
-  const currentCategoryData = categories?.find((category) => category.title === currentCategory);
 
-  const currentFocusTime = isoDurationToMs(currentCategoryData?.focusTime);
-  const currentRestTime = isoDurationToMs(currentCategoryData?.restTime);
+  const currentFocusTime = isoDurationToMs(currentCategory?.focusTime);
+  const currentRestTime = isoDurationToMs(currentCategory?.restTime);
 
   const { pomodoroCycles, pomodoroTime, startFocus, startRestWait, startRest, endPomodoro } =
     usePomodoro({
@@ -96,12 +96,12 @@ const Pomodoro = () => {
           timeoutDialogProps.onOpen();
         }
 
-        if (currentCategoryData) {
+        if (currentCategory) {
           savePomodoro({
             body: [
               {
                 clientFocusTimeId: Date.now().toString(),
-                categoryNo: currentCategoryData.no,
+                categoryNo: currentCategory.no,
                 focusedTime: msToIsoDuration(focusedTime),
                 restedTime: msToIsoDuration(restedTime),
                 doneAt: new Date().toISOString(),
@@ -119,10 +119,10 @@ const Pomodoro = () => {
   const currentRestMinutes = msToMinutes(currentRestTime);
 
   const updateCategoryTime = (type: 'focusTime' | 'restTime', currentMinutes: number) => {
-    if (!selectedNextAction || !currentCategoryData) return;
+    if (!selectedNextAction || !currentCategory) return;
 
     updateCategory({
-      no: currentCategoryData.no,
+      no: currentCategory.no,
       body: {
         [type]: createIsoDuration({
           minutes:
@@ -140,7 +140,7 @@ const Pomodoro = () => {
       <FocusScreen
         elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
         exceededTime={pomodoroTime.exceeded}
-        currentCategory={currentCategory}
+        currentCategory={currentCategoryTitle}
         handleRest={() => {
           startRestWait();
         }}
@@ -155,7 +155,7 @@ const Pomodoro = () => {
       <RestWaitScreen
         elapsedTime={Math.min(latestFocusTime?.elapsed ?? 0, currentFocusTime)}
         exceededTime={latestFocusTime?.exceeded ?? 0}
-        currentCategory={currentCategory}
+        currentCategory={currentCategoryTitle}
         currentFocusMinutes={currentFocusMinutes}
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
@@ -175,7 +175,7 @@ const Pomodoro = () => {
       <RestScreen
         elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
         exceededTime={pomodoroTime.exceeded}
-        currentCategory={currentCategory}
+        currentCategory={currentCategoryTitle}
         currentRestMinutes={currentRestMinutes}
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
@@ -194,8 +194,10 @@ const Pomodoro = () => {
     <>
       <HomeScreen
         startTimer={startFocus}
-        currentCategory={currentCategory}
-        setCurrentCategory={setCurrentCategory}
+        currentCategory={currentCategoryTitle}
+        setCurrentCategory={(title) => {
+          setCurrentCategory(categories?.find((category) => category.title === title));
+        }}
         currentFocusMinutes={msToMinutes(currentFocusTime)}
         currentRestMinutes={msToMinutes(currentRestTime)}
       />
