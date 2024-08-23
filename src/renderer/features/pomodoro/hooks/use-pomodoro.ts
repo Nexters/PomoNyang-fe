@@ -22,13 +22,14 @@ import { useInterval } from '@/shared/hooks';
 // 뽀모도로 종료 - 저장된 값 list를 서버에 전달(물론 전달하기 전 변환 필수). 전달 성공시 저장된 값 초기화
 
 // 강제 종료 - 뽀모도로 종료 로직 실행(단, 마지막 끝난시간은 강제 종료시점으로 해서)
+export type PomodoroMode = 'focus' | 'rest-wait' | 'rest';
 
 export type PomodoroCycle = {
   startAt: number;
   endAt?: number;
   goalTime: number;
   exceedMaxTime: number;
-  mode: 'focus' | 'rest-wait' | 'rest';
+  mode: PomodoroMode;
 };
 
 export type PomodoroTime = {
@@ -49,6 +50,7 @@ export type PomodoroParams = {
   restExceedMaxTime: number;
   // TODO:
   onEndPomodoro: (cycles: PomodoroCycle[]) => void;
+  onTimeExceed?: (mode: PomodoroMode) => void;
 };
 
 const isNotNil = <T>(value: T): value is NonNullable<T> => value !== null && value !== undefined;
@@ -71,6 +73,16 @@ const updateCycles = (cycles: PomodoroCycle[], nextCycle?: PomodoroCycle): Pomod
   ].filter(isNotNil);
 };
 
+export const getPomodoroTime = (cycle: PomodoroCycle): PomodoroTime => {
+  const now = cycle.endAt ?? Date.now();
+  const elapsed = now - cycle.startAt;
+  const exceeded = elapsed - cycle.goalTime;
+
+  return { elapsed, exceeded };
+};
+
+const defaultPomodoroTime: PomodoroTime = { elapsed: 0, exceeded: 0 };
+
 export const usePomodoro = ({
   focusTime,
   focusExceedMaxTime,
@@ -78,15 +90,16 @@ export const usePomodoro = ({
   restTime,
   restExceedMaxTime,
   onEndPomodoro,
+  onTimeExceed,
 }: PomodoroParams) => {
   const [pomodoroCycles, setPomodoroCycles] = useLocalStorage<PomodoroCycle[]>(
     'pomodoro-cycles',
     [],
   );
-  const [pomodoroTime, setPomodoroTime] = useLocalStorage<PomodoroTime>('pomodoro-time', {
-    elapsed: 0,
-    exceeded: 0,
-  });
+  const [pomodoroTime, setPomodoroTime] = useLocalStorage<PomodoroTime>(
+    'pomodoro-time',
+    defaultPomodoroTime,
+  );
 
   const startFocus = () => {
     const nextCycles = updateCycles(pomodoroCycles, {
@@ -96,6 +109,7 @@ export const usePomodoro = ({
       mode: 'focus',
     });
     setPomodoroCycles(nextCycles);
+    setPomodoroTime(defaultPomodoroTime);
   };
 
   const startRestWait = () => {
@@ -106,6 +120,7 @@ export const usePomodoro = ({
       mode: 'rest-wait',
     });
     setPomodoroCycles(nextCycles);
+    setPomodoroTime(defaultPomodoroTime);
   };
 
   const startRest = () => {
@@ -116,14 +131,16 @@ export const usePomodoro = ({
       mode: 'rest',
     });
     setPomodoroCycles(nextCycles);
+    setPomodoroTime(defaultPomodoroTime);
   };
 
   const endPomodoro = () => {
     const endedCycles = updateCycles(pomodoroCycles);
     onEndPomodoro(endedCycles);
 
-    // 상위로 전달했으니 데이터 초기화
+    // 상위로 전달했으니 cycle 데이터 초기화
     setPomodoroCycles([]);
+    setPomodoroTime(defaultPomodoroTime);
   };
 
   useInterval(
@@ -131,20 +148,20 @@ export const usePomodoro = ({
       const currentCycle = pomodoroCycles[pomodoroCycles.length - 1];
       if (!currentCycle) return;
 
-      const now = Date.now();
-      const elapsed = now - currentCycle.startAt;
-      const exceeded = elapsed - currentCycle.goalTime;
-
+      const { elapsed, exceeded } = getPomodoroTime(currentCycle);
       setPomodoroTime({ elapsed, exceeded });
 
       if (exceeded >= currentCycle.exceedMaxTime) {
         if (currentCycle.mode === 'focus') {
+          onTimeExceed?.('focus');
           startRestWait();
         }
         if (currentCycle.mode === 'rest-wait') {
+          onTimeExceed?.('rest-wait');
           endPomodoro();
         }
         if (currentCycle.mode === 'rest') {
+          onTimeExceed?.('rest');
           endPomodoro();
         }
       }
@@ -153,6 +170,7 @@ export const usePomodoro = ({
   );
 
   return {
+    pomodoroCycles,
     pomodoroTime,
     startFocus,
     startRestWait,
