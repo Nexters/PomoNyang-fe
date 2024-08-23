@@ -49,9 +49,9 @@ export type PomodoroParams = {
   restTime: number;
   /** 휴식 초과 최대시간. (단위는 ms) */
   restExceedMaxTime: number;
-  // TODO:
+  /** 뽀모도로 종료시 실행되는 콜백 */
   onEndPomodoro: (cycles: PomodoroCycle[], reason: PomodoroEndReason) => void;
-
+  /** 목표시간 초과시 한번만 실행되는 콜백 */
   onceExceedGoalTime?: (mode: PomodoroMode) => void;
 };
 
