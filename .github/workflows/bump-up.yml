@@ -1,0 +1,39 @@
+name: Bump version
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine version type
+        id: get_version_type
+        run: |
+          last_commit_message=$(git log -1 --pretty=%B)
+          echo "Last commit message: $last_commit_message"
+
+          if [[ "$last_commit_message" == *"#major"* ]]; then
+            echo "version_type=major" >> $GITHUB_ENV
+          elif [[ "$last_commit_message" == *"#minor"* ]]; then
+            echo "version_type=minor" >> $GITHUB_ENV
+          else
+            echo "No specific version bump keyword found. Defaulting to patch."
+            echo "version_type=patch" >> $GITHUB_ENV
+          fi
+
+      - name: Bump version
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          npm version ${{ env.version_type }}
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          tags: true
+          branch: ${{ github.ref }}

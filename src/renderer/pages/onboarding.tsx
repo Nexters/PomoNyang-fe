@@ -26,8 +26,8 @@ const contents = [
     imageSrc: onboardingImage1,
   },
   {
-    title: '다른 앱을 실행하면 방해 알림을 보내요',
-    description: '뽀모도로를 실행한 후, 다른 앱을 사용하면\n설정한 주기로 방해 알림을 보내드려요.',
+    title: '집중, 휴식시간이 끝나면 알림을 보내요',
+    description: '뽀모도로를 실행한 후, 목표 시간이 지나면\n시간이 끝났다는 알림을 보내드려요.',
     imageSrc: onboardingImage2,
   },
   {
