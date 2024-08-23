@@ -51,6 +51,8 @@ export type PomodoroParams = {
   restExceedMaxTime: number;
   // TODO:
   onEndPomodoro: (cycles: PomodoroCycle[], reason: PomodoroEndReason) => void;
+
+  onceExceedGoalTime?: (mode: PomodoroMode) => void;
 };
 
 const isNotNil = <T>(value: T): value is NonNullable<T> => value !== null && value !== undefined;
@@ -90,6 +92,7 @@ export const usePomodoro = ({
   restTime,
   restExceedMaxTime,
   onEndPomodoro,
+  onceExceedGoalTime,
 }: PomodoroParams) => {
   const [pomodoroCycles, setPomodoroCycles] = useLocalStorage<PomodoroCycle[]>(
     'pomodoro-cycles',
@@ -98,6 +101,10 @@ export const usePomodoro = ({
   const [pomodoroTime, setPomodoroTime] = useLocalStorage<PomodoroTime>(
     'pomodoro-time',
     defaultPomodoroTime,
+  );
+  const [calledOnceExceedGoalTime, setCalledOnceExceedGoalTime] = useLocalStorage<boolean>(
+    'pomodoro-exceed-time',
+    false,
   );
 
   const startFocus = () => {
@@ -109,6 +116,7 @@ export const usePomodoro = ({
     });
     setPomodoroCycles(nextCycles);
     setPomodoroTime(defaultPomodoroTime);
+    setCalledOnceExceedGoalTime(false);
   };
 
   const startRestWait = () => {
@@ -120,6 +128,7 @@ export const usePomodoro = ({
     });
     setPomodoroCycles(nextCycles);
     setPomodoroTime(defaultPomodoroTime);
+    setCalledOnceExceedGoalTime(false);
   };
 
   const startRest = () => {
@@ -131,6 +140,7 @@ export const usePomodoro = ({
     });
     setPomodoroCycles(nextCycles);
     setPomodoroTime(defaultPomodoroTime);
+    setCalledOnceExceedGoalTime(false);
   };
 
   const endPomodoro = (reason: PomodoroEndReason = 'manual') => {
@@ -149,6 +159,11 @@ export const usePomodoro = ({
 
       const { elapsed, exceeded } = getPomodoroTime(currentCycle);
       setPomodoroTime({ elapsed, exceeded });
+
+      if (exceeded > 0 && !calledOnceExceedGoalTime) {
+        onceExceedGoalTime?.(currentCycle.mode);
+        setCalledOnceExceedGoalTime(true);
+      }
 
       if (exceeded >= currentCycle.exceedMaxTime) {
         if (currentCycle.mode === 'focus') {
