@@ -1,7 +1,7 @@
 {
   "name": "mohanyang",
   "productName": "mohanyang",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Pomodoro timer desktop app with cat",
   "main": ".vite/build/main.js",
   "scripts": {
