@@ -36,8 +36,7 @@ export const useTimer = (initialTime: number, endTime?: number, handler?: THandl
 
     const now = Date.now();
     const elapsedTime = now - startTimeRef.current + accumulatedTimeRef.current;
-    // @FIX: 테스트 용으로 1000 곱해줌
-    const newTime = initialTime - elapsedTime * 1000;
+    const newTime = initialTime - elapsedTime;
 
     setTime(newTime);
 
