@@ -29,4 +29,7 @@ export const LOCAL_STORAGE_KEY = {
   FOCUSED_TIME: 'focusedTime',
   RESTED_TIME: 'restedTime',
   MODE: 'mode',
+  POMODORO_CYCLES: 'pomodoroCycles',
+  POMODORO_TIME: 'pomodoroTime',
+  POMODORO_CALLED_ONCE_FOR_EXCEED_TIME: 'pomodoroCalledOnceForExceedTime',
 };

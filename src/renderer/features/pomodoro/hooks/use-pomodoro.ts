@@ -1,6 +1,10 @@
 import { useLocalStorage } from 'usehooks-ts';
 
+import { PomodoroCycle, PomodoroEndReason, PomodoroMode, PomodoroTime } from '@/entities/pomodoro';
+import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useInterval } from '@/shared/hooks';
+
+// == usePomodoro 로직에 대한 description
 
 // 집중 시작 - 시작 시각: Date.now(), 목표시간: 25 * 60 * 1000(25분, 형식 미정), 모드: focus, 끝난시간: Null로 로컬에 저장
 
@@ -22,23 +26,8 @@ import { useInterval } from '@/shared/hooks';
 // 뽀모도로 종료 - 저장된 값 list를 서버에 전달(물론 전달하기 전 변환 필수). 전달 성공시 저장된 값 초기화
 
 // 강제 종료 - 뽀모도로 종료 로직 실행(단, 마지막 끝난시간은 강제 종료시점으로 해서)
-export type PomodoroMode = 'focus' | 'rest-wait' | 'rest';
-export type PomodoroEndReason = 'manual' | 'exceed';
 
-export type PomodoroCycle = {
-  startAt: number;
-  endAt?: number;
-  goalTime: number;
-  exceedMaxTime: number;
-  mode: PomodoroMode;
-};
-
-export type PomodoroTime = {
-  elapsed: number;
-  exceeded: number;
-};
-
-export type PomodoroParams = {
+export type UsePomodoroParams = {
   /** 집중시간. (단위는 ms) */
   focusTime: number;
   /** 집중 초과 최대시간. (단위는 ms) */
@@ -93,17 +82,17 @@ export const usePomodoro = ({
   restExceedMaxTime,
   onEndPomodoro,
   onceExceedGoalTime,
-}: PomodoroParams) => {
+}: UsePomodoroParams) => {
   const [pomodoroCycles, setPomodoroCycles] = useLocalStorage<PomodoroCycle[]>(
-    'pomodoro-cycles',
+    LOCAL_STORAGE_KEY.POMODORO_CYCLES,
     [],
   );
   const [pomodoroTime, setPomodoroTime] = useLocalStorage<PomodoroTime>(
-    'pomodoro-time',
+    LOCAL_STORAGE_KEY.POMODORO_TIME,
     defaultPomodoroTime,
   );
-  const [calledOnceExceedGoalTime, setCalledOnceExceedGoalTime] = useLocalStorage<boolean>(
-    'pomodoro-exceed-time',
+  const [calledOnceForExceedGoalTime, setCalledOnceForExceedGoalTime] = useLocalStorage(
+    LOCAL_STORAGE_KEY.POMODORO_CALLED_ONCE_FOR_EXCEED_TIME,
     false,
   );
 
@@ -116,7 +105,7 @@ export const usePomodoro = ({
     });
     setPomodoroCycles(nextCycles);
     setPomodoroTime(defaultPomodoroTime);
-    setCalledOnceExceedGoalTime(false);
+    setCalledOnceForExceedGoalTime(false);
   };
 
   const startRestWait = () => {
@@ -128,7 +117,7 @@ export const usePomodoro = ({
     });
     setPomodoroCycles(nextCycles);
     setPomodoroTime(defaultPomodoroTime);
-    setCalledOnceExceedGoalTime(false);
+    setCalledOnceForExceedGoalTime(false);
   };
 
   const startRest = () => {
@@ -140,7 +129,7 @@ export const usePomodoro = ({
     });
     setPomodoroCycles(nextCycles);
     setPomodoroTime(defaultPomodoroTime);
-    setCalledOnceExceedGoalTime(false);
+    setCalledOnceForExceedGoalTime(false);
   };
 
   const endPomodoro = (reason: PomodoroEndReason = 'manual') => {
@@ -150,7 +139,7 @@ export const usePomodoro = ({
     // 상위로 전달했으니 cycle 데이터 초기화
     setPomodoroCycles([]);
     setPomodoroTime(defaultPomodoroTime);
-    setCalledOnceExceedGoalTime(false);
+    setCalledOnceForExceedGoalTime(false);
   };
 
   useInterval(
@@ -161,9 +150,9 @@ export const usePomodoro = ({
       const { elapsed, exceeded } = getPomodoroTime(currentCycle);
       setPomodoroTime({ elapsed, exceeded });
 
-      if (exceeded > 0 && !calledOnceExceedGoalTime) {
+      if (exceeded > 0 && !calledOnceForExceedGoalTime) {
         onceExceedGoalTime?.(currentCycle.mode);
-        setCalledOnceExceedGoalTime(true);
+        setCalledOnceForExceedGoalTime(true);
       }
 
       if (exceeded >= currentCycle.exceedMaxTime) {
