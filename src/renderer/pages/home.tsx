@@ -19,8 +19,10 @@ const Home = () => {
 
   useEffect(() => {
     if (!user) return;
-    if (!isCompletedOnboarding) return navigate(PATH.ONBOARDING);
-    if (!user.cat) return navigate(PATH.SELECTION);
+    if (!user.cat) {
+      if (!isCompletedOnboarding) return navigate(PATH.ONBOARDING);
+      return navigate(PATH.SELECTION);
+    }
     navigate(PATH.POMODORO);
   }, [isCompletedOnboarding, user]);
 
