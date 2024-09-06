@@ -138,6 +138,7 @@ const Pomodoro = () => {
   if (mode === 'focus')
     return (
       <FocusScreen
+        currentFocusTime={currentFocusTime}
         elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
         exceededTime={pomodoroTime.exceeded}
         currentCategory={currentCategoryTitle}
@@ -173,6 +174,7 @@ const Pomodoro = () => {
   if (mode === 'rest')
     return (
       <RestScreen
+        currentRestTime={currentRestTime}
         elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
         exceededTime={pomodoroTime.exceeded}
         currentCategory={currentCategoryTitle}

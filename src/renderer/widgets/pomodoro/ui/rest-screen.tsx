@@ -9,6 +9,7 @@ import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
 type RestScreenProps = {
   currentCategory: string;
+  currentRestTime: number;
   elapsedTime: number;
   exceededTime: number;
   currentRestMinutes: number;
@@ -20,6 +21,7 @@ type RestScreenProps = {
 
 export const RestScreen = ({
   currentCategory,
+  currentRestTime,
   elapsedTime,
   exceededTime,
   currentRestMinutes,
@@ -29,7 +31,7 @@ export const RestScreen = ({
   handleEnd,
 }: RestScreenProps) => {
   const isExceed = exceededTime > 0;
-  const { minutes, seconds } = msToTime(elapsedTime);
+  const { minutes, seconds } = msToTime(currentRestTime - elapsedTime);
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(exceededTime);
 
   const { data: user } = useUser();

@@ -7,6 +7,7 @@ import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
 type FocusScreenProps = {
   currentCategory: string;
+  currentFocusTime: number;
   elapsedTime: number;
   exceededTime: number;
   handleRest: () => void;
@@ -20,13 +21,14 @@ const toolTipContentMap: Record<string, string> = {
 
 export const FocusScreen = ({
   currentCategory,
+  currentFocusTime,
   elapsedTime,
   exceededTime,
   handleRest,
   handleEnd,
 }: FocusScreenProps) => {
   const isExceed = exceededTime > 0;
-  const { minutes, seconds } = msToTime(elapsedTime);
+  const { minutes, seconds } = msToTime(currentFocusTime - elapsedTime);
   const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(exceededTime);
 
   const { data: user } = useUser();
