@@ -1,21 +1,27 @@
 import { useEffect, useState } from 'react';
 
-import { useLocalStorage } from 'usehooks-ts';
-
 import { PomodoroMode, PomodoroNextAction } from '@/entities/pomodoro';
 import { useCategories, useUpdateCategory } from '@/features/category';
 import { useAddPomodoro } from '@/features/pomodoro';
+import { getPomodoroTime, usePomodoro } from '@/features/pomodoro/hooks/use-pomodoro';
 import { TimeoutDialog } from '@/features/pomodoro/ui/timeout-dialog';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
-import { LOCAL_STORAGE_KEY, MINUTES_GAP } from '@/shared/constants';
-import { useDisclosure, useTimer } from '@/shared/hooks';
-import { createIsoDuration, minutesToMs, msToTime, parseIsoDuration } from '@/shared/utils';
+import { MINUTES_GAP } from '@/shared/constants';
+import { useDisclosure } from '@/shared/hooks';
+import { useToast } from '@/shared/ui';
+import {
+  createIsoDuration,
+  isoDurationToMs,
+  minutesToMs,
+  msToIsoDuration,
+  msToMinutes,
+} from '@/shared/utils';
 import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/pomodoro';
 
-const END_TIME_ON_FOCUS_PAGE = -minutesToMs(60);
-const END_TIME_ON_REST_WAIT_PAGE = -minutesToMs(60);
-const END_TIME_ON_REST_PAGE = -minutesToMs(30);
+const focusExceedMaxTime = minutesToMs(60);
+const restWaitExceedMaxTime = minutesToMs(60);
+const restExceedMaxTime = minutesToMs(30);
 
 const timeoutMessageMap: Record<
   Exclude<PomodoroMode, 'focus'>,
@@ -32,129 +38,91 @@ const timeoutMessageMap: Record<
 };
 
 const Pomodoro = () => {
+  const { createNotificationByMode } = useFocusNotification();
+  const { toast } = useToast();
+
   const [selectedNextAction, setSelectedNextAction] = useState<PomodoroNextAction>();
-
   const [timeoutMode, setTimeoutMode] = useState<Exclude<PomodoroMode, 'focus'> | null>(null);
-  const [mode, setMode] = useLocalStorage<PomodoroMode | null>(LOCAL_STORAGE_KEY.MODE, null);
-
-  // 단위 ms
-  const [focusedTime, setFocusedTime] = useLocalStorage(LOCAL_STORAGE_KEY.FOCUSED_TIME, 0);
+  const timeoutDialogProps = useDisclosure();
 
   const { data: categories } = useCategories();
   const { data: user } = useUser();
-  const { mutate: _addPomodoro } = useAddPomodoro();
   const { mutate: updateCategory } = useUpdateCategory();
+  const { mutate: savePomodoro } = useAddPomodoro();
 
-  const { createNotificationByMode } = useFocusNotification();
-  const timeoutDialogProps = useDisclosure();
-
+  const [currentCategory, setCurrentCategory] = useState(categories?.[0]);
+  const currentCategoryTitle = currentCategory?.title || '';
   useEffect(() => {
-    setCurrentCategory(categories?.[0].title ?? '');
+    setCurrentCategory(categories?.[0]);
   }, [categories]);
 
-  const [currentCategory, setCurrentCategory] = useState(categories?.[0].title ?? '');
-  const categoryData = categories?.find((category) => category.title === currentCategory);
+  const currentFocusTime = isoDurationToMs(currentCategory?.focusTime);
+  const currentRestTime = isoDurationToMs(currentCategory?.restTime);
 
-  const currentRestMinutes =
-    parseIsoDuration(categoryData?.restTime).hours * 60 +
-    parseIsoDuration(categoryData?.restTime).minutes;
-  const currentFocusMinutes =
-    parseIsoDuration(categoryData?.focusTime).hours * 60 +
-    parseIsoDuration(categoryData?.focusTime).minutes;
+  const { pomodoroCycles, pomodoroTime, startFocus, startRestWait, startRest, endPomodoro } =
+    usePomodoro({
+      focusTime: currentFocusTime,
+      focusExceedMaxTime,
+      restWaitExceedMaxTime,
+      restTime: currentRestTime,
+      restExceedMaxTime,
+      onceExceedGoalTime: (mode) => {
+        if (!user?.cat?.type) return;
+        // 목표시간 초과 시 알림
+        if (mode === 'focus') return createNotificationByMode(user.cat.type, 'focus-end');
+        if (mode === 'rest') return createNotificationByMode(user.cat.type, 'rest-end');
+      },
+      onEndPomodoro: (cycles, reason) => {
+        console.log('Pomodoro cycles:', cycles);
 
-  const [initialTime, setInitialTime] = useState(minutesToMs(currentFocusMinutes));
-  const [endTime, setEndTime] = useState(END_TIME_ON_FOCUS_PAGE); // 끝나는 시간
+        let focusedTime = 0;
+        let restedTime = 0;
 
-  useEffect(() => {
-    setInitialTime(minutesToMs(currentFocusMinutes));
-  }, [categoryData]);
+        cycles.forEach((cycle) => {
+          const time = getPomodoroTime(cycle);
+          if (cycle.mode === 'focus')
+            focusedTime += Math.min(time.elapsed, cycle.goalTime + cycle.exceedMaxTime);
+          if (cycle.mode === 'rest')
+            restedTime += Math.min(time.elapsed, cycle.goalTime + cycle.exceedMaxTime);
+        });
 
-  const { time, start, stop } = useTimer(initialTime, endTime, {
-    onStop: () => {
-      if (mode === 'focus') {
-        createNotificationByMode(user?.cat?.type ?? 'CHEESE', 'focus-end');
-        setInitialTime(0);
-        setEndTime(END_TIME_ON_REST_WAIT_PAGE);
-        return;
-      }
-      if (mode === 'rest') {
-        createNotificationByMode(user?.cat?.type ?? 'CHEESE', 'rest-end');
-        setInitialTime(minutesToMs(currentFocusMinutes));
-        setEndTime(END_TIME_ON_FOCUS_PAGE);
-      }
-    },
-    onFinish: () => {
-      if (mode === 'focus') {
-        // 데이터 저장 이후,
-        // 초기 값 변경 이후
-        // 휴식 대기 화면으로 강제 이동
-        setFocusedTime(minutesToMs(currentFocusMinutes) - endTime);
-        setInitialTime(0);
-        setEndTime(END_TIME_ON_REST_WAIT_PAGE);
-        setMode('rest-wait');
-        return;
-      }
-      if (mode === 'rest-wait') {
-        // 데이터 저장 이후,
-        // 초기 값 변경 이후
-        // 홈 화면으로 강제 이동
-        if (categoryData?.no) {
-          addPomodoro(focusedTime, 0);
+        if (focusedTime < 1000 * 60) {
+          return toast({ message: '1분 미만의 집중 시간은 저장되지 않아요', iconName: 'clock' });
         }
-        setInitialTime(minutesToMs(currentRestMinutes));
-        setEndTime(END_TIME_ON_REST_PAGE);
-        setMode(null);
-        // @TODO: 모달 띄워주기
-        setTimeoutMode('rest-wait');
-        timeoutDialogProps.onOpen();
-        return;
-      }
-      if (mode === 'rest') {
-        // 데이터 저장 이후,
-        // 초기 값 변경 이후
-        // 홈 화면으로 강제 이동
-        if (categoryData?.no) {
-          addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - endTime);
+
+        const lastCycleMode = cycles.at(-1)?.mode;
+        if (reason === 'exceed' && lastCycleMode && lastCycleMode !== 'focus') {
+          setTimeoutMode(lastCycleMode);
+          timeoutDialogProps.onOpen();
         }
-        setInitialTime(minutesToMs(currentFocusMinutes));
-        setEndTime(END_TIME_ON_FOCUS_PAGE);
-        setTimeoutMode('rest');
-        timeoutDialogProps.onOpen();
-        setMode(null);
-      }
-    },
-  });
 
-  useEffect(() => {
-    if (!mode) {
-      setInitialTime(minutesToMs(currentFocusMinutes));
-      setFocusedTime(0);
-      setEndTime(END_TIME_ON_FOCUS_PAGE);
-      return;
-    }
-    start();
-  }, [mode]);
+        if (currentCategory) {
+          savePomodoro({
+            body: [
+              {
+                clientFocusTimeId: Date.now().toString(),
+                categoryNo: currentCategory.no,
+                focusedTime: msToIsoDuration(focusedTime),
+                restedTime: msToIsoDuration(restedTime),
+                doneAt: new Date().toISOString(),
+              },
+            ],
+          });
+        }
+      },
+    });
+  const mode = pomodoroCycles.at(-1)?.mode;
+  const latestFocusCycle = pomodoroCycles.findLast((cycle) => cycle.mode === 'focus');
+  const latestFocusTime = latestFocusCycle ? getPomodoroTime(latestFocusCycle) : null;
 
-  const addPomodoro = (focusedTime: number, restedTime: number) => {
-    if (categoryData?.no) {
-      _addPomodoro({
-        body: [
-          {
-            clientFocusTimeId: `${user?.registeredDeviceNo}-${new Date().toISOString()}`,
-            categoryNo: categoryData?.no,
-            focusedTime: createIsoDuration(msToTime(focusedTime)),
-            restedTime: createIsoDuration(msToTime(restedTime)),
-            doneAt: new Date().toISOString(),
-          },
-        ],
-      });
-    }
-  };
+  const currentFocusMinutes = msToMinutes(currentFocusTime);
+  const currentRestMinutes = msToMinutes(currentRestTime);
 
   const updateCategoryTime = (type: 'focusTime' | 'restTime', currentMinutes: number) => {
-    if (!selectedNextAction || !categoryData?.no) return;
+    if (!selectedNextAction || !currentCategory) return;
+
     updateCategory({
-      no: categoryData?.no,
+      no: currentCategory.no,
       body: {
         [type]: createIsoDuration({
           minutes:
@@ -167,67 +135,59 @@ const Pomodoro = () => {
     setSelectedNextAction(undefined);
   };
 
-  if (mode === 'rest')
+  if (mode === 'focus')
     return (
-      <RestScreen
-        time={time}
-        currentCategory={currentCategory}
-        currentRestMinutes={currentRestMinutes}
-        selectedNextAction={selectedNextAction}
-        setSelectedNextAction={setSelectedNextAction}
-        handleFocus={() => {
-          updateCategoryTime('restTime', currentRestMinutes);
-          stop();
-          addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
-          setMode('focus');
+      <FocusScreen
+        currentFocusTime={currentFocusTime}
+        elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
+        exceededTime={pomodoroTime.exceeded}
+        currentCategory={currentCategoryTitle}
+        handleRest={() => {
+          startRestWait();
         }}
         handleEnd={() => {
-          updateCategoryTime('restTime', currentRestMinutes);
-          stop();
-          addPomodoro(focusedTime, minutesToMs(currentRestMinutes) - time);
-          setMode(null);
+          endPomodoro();
         }}
       />
     );
+
   if (mode === 'rest-wait')
     return (
       <RestWaitScreen
-        time={focusedTime}
-        currentCategory={currentCategory}
+        elapsedTime={Math.min(latestFocusTime?.elapsed ?? 0, currentFocusTime)}
+        exceededTime={latestFocusTime?.exceeded ?? 0}
+        currentCategory={currentCategoryTitle}
         currentFocusMinutes={currentFocusMinutes}
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
         handleRest={() => {
           updateCategoryTime('focusTime', currentFocusMinutes);
-          setInitialTime(minutesToMs(currentRestMinutes));
-          setEndTime(END_TIME_ON_REST_PAGE);
-          stop();
-          setMode('rest');
+          startRest();
         }}
         handleEnd={() => {
           updateCategoryTime('focusTime', currentFocusMinutes);
-          stop();
-          addPomodoro(focusedTime, 0);
-          setMode(null);
+          endPomodoro();
         }}
       />
     );
-  if (mode === 'focus')
+
+  if (mode === 'rest')
     return (
-      <FocusScreen
-        time={time}
-        currentCategory={currentCategory}
-        handleRest={() => {
-          setInitialTime(0);
-          setEndTime(END_TIME_ON_REST_WAIT_PAGE);
-          stop();
-          setFocusedTime(minutesToMs(currentFocusMinutes) - time);
-          setMode('rest-wait');
+      <RestScreen
+        currentRestTime={currentRestTime}
+        elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
+        exceededTime={pomodoroTime.exceeded}
+        currentCategory={currentCategoryTitle}
+        currentRestMinutes={currentRestMinutes}
+        selectedNextAction={selectedNextAction}
+        setSelectedNextAction={setSelectedNextAction}
+        handleFocus={() => {
+          updateCategoryTime('restTime', currentRestMinutes);
+          startFocus();
         }}
         handleEnd={() => {
-          stop();
-          addPomodoro(minutesToMs(currentFocusMinutes) - time, 0);
-          setMode(null);
+          updateCategoryTime('restTime', currentRestMinutes);
+          endPomodoro();
         }}
       />
     );
@@ -235,12 +195,13 @@ const Pomodoro = () => {
   return (
     <>
       <HomeScreen
-        setMode={setMode}
-        startTimer={start}
-        currentCategory={currentCategory}
-        setCurrentCategory={setCurrentCategory}
-        currentFocusMinutes={currentFocusMinutes}
-        currentRestMinutes={currentRestMinutes}
+        startTimer={startFocus}
+        currentCategory={currentCategoryTitle}
+        setCurrentCategory={(title) => {
+          setCurrentCategory(categories?.find((category) => category.title === title));
+        }}
+        currentFocusMinutes={msToMinutes(currentFocusTime)}
+        currentRestMinutes={msToMinutes(currentRestTime)}
       />
       {timeoutMode && (
         <TimeoutDialog

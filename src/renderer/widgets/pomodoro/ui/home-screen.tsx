@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
-import { PomodoroMode } from '@/entities/pomodoro';
 import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
@@ -29,7 +28,6 @@ const getTooltipMessages = (catType?: CatType) => {
 };
 
 type HomeScreenProps = {
-  setMode: (mode: PomodoroMode) => void;
   startTimer: () => void;
   currentCategory: string;
   setCurrentCategory: (category: string) => void;
@@ -38,7 +36,6 @@ type HomeScreenProps = {
 };
 
 export const HomeScreen = ({
-  setMode,
   startTimer,
   currentCategory,
   setCurrentCategory,
@@ -144,7 +141,6 @@ export const HomeScreen = ({
             className="p-[28px]"
             size="icon"
             onClick={() => {
-              setMode('focus');
               startTimer();
             }}
           >

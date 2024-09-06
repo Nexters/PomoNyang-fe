@@ -9,7 +9,9 @@ import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
 type RestScreenProps = {
   currentCategory: string;
-  time: number;
+  currentRestTime: number;
+  elapsedTime: number;
+  exceededTime: number;
   currentRestMinutes: number;
   selectedNextAction: PomodoroNextAction | undefined;
   setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
@@ -19,16 +21,18 @@ type RestScreenProps = {
 
 export const RestScreen = ({
   currentCategory,
-  time,
+  currentRestTime,
+  elapsedTime,
+  exceededTime,
   currentRestMinutes,
   selectedNextAction,
   setSelectedNextAction,
   handleFocus,
   handleEnd,
 }: RestScreenProps) => {
-  const isExceed = time < 0;
-  const { minutes, seconds } = msToTime(!isExceed ? time : 0);
-  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(isExceed ? -time : 0);
+  const isExceed = exceededTime > 0;
+  const { minutes, seconds } = msToTime(currentRestTime - elapsedTime);
+  const { minutes: exceedMinutes, seconds: exceedSeconds } = msToTime(exceededTime);
 
   const { data: user } = useUser();
   const { RiveComponent, clickCatInput } = useRiveCat({

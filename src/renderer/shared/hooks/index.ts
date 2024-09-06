@@ -6,3 +6,4 @@ export * from './use-auth-client';
 export * from './use-disclosure';
 export * from './use-notification';
 export * from './use-rive-cat';
+export * from './use-interval';
