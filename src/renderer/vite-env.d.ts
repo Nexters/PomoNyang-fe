@@ -9,6 +9,9 @@ declare module '*.riv';
 interface ImportMetaEnv {
   readonly VITE_SAMPLE: string;
   readonly VITE_API_SERVER_URL: string;
+  readonly VITE_DATADOG_APPLICATION_ID: string;
+  readonly VITE_DATADOG_CLIENT_TOKEN: string;
+  readonly VITE_DATADOG_ENV: string;
 }
 
 interface ImportMeta {
