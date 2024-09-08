@@ -4,6 +4,10 @@
 // modules
 declare module '*.riv';
 
+// set app version
+// https://stackoverflow.com/questions/67194082/how-can-i-display-the-current-app-version-from-package-json-to-the-user-using-vi
+declare const __APP_VERSION__: string;
+
 // vite env
 // @see: https://electron-vite.org/guide/env-and-mode
 interface ImportMetaEnv {

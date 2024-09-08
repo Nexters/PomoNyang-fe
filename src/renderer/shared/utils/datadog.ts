@@ -14,7 +14,7 @@ export const initDatadogRum = () => {
     service: 'mohanyang-desktop',
     env: datadogEnv,
     // Specify a version number to identify the deployed version of your application in Datadog
-    // version: '1.0.0',
+    version: __APP_VERSION__,
     sessionSampleRate: 100,
     sessionReplaySampleRate: 20,
     allowFallbackToLocalStorage: true,
