@@ -20,6 +20,9 @@ export default defineConfig((env) => {
       outDir: `.vite/renderer/${name}`,
     },
     plugins: [pluginExposeRenderer(name), svgr()],
+    define: {
+      __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
+    },
     resolve: {
       preserveSymlinks: true,
       alias: {
