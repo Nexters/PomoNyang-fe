@@ -41,7 +41,7 @@ export const Dialog = ({
             fullScreen && 'fixed bottom-0 left-[50%] top-0 translate-x-[-50%] pt-[56px]',
             !fullScreen &&
               'fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-md p-[20px] shadow-lg',
-            'z-50 w-full max-w-md bg-background-primary',
+            'z-50 w-[95%] max-w-md bg-background-primary',
 
             animated &&
               'duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
