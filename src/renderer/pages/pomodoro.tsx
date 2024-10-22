@@ -80,10 +80,8 @@ const Pomodoro = () => {
 
         cycles.forEach((cycle) => {
           const time = getPomodoroTime(cycle);
-          if (cycle.mode === 'focus')
-            focusedTime += Math.min(time.elapsed, cycle.goalTime + cycle.exceedMaxTime);
-          if (cycle.mode === 'rest')
-            restedTime += Math.min(time.elapsed, cycle.goalTime + cycle.exceedMaxTime);
+          if (cycle.mode === 'focus') focusedTime += time.elapsed;
+          if (cycle.mode === 'rest') restedTime += time.elapsed;
         });
 
         if (focusedTime < 1000 * 60) {
