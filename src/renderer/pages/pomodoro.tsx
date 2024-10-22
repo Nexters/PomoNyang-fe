@@ -19,9 +19,14 @@ import {
 } from '@/shared/utils';
 import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/pomodoro';
 
-const focusExceedMaxTime = minutesToMs(60);
-const restWaitExceedMaxTime = minutesToMs(60);
-const restExceedMaxTime = minutesToMs(30);
+// @note: 개발할 때, 초과시간까지 빠르게 테스트하기 위해 설정함
+// 원래대로 하고 싶으면 false로 변경해서 사용하면 됩니다
+const isFastForward = import.meta.env.DEV;
+const taping = (ms: number) => (isFastForward ? Math.floor(ms / 60) : ms);
+
+const focusExceedMaxTime = taping(minutesToMs(60));
+const restWaitExceedMaxTime = taping(minutesToMs(60));
+const restExceedMaxTime = taping(minutesToMs(30));
 
 const timeoutMessageMap: Record<
   Exclude<PomodoroMode, 'focus'>,
@@ -56,8 +61,8 @@ const Pomodoro = () => {
     setCurrentCategory(categories?.[0]);
   }, [categories]);
 
-  const currentFocusTime = isoDurationToMs(currentCategory?.focusTime);
-  const currentRestTime = isoDurationToMs(currentCategory?.restTime);
+  const currentFocusTime = taping(isoDurationToMs(currentCategory?.focusTime));
+  const currentRestTime = taping(isoDurationToMs(currentCategory?.restTime));
 
   const { pomodoroCycles, pomodoroTime, startFocus, startRestWait, startRest, endPomodoro } =
     usePomodoro({
