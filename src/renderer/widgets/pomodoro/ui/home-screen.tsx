@@ -65,10 +65,14 @@ export const HomeScreen = ({
   const [tooltipMessage, setTooltipMessage] = useState('');
 
   useEffect(() => {
+    showRandomMessage();
+  }, [user?.cat?.type]);
+
+  const showRandomMessage = () => {
     const messages = getTooltipMessages(user?.cat?.type);
     const randomIndex = Math.floor(Math.random() * messages.length);
     setTooltipMessage(messages[randomIndex]);
-  }, [user?.cat?.type]);
+  };
 
   return (
     <>
@@ -94,6 +98,7 @@ export const HomeScreen = ({
           <RiveComponent
             className="h-[240px] w-full cursor-pointer select-none"
             onClick={() => {
+              showRandomMessage();
               clickCatInput?.fire();
             }}
           />
