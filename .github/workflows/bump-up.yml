@@ -21,9 +21,10 @@ jobs:
             echo "version_type=major" >> $GITHUB_ENV
           elif [[ "$last_commit_message" == *"#minor"* ]]; then
             echo "version_type=minor" >> $GITHUB_ENV
-          else
-            echo "No specific version bump keyword found. Defaulting to patch."
+          elif [[ "$last_commit_message" == *"#patch"* ]]; then
             echo "version_type=patch" >> $GITHUB_ENV
+          else
+            echo "No specific version bump keyword found. Skip it"
           fi
 
       - name: Bump version
