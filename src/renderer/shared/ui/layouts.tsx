@@ -14,17 +14,18 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
 };
 
 export type DesktopLayoutProps = {
+  title?: string;
   children: React.ReactNode;
 };
 
-export const DesktopLayout = ({ children }: DesktopLayoutProps) => {
+export const DesktopLayout = ({ title, children }: DesktopLayoutProps) => {
   return (
     <div className="relative h-dvh w-full">
       <div className="absolute bottom-0 left-0 top-0 w-[68px] bg-background-secondary pt-[52px]">
         <DesktopSidebar />
       </div>
-      <div className="absolute left-[68px] right-0 top-0 h-[52px] bg-background-tertiary">
-        {/* FIXME: 위 영역 구분을 위해 임시로 배경색 변경해둠 */}
+      <div className="absolute left-[68px] right-0 top-0 h-[52px] bg-background-primary">
+        <h1 className="body-sb flex h-full items-center pl-3 text-text-primary">{title}</h1>
       </div>
       <div className="absolute bottom-0 left-[68px] right-0 top-[52px] bg-background-primary">
         {children}

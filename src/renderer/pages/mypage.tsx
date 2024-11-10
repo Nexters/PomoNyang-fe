@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
-import { DesktopLayout, Frame, Icon, Toggle } from '@/shared/ui';
+import { DesktopLayout, Icon, Toggle } from '@/shared/ui';
 
 const SURVEY_LINK =
   'https://docs.google.com/forms/d/e/1FAIpQLSdoFxWJ7TFTU0-HKZEeqmDxz5ZprYtRz08FwrzNgDWnkNaOeA/viewform';
@@ -14,34 +14,40 @@ const MyPage = () => {
   const { isEnabled, isUnavailable, changeEnabled } = useFocusNotification();
 
   return (
-    <DesktopLayout>
-      <Frame>
-        <Frame.NavBar title="마이페이지" onBack={() => navigate(PATH.POMODORO)} />
+    <DesktopLayout title="마이페이지">
+      <div className="px-4 py-2">
+        <div className="flex w-full flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <h2 className="subBody-sb text-text-secondary">나의 고양이</h2>
+            <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
+              <span className="header-4 text-text-primary">{user?.cat?.name}</span>
+            </ActionButton>
+          </div>
 
-        <div className="flex w-full flex-col gap-3">
-          <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
-            <span className="subBody-r text-text-tertiary">나의 고양이</span>
-            <span className="header-4 text-text-primary">{user?.cat?.name}</span>
-          </ActionButton>
+          <div className="flex flex-col gap-2">
+            <h2 className="subBody-sb text-text-secondary">통계</h2>
+            <ReadyForStat />
+          </div>
 
-          <ReadyForStat />
-
-          <div className="w-full rounded-sm bg-background-secondary p-5">
-            <div className="flex w-full items-center">
-              <div className="flex flex-1 flex-col justify-start">
-                <h3 className="body-sb text-text-primary">집중시간 알림받기</h3>
-                <p className="subBody-r text-text-tertiary">
-                  집중・휴식시간이 되면 고양이가 알려줘요
-                </p>
+          <div className="flex flex-col gap-2">
+            <h2 className="subBody-sb text-text-secondary">알림</h2>
+            <div className="w-full rounded-sm bg-background-secondary p-3">
+              <div className="flex w-full items-center">
+                <div className="flex flex-1 flex-col justify-start">
+                  <h3 className="body-sb text-text-primary">집중시간 알림받기</h3>
+                  <p className="caption-r text-text-tertiary">
+                    집중・휴식시간이 되면 고양이가 알려줘요
+                  </p>
+                </div>
+                <Toggle
+                  disabled={isUnavailable}
+                  pressed={isEnabled}
+                  onPressedChange={(pressed) => {
+                    console.log('pressed', pressed);
+                    changeEnabled(pressed);
+                  }}
+                />
               </div>
-              <Toggle
-                disabled={isUnavailable}
-                pressed={isEnabled}
-                onPressedChange={(pressed) => {
-                  console.log('pressed', pressed);
-                  changeEnabled(pressed);
-                }}
-              />
             </div>
           </div>
 
@@ -49,7 +55,7 @@ const MyPage = () => {
             <span className="body-sb text-text-primary">의견 보내기</span>
           </ActionButton>
         </div>
-      </Frame>
+      </div>
     </DesktopLayout>
   );
 };
@@ -69,10 +75,10 @@ const ActionButton = ({ children, onClick }: ActionButtonProps) => (
 );
 
 const ReadyForStat = () => (
-  <div className="flex flex-col items-center justify-center gap-2 rounded-sm bg-background-secondary py-[62px]">
+  <div className="flex flex-col items-center justify-center gap-2 rounded-sm bg-background-secondary py-5">
     <Icon name="readyForStat" width={100} height={100} />
     <div className="flex flex-col gap-1 text-center">
-      <h3 className="header-5 text-text-primary">통계 기능을 준비하고 있어요</h3>
+      <h3 className="body-sb text-text-primary">통계 기능을 준비하고 있어요</h3>
       <p className="subBody-r text-text-secondary">
         집중시간을 모아보는 통계가
         <br />곧 업데이트될 예정이에요
