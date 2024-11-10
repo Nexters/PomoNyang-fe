@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
-import { Frame, Icon, Toggle } from '@/shared/ui';
+import { DesktopLayout, Frame, Icon, Toggle } from '@/shared/ui';
 
 const SURVEY_LINK =
   'https://docs.google.com/forms/d/e/1FAIpQLSdoFxWJ7TFTU0-HKZEeqmDxz5ZprYtRz08FwrzNgDWnkNaOeA/viewform';
@@ -14,41 +14,43 @@ const MyPage = () => {
   const { isEnabled, isUnavailable, changeEnabled } = useFocusNotification();
 
   return (
-    <Frame>
-      <Frame.NavBar title="마이페이지" onBack={() => navigate(PATH.POMODORO)} />
+    <DesktopLayout>
+      <Frame>
+        <Frame.NavBar title="마이페이지" onBack={() => navigate(PATH.POMODORO)} />
 
-      <div className="flex w-full flex-col gap-3">
-        <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
-          <span className="subBody-r text-text-tertiary">나의 고양이</span>
-          <span className="header-4 text-text-primary">{user?.cat?.name}</span>
-        </ActionButton>
+        <div className="flex w-full flex-col gap-3">
+          <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
+            <span className="subBody-r text-text-tertiary">나의 고양이</span>
+            <span className="header-4 text-text-primary">{user?.cat?.name}</span>
+          </ActionButton>
 
-        <ReadyForStat />
+          <ReadyForStat />
 
-        <div className="w-full rounded-sm bg-background-secondary p-5">
-          <div className="flex w-full items-center">
-            <div className="flex flex-1 flex-col justify-start">
-              <h3 className="body-sb text-text-primary">집중시간 알림받기</h3>
-              <p className="subBody-r text-text-tertiary">
-                집중・휴식시간이 되면 고양이가 알려줘요
-              </p>
+          <div className="w-full rounded-sm bg-background-secondary p-5">
+            <div className="flex w-full items-center">
+              <div className="flex flex-1 flex-col justify-start">
+                <h3 className="body-sb text-text-primary">집중시간 알림받기</h3>
+                <p className="subBody-r text-text-tertiary">
+                  집중・휴식시간이 되면 고양이가 알려줘요
+                </p>
+              </div>
+              <Toggle
+                disabled={isUnavailable}
+                pressed={isEnabled}
+                onPressedChange={(pressed) => {
+                  console.log('pressed', pressed);
+                  changeEnabled(pressed);
+                }}
+              />
             </div>
-            <Toggle
-              disabled={isUnavailable}
-              pressed={isEnabled}
-              onPressedChange={(pressed) => {
-                console.log('pressed', pressed);
-                changeEnabled(pressed);
-              }}
-            />
           </div>
-        </div>
 
-        <ActionButton onClick={() => window.open(SURVEY_LINK, '_target')}>
-          <span className="body-sb text-text-primary">의견 보내기</span>
-        </ActionButton>
-      </div>
-    </Frame>
+          <ActionButton onClick={() => window.open(SURVEY_LINK, '_target')}>
+            <span className="body-sb text-text-primary">의견 보내기</span>
+          </ActionButton>
+        </div>
+      </Frame>
+    </DesktopLayout>
   );
 };
 

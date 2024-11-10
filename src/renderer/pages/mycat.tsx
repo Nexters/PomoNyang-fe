@@ -7,7 +7,7 @@ import { useUser } from '@/features/user';
 import catSelectMotionRiveFile from '@/shared/assets/rivs/cat_select_ver2.0.riv';
 import { PATH } from '@/shared/constants';
 import { userCatTypeAliasMap } from '@/shared/hooks';
-import { Button, Frame, Icon, Tooltip } from '@/shared/ui';
+import { Button, Frame, Icon, MobileLayout, Tooltip } from '@/shared/ui';
 
 const MyCat = () => {
   const navigate = useNavigate();
@@ -39,39 +39,41 @@ const MyCat = () => {
   }, [rive, user?.cat?.type]);
 
   return (
-    <Frame>
-      <Frame.NavBar title="나의 고양이" onBack={() => navigate(PATH.MY_PAGE)} />
+    <MobileLayout>
+      <Frame>
+        <Frame.NavBar title="나의 고양이" onBack={() => navigate(PATH.MY_PAGE)} />
 
-      <div className="flex h-full items-center justify-center">
-        <div className="flex w-full flex-col">
-          <Tooltip
-            content="사냥놀이를 하고싶다냥"
-            color="white"
-            sideOffset={-20}
-            rootProps={{ open: true }}
-            arrowProps={{ width: 14, height: 9 }}
-          />
+        <div className="flex h-full items-center justify-center">
+          <div className="flex w-full flex-col">
+            <Tooltip
+              content="사냥놀이를 하고싶다냥"
+              color="white"
+              sideOffset={-20}
+              rootProps={{ open: true }}
+              arrowProps={{ width: 14, height: 9 }}
+            />
 
-          <RiveComponent className="h-[240px] w-full select-none" />
+            <RiveComponent className="h-[240px] w-full select-none" />
 
-          <div className="flex w-full items-center justify-center">
-            <button
-              className="flex items-center justify-center gap-1 p-3"
-              onClick={handleClickEditNameButton}
-            >
-              <span className="header-4 text-text-secondary">{user?.cat?.name}</span>
-              <Icon name="pen" size="md" />
-            </button>
+            <div className="flex w-full items-center justify-center">
+              <button
+                className="flex items-center justify-center gap-1 p-3"
+                onClick={handleClickEditNameButton}
+              >
+                <span className="header-4 text-text-secondary">{user?.cat?.name}</span>
+                <Icon name="pen" size="md" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <Frame.BottomBar>
-        <Button className="w-full" variant="secondary" onClick={handleClickChangeCatButton}>
-          고양이 바꾸기
-        </Button>
-      </Frame.BottomBar>
-    </Frame>
+        <Frame.BottomBar>
+          <Button className="w-full" variant="secondary" onClick={handleClickChangeCatButton}>
+            고양이 바꾸기
+          </Button>
+        </Frame.BottomBar>
+      </Frame>
+    </MobileLayout>
   );
 };
 

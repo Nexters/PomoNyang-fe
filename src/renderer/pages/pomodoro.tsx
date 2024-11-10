@@ -9,7 +9,7 @@ import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { MINUTES_GAP } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
-import { useToast } from '@/shared/ui';
+import { DesktopLayout, MobileLayout, useToast } from '@/shared/ui';
 import {
   createIsoDuration,
   isoDurationToMs,
@@ -140,63 +140,69 @@ const Pomodoro = () => {
 
   if (mode === 'focus')
     return (
-      <FocusScreen
-        currentFocusTime={currentFocusTime}
-        elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
-        exceededTime={pomodoroTime.exceeded}
-        currentCategory={currentCategoryTitle}
-        handleRest={() => {
-          startRestWait();
-        }}
-        handleEnd={() => {
-          endPomodoro();
-        }}
-      />
+      <MobileLayout>
+        <FocusScreen
+          currentFocusTime={currentFocusTime}
+          elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
+          exceededTime={pomodoroTime.exceeded}
+          currentCategory={currentCategoryTitle}
+          handleRest={() => {
+            startRestWait();
+          }}
+          handleEnd={() => {
+            endPomodoro();
+          }}
+        />
+      </MobileLayout>
     );
 
   if (mode === 'rest-wait')
     return (
-      <RestWaitScreen
-        elapsedTime={Math.min(latestFocusTime?.elapsed ?? 0, currentFocusTime)}
-        exceededTime={latestFocusTime?.exceeded ?? 0}
-        currentCategory={currentCategoryTitle}
-        currentFocusMinutes={currentFocusMinutes}
-        selectedNextAction={selectedNextAction}
-        setSelectedNextAction={setSelectedNextAction}
-        handleRest={() => {
-          updateCategoryTime('focusTime', currentFocusMinutes);
-          startRest();
-        }}
-        handleEnd={() => {
-          updateCategoryTime('focusTime', currentFocusMinutes);
-          endPomodoro();
-        }}
-      />
+      <MobileLayout>
+        <RestWaitScreen
+          elapsedTime={Math.min(latestFocusTime?.elapsed ?? 0, currentFocusTime)}
+          exceededTime={latestFocusTime?.exceeded ?? 0}
+          currentCategory={currentCategoryTitle}
+          currentFocusMinutes={currentFocusMinutes}
+          selectedNextAction={selectedNextAction}
+          setSelectedNextAction={setSelectedNextAction}
+          handleRest={() => {
+            updateCategoryTime('focusTime', currentFocusMinutes);
+            startRest();
+          }}
+          handleEnd={() => {
+            updateCategoryTime('focusTime', currentFocusMinutes);
+            endPomodoro();
+          }}
+        />
+      </MobileLayout>
     );
 
   if (mode === 'rest')
     return (
-      <RestScreen
-        currentRestTime={currentRestTime}
-        elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
-        exceededTime={pomodoroTime.exceeded}
-        currentCategory={currentCategoryTitle}
-        currentRestMinutes={currentRestMinutes}
-        selectedNextAction={selectedNextAction}
-        setSelectedNextAction={setSelectedNextAction}
-        handleFocus={() => {
-          updateCategoryTime('restTime', currentRestMinutes);
-          startFocus();
-        }}
-        handleEnd={() => {
-          updateCategoryTime('restTime', currentRestMinutes);
-          endPomodoro();
-        }}
-      />
+      <MobileLayout>
+        <RestScreen
+          currentRestTime={currentRestTime}
+          elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
+          exceededTime={pomodoroTime.exceeded}
+          currentCategory={currentCategoryTitle}
+          currentRestMinutes={currentRestMinutes}
+          selectedNextAction={selectedNextAction}
+          setSelectedNextAction={setSelectedNextAction}
+          handleFocus={() => {
+            updateCategoryTime('restTime', currentRestMinutes);
+            startFocus();
+          }}
+          handleEnd={() => {
+            updateCategoryTime('restTime', currentRestMinutes);
+            endPomodoro();
+          }}
+        />
+      </MobileLayout>
     );
 
   return (
-    <>
+    <DesktopLayout>
       <HomeScreen
         startTimer={startFocus}
         currentCategory={currentCategoryTitle}
@@ -214,7 +220,7 @@ const Pomodoro = () => {
           description={timeoutMessageMap[timeoutMode].description}
         />
       )}
-    </>
+    </DesktopLayout>
   );
 };
 

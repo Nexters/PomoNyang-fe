@@ -6,6 +6,7 @@ import { useLocalStorage, useTimeout } from 'usehooks-ts';
 import { useUser } from '@/features/user';
 import appSymbolIcon from '@/shared/assets/svgs/app-symbol.svg';
 import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
+import { MobileLayout } from '@/shared/ui';
 import { cn } from '@/shared/utils';
 
 const Home = () => {
@@ -27,14 +28,16 @@ const Home = () => {
   }, [isCompletedOnboarding, user]);
 
   return (
-    <div
-      className={cn(
-        'flex h-full w-full items-center justify-center bg-[#FFE9BF] transition-opacity duration-500',
-        isMinTimePassed ? 'opacity-100' : 'opacity-0',
-      )}
-    >
-      <img src={appSymbolIcon} width={174} />
-    </div>
+    <MobileLayout>
+      <div
+        className={cn(
+          'flex h-full w-full items-center justify-center bg-[#FFE9BF] transition-opacity duration-500',
+          isMinTimePassed ? 'opacity-100' : 'opacity-0',
+        )}
+      >
+        <img src={appSymbolIcon} width={174} />
+      </div>
+    </MobileLayout>
   );
 };
 
