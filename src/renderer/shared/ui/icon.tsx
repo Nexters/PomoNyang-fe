@@ -8,10 +8,11 @@ import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
 import CheckIcon from '@/shared/assets/svgs/check.svg?react';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
 import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
+import ClockLineIcon from '@/shared/assets/svgs/clock-line.svg?react';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
-import MenuIcon from '@/shared/assets/svgs/menu.svg';
+import MenuIcon from '@/shared/assets/svgs/menu.svg?react';
 import MinusIcon from '@/shared/assets/svgs/minus.svg';
 import MinusSvgIcon from '@/shared/assets/svgs/minus.svg?react';
 import PenIcon from '@/shared/assets/svgs/pen.svg';
@@ -48,6 +49,7 @@ const icons = {
   pen: PenIcon,
   clock: ClockIcon,
   readyForStat: ReadyForStatIcon,
+  clockLine: ClockLineIcon,
 } as const;
 const sizes = {
   xs: 16,
