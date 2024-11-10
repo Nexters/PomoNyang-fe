@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
@@ -8,7 +7,7 @@ import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/featur
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
-import { LOCAL_STORAGE_KEY, PATH } from '@/shared/constants';
+import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useDisclosure, useRiveCat } from '@/shared/hooks';
 import { Button, Guide, Icon, Tooltip, useToast } from '@/shared/ui';
 import { getCategoryIconName, createIsoDuration } from '@/shared/utils';
@@ -42,8 +41,6 @@ export const HomeScreen = ({
   currentFocusMinutes,
   currentRestMinutes,
 }: HomeScreenProps) => {
-  const navigate = useNavigate();
-
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(LOCAL_STORAGE_KEY.GUIDE_SHOWN, true);
@@ -77,16 +74,6 @@ export const HomeScreen = ({
   return (
     <>
       <div className="flex h-full flex-col">
-        <header className="flex justify-end p-4">
-          <Button
-            variant="text-primary"
-            size="md"
-            className="rounded-none bg-gray-50 p-[8px]"
-            onClick={() => navigate(PATH.MY_PAGE)}
-          >
-            <Icon name="menu" size="md" />
-          </Button>
-        </header>
         <main className="flex flex-1 flex-col items-center justify-center gap-[25px]">
           <Tooltip
             content={tooltipMessage}
