@@ -7,7 +7,7 @@ import { useUser } from '@/features/user';
 import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { PATH } from '@/shared/constants';
 import { useRiveCat } from '@/shared/hooks';
-import { Button, Frame, MobileLayout, Tooltip } from '@/shared/ui';
+import { Button, Frame, SimpleLayout, Tooltip } from '@/shared/ui';
 
 const Naming = () => {
   const location = useLocation();
@@ -41,7 +41,7 @@ const Naming = () => {
   };
 
   return (
-    <MobileLayout>
+    <SimpleLayout>
       <Frame>
         <Frame.NavBar onBack={handleClickBackButton} />
         <div className="flex h-full items-center justify-center">
@@ -83,7 +83,7 @@ const Naming = () => {
           </Button>
         </Frame.BottomBar>
       </Frame>
-    </MobileLayout>
+    </SimpleLayout>
   );
 };
 

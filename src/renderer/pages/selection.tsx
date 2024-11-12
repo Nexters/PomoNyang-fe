@@ -14,7 +14,7 @@ import {
   Frame,
   Icon,
   IconName,
-  MobileLayout,
+  SimpleLayout,
   SelectGroup,
   SelectGroupItem,
 } from '@/shared/ui';
@@ -91,7 +91,7 @@ const Selection = () => {
   };
 
   return (
-    <MobileLayout>
+    <SimpleLayout>
       <Frame>
         <Frame.NavBar title="고양이 선택" onBack={handleClickBackButton} />
 
@@ -161,7 +161,7 @@ const Selection = () => {
           </Button>
         </Frame.BottomBar>
       </Frame>
-    </MobileLayout>
+    </SimpleLayout>
   );
 };
 

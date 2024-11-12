@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { PATH } from '@/shared/constants';
-import { DesktopLayout, Icon, Toggle } from '@/shared/ui';
+import { SidebarLayout, Icon, Toggle } from '@/shared/ui';
 
 const SURVEY_LINK =
   'https://docs.google.com/forms/d/e/1FAIpQLSdoFxWJ7TFTU0-HKZEeqmDxz5ZprYtRz08FwrzNgDWnkNaOeA/viewform';
@@ -14,7 +14,7 @@ const MyPage = () => {
   const { isEnabled, isUnavailable, changeEnabled } = useFocusNotification();
 
   return (
-    <DesktopLayout title="마이페이지">
+    <SidebarLayout title="마이페이지">
       <div className="px-4 py-2">
         <div className="flex w-full flex-col gap-4">
           <div className="flex flex-col gap-2">
@@ -56,7 +56,7 @@ const MyPage = () => {
           </ActionButton>
         </div>
       </div>
-    </DesktopLayout>
+    </SidebarLayout>
   );
 };
 

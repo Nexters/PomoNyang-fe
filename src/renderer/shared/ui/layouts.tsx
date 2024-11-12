@@ -5,20 +5,20 @@ import { cn } from '../utils';
 
 import { Icon } from './icon';
 
-export type MobileLayoutProps = {
+export type SimpleLayoutProps = {
   children: React.ReactNode;
 };
 
-export const MobileLayout = ({ children }: MobileLayoutProps) => {
+export const SimpleLayout = ({ children }: SimpleLayoutProps) => {
   return <div className="m-auto h-dvh max-w-md bg-background-primary">{children}</div>;
 };
 
-export type DesktopLayoutProps = {
+export type SidebarLayoutProps = {
   title?: string;
   children: React.ReactNode;
 };
 
-export const DesktopLayout = ({ title, children }: DesktopLayoutProps) => {
+export const SidebarLayout = ({ title, children }: SidebarLayoutProps) => {
   return (
     <div className="relative h-dvh w-full">
       <div className="absolute bottom-0 left-0 top-0 w-[68px] bg-background-secondary pt-[52px]">

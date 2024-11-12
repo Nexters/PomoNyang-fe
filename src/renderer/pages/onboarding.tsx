@@ -12,7 +12,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  MobileLayout,
+  SimpleLayout,
   useCarousel,
 } from '@/shared/ui';
 import { cn } from '@/shared/utils';
@@ -52,7 +52,7 @@ const OnboardingContent = () => {
   const [, setIsCompleted] = useLocalStorage(LOCAL_STORAGE_KEY.ONBOARDING_COMPLETED, false);
 
   return (
-    <MobileLayout>
+    <SimpleLayout>
       <div className="flex h-full flex-col items-center justify-center gap-12">
         <div
           className={cn(
@@ -103,7 +103,7 @@ const OnboardingContent = () => {
           </Button>
         </div>
       </div>
-    </MobileLayout>
+    </SimpleLayout>
   );
 };
 

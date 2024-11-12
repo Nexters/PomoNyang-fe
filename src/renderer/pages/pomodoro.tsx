@@ -9,7 +9,7 @@ import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { MINUTES_GAP } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
-import { DesktopLayout, MobileLayout, useToast } from '@/shared/ui';
+import { SidebarLayout, SimpleLayout, useToast } from '@/shared/ui';
 import {
   createIsoDuration,
   isoDurationToMs,
@@ -140,7 +140,7 @@ const Pomodoro = () => {
 
   if (mode === 'focus')
     return (
-      <MobileLayout>
+      <SimpleLayout>
         <FocusScreen
           currentFocusTime={currentFocusTime}
           elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
@@ -153,12 +153,12 @@ const Pomodoro = () => {
             endPomodoro();
           }}
         />
-      </MobileLayout>
+      </SimpleLayout>
     );
 
   if (mode === 'rest-wait')
     return (
-      <MobileLayout>
+      <SimpleLayout>
         <RestWaitScreen
           elapsedTime={Math.min(latestFocusTime?.elapsed ?? 0, currentFocusTime)}
           exceededTime={latestFocusTime?.exceeded ?? 0}
@@ -175,12 +175,12 @@ const Pomodoro = () => {
             endPomodoro();
           }}
         />
-      </MobileLayout>
+      </SimpleLayout>
     );
 
   if (mode === 'rest')
     return (
-      <MobileLayout>
+      <SimpleLayout>
         <RestScreen
           currentRestTime={currentRestTime}
           elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
@@ -198,11 +198,11 @@ const Pomodoro = () => {
             endPomodoro();
           }}
         />
-      </MobileLayout>
+      </SimpleLayout>
     );
 
   return (
-    <DesktopLayout>
+    <SidebarLayout>
       <HomeScreen
         startTimer={startFocus}
         currentCategory={currentCategoryTitle}
@@ -220,7 +220,7 @@ const Pomodoro = () => {
           description={timeoutMessageMap[timeoutMode].description}
         />
       )}
-    </DesktopLayout>
+    </SidebarLayout>
   );
 };
 

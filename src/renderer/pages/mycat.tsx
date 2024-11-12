@@ -7,7 +7,7 @@ import { useUser } from '@/features/user';
 import catSelectMotionRiveFile from '@/shared/assets/rivs/cat_select_ver2.0.riv';
 import { PATH } from '@/shared/constants';
 import { userCatTypeAliasMap } from '@/shared/hooks';
-import { Button, Frame, Icon, MobileLayout, Tooltip } from '@/shared/ui';
+import { Button, Frame, Icon, SimpleLayout, Tooltip } from '@/shared/ui';
 
 const MyCat = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const MyCat = () => {
   }, [rive, user?.cat?.type]);
 
   return (
-    <MobileLayout>
+    <SimpleLayout>
       <Frame>
         <Frame.NavBar title="나의 고양이" onBack={() => navigate(PATH.MY_PAGE)} />
 
@@ -73,7 +73,7 @@ const MyCat = () => {
           </Button>
         </Frame.BottomBar>
       </Frame>
-    </MobileLayout>
+    </SimpleLayout>
   );
 };
 
