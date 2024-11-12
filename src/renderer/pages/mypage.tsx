@@ -20,7 +20,7 @@ const MyPage = () => {
           <div className="flex flex-col gap-2">
             <h2 className="subBody-sb text-text-secondary">나의 고양이</h2>
             <ActionButton onClick={() => navigate(PATH.MY_CAT)}>
-              <span className="header-4 text-text-primary">{user?.cat?.name}</span>
+              <span className="body-sb text-text-primary">{user?.cat?.name}</span>
             </ActionButton>
           </div>
 
@@ -31,9 +31,9 @@ const MyPage = () => {
 
           <div className="flex flex-col gap-2">
             <h2 className="subBody-sb text-text-secondary">알림</h2>
-            <div className="w-full rounded-sm bg-background-secondary p-3">
+            <div className="w-full rounded-sm bg-background-secondary px-5 py-6">
               <div className="flex w-full items-center">
-                <div className="flex flex-1 flex-col justify-start">
+                <div className="flex flex-1 flex-col justify-start gap-1">
                   <h3 className="body-sb text-text-primary">집중시간 알림받기</h3>
                   <p className="caption-r text-text-tertiary">
                     집중・휴식시간이 되면 고양이가 알려줘요
@@ -51,9 +51,12 @@ const MyPage = () => {
             </div>
           </div>
 
-          <ActionButton onClick={() => window.open(SURVEY_LINK, '_target')}>
-            <span className="body-sb text-text-primary">의견 보내기</span>
-          </ActionButton>
+          <div className="flex flex-col gap-2">
+            <h2 className="subBody-sb text-text-secondary">서비스</h2>
+            <ActionButton onClick={() => window.open(SURVEY_LINK, '_target')}>
+              <span className="body-sb text-text-primary">의견 보내기</span>
+            </ActionButton>
+          </div>
         </div>
       </div>
     </SidebarLayout>
