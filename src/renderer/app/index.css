@@ -100,3 +100,13 @@
     @apply text-[12px] font-normal leading-[16px] tracking-[-.01em];
   }
 }
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+.drag-region > * {
+  -webkit-app-region: no-drag;
+}
+.no-drag-region {
+  -webkit-app-region: no-drag;
+}
