@@ -126,4 +126,7 @@ app.whenReady().then(() => {
   ipcMain.handle('change-tray-icon', (event, icon: string) => {
     tray?.setImage(getTrayIcon(icon));
   });
+  ipcMain.handle('change-tray-title', (event, title: string) => {
+    tray?.setTitle(title);
+  });
 });
