@@ -58,7 +58,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background-primary text-foreground;
+    @apply bg-background-primary font-pretendard text-foreground;
   }
 }
 

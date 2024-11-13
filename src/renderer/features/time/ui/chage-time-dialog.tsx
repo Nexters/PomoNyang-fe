@@ -80,7 +80,7 @@ export const ChangeTimeDialog = ({
   }, [open, categoryTimeMinutes, categoryTimeSeconds]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} fullScreen animated={false}>
+    <Dialog open={open} onOpenChange={onOpenChange} fullScreen={false} animated={false}>
       <div className="flex h-full flex-col">
         <div className="flex flex-1 flex-col items-center justify-center gap-8">
           <div className="flex items-center justify-center gap-2 px-4 py-2">
@@ -127,7 +127,7 @@ export const ChangeTimeDialog = ({
           </div>
         </div>
 
-        <div className="w-full pb-[54px] text-center">
+        <div className="w-full pb-6 pt-16 text-center">
           <Button variant="secondary" size="icon" className="aspect-square p-7" onClick={applyTime}>
             <Icon name="check" size="lg" />
           </Button>

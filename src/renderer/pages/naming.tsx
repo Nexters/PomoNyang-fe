@@ -7,7 +7,7 @@ import { useUser } from '@/features/user';
 import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { PATH } from '@/shared/constants';
 import { useRiveCat } from '@/shared/hooks';
-import { Button, Frame, Tooltip } from '@/shared/ui';
+import { Button, Frame, SimpleLayout, Tooltip } from '@/shared/ui';
 
 const Naming = () => {
   const location = useLocation();
@@ -41,47 +41,49 @@ const Naming = () => {
   };
 
   return (
-    <Frame>
-      <Frame.NavBar onBack={handleClickBackButton} />
-      <div className="flex h-full items-center justify-center">
-        <div className="flex w-full flex-col gap-10">
-          <Tooltip
-            content="반갑다냥! 내 이름을 지어줄래냥?"
-            color="white"
-            sideOffset={-20}
-            rootProps={{ open: true }}
-            arrowProps={{ width: 14, height: 9 }}
-          />
-          <RiveComponent
-            className="h-[240px] w-full cursor-pointer select-none"
-            onClick={() => {
-              clickCatInput?.fire();
-            }}
-          />
-          <div className="relative flex flex-col gap-2">
-            <label className="subBody-4 text-text-secondary">내 고양이의 이름</label>
-            <input
-              value={typedCatName}
-              placeholder={selectedCatName}
-              className="body-sb rounded-sm p-lg text-text-primary caret-text-accent-1 placeholder:text-text-disabled"
-              onChange={(e) => setTypedCatName(e.target.value)}
+    <SimpleLayout>
+      <Frame>
+        <Frame.NavBar onBack={handleClickBackButton} />
+        <div className="flex h-full items-center justify-center">
+          <div className="flex w-full flex-col gap-10">
+            <Tooltip
+              content="반갑다냥! 내 이름을 지어줄래냥?"
+              color="white"
+              sideOffset={-20}
+              rootProps={{ open: true }}
+              arrowProps={{ width: 14, height: 9 }}
             />
-            {errorMessage && (
-              <div className="absolute bottom-[-8px] left-0 w-full">
-                <div className="caption-r absolute left-0 top-0 text-accent-red">
-                  {errorMessage}
+            <RiveComponent
+              className="h-[240px] w-full cursor-pointer select-none"
+              onClick={() => {
+                clickCatInput?.fire();
+              }}
+            />
+            <div className="relative flex flex-col gap-2">
+              <label className="subBody-4 text-text-secondary">내 고양이의 이름</label>
+              <input
+                value={typedCatName}
+                placeholder={selectedCatName}
+                className="body-sb rounded-sm p-lg text-text-primary caret-text-accent-1 placeholder:text-text-disabled"
+                onChange={(e) => setTypedCatName(e.target.value)}
+              />
+              {errorMessage && (
+                <div className="absolute bottom-[-8px] left-0 w-full">
+                  <div className="caption-r absolute left-0 top-0 text-accent-red">
+                    {errorMessage}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <Frame.BottomBar>
-        <Button className="w-full" disabled={!!errorMessage} onClick={handleClickCompleteButton}>
-          확인
-        </Button>
-      </Frame.BottomBar>
-    </Frame>
+        <Frame.BottomBar>
+          <Button className="w-full" disabled={!!errorMessage} onClick={handleClickCompleteButton}>
+            확인
+          </Button>
+        </Frame.BottomBar>
+      </Frame>
+    </SimpleLayout>
   );
 };
 

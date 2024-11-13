@@ -9,7 +9,15 @@ import appIconImage from '@/shared/assets/images/app-icon.png';
 import catSelectMotionRiveFile from '@/shared/assets/rivs/cat_select_ver2.0.riv';
 import { PATH } from '@/shared/constants';
 import { useNotification } from '@/shared/hooks';
-import { Button, Frame, Icon, IconName, SelectGroup, SelectGroupItem } from '@/shared/ui';
+import {
+  Button,
+  Frame,
+  Icon,
+  IconName,
+  SimpleLayout,
+  SelectGroup,
+  SelectGroupItem,
+} from '@/shared/ui';
 import { cn } from '@/shared/utils';
 
 const adjectiveMap: Record<CatType, string> = {
@@ -83,75 +91,77 @@ const Selection = () => {
   };
 
   return (
-    <Frame>
-      <Frame.NavBar title="고양이 선택" onBack={handleClickBackButton} />
+    <SimpleLayout>
+      <Frame>
+        <Frame.NavBar title="고양이 선택" onBack={handleClickBackButton} />
 
-      <div className="flex w-full flex-col gap-[42px]">
-        <div className="flex flex-col gap-1">
-          <h1 className="header-3 text-text-primary">어떤 고양이와 함께할까요?</h1>
-          <p className="body-r text-text-secondary">언제든지 다른 고양이와 함께할 수 있어요</p>
-        </div>
+        <div className="flex w-full flex-col gap-[42px]">
+          <div className="flex flex-col gap-1">
+            <h1 className="header-3 text-text-primary">어떤 고양이와 함께할까요?</h1>
+            <p className="body-r text-text-secondary">언제든지 다른 고양이와 함께할 수 있어요</p>
+          </div>
 
-        <div className="flex flex-col gap-3">
-          {!selectedCatId && <AlarmEmpty />}
-          {cats.map((cat) => (
-            <Fragment key={cat.id}>
-              {selectedCatId === cat.id && <AlarmSample message={cat.alarmMessage} />}
-            </Fragment>
-          ))}
+          <div className="flex flex-col gap-3">
+            {!selectedCatId && <AlarmEmpty />}
+            {cats.map((cat) => (
+              <Fragment key={cat.id}>
+                {selectedCatId === cat.id && <AlarmSample message={cat.alarmMessage} />}
+              </Fragment>
+            ))}
 
-          {/* TODO: 아래를 선택한 고양이 이미지 에셋으로 변경 */}
-          <RiveComponent className="h-[240px] w-full select-none" />
-        </div>
+            {/* TODO: 아래를 선택한 고양이 이미지 에셋으로 변경 */}
+            <RiveComponent className="h-[240px] w-full select-none" />
+          </div>
 
-        <SelectGroup
-          className="flex"
-          value={selectedCatId}
-          onValueChange={(nextCatId) => {
-            setSelectedCatId((prevCatId) => {
-              const prevCat = cats.find((cat) => cat.id === prevCatId);
-              const nextCat = cats.find((cat) => cat.id === nextCatId);
+          <SelectGroup
+            className="flex"
+            value={selectedCatId}
+            onValueChange={(nextCatId) => {
+              setSelectedCatId((prevCatId) => {
+                const prevCat = cats.find((cat) => cat.id === prevCatId);
+                const nextCat = cats.find((cat) => cat.id === nextCatId);
 
-              // 다음 고양이 선택이 있으면 해당 input을 fire
-              // 없으면 처음으로 돌아가기 위해 이전 고양이의 input을 fire
-              if (nextCat) {
-                catTypeInputMap[nextCat.type]?.fire();
-              } else if (prevCat) {
-                catTypeInputMap[prevCat.type]?.fire();
-              }
+                // 다음 고양이 선택이 있으면 해당 input을 fire
+                // 없으면 처음으로 돌아가기 위해 이전 고양이의 input을 fire
+                if (nextCat) {
+                  catTypeInputMap[nextCat.type]?.fire();
+                } else if (prevCat) {
+                  catTypeInputMap[prevCat.type]?.fire();
+                }
 
-              return nextCatId;
-            });
-          }}
-        >
-          {cats.map((cat) => (
-            <SelectGroupItem
-              key={cat.id}
-              value={cat.id}
-              className="flex h-[80px] flex-1 flex-col gap-1"
-            >
-              <span className="subBody-4 flex gap-1 text-text-tertiary">
-                {cat.adjective} <Icon size="xs" name={cat.iconName} />
-              </span>
-              <span
-                className={cn(
-                  'header-5',
-                  selectedCatId === cat.id ? 'text-text-primary' : 'text-text-secondary',
-                )}
+                return nextCatId;
+              });
+            }}
+          >
+            {cats.map((cat) => (
+              <SelectGroupItem
+                key={cat.id}
+                value={cat.id}
+                className="flex h-[80px] flex-1 flex-col gap-1"
               >
-                {cat.name}
-              </span>
-            </SelectGroupItem>
-          ))}
-        </SelectGroup>
-      </div>
+                <span className="subBody-4 flex gap-1 text-text-tertiary">
+                  {cat.adjective} <Icon size="xs" name={cat.iconName} />
+                </span>
+                <span
+                  className={cn(
+                    'header-5',
+                    selectedCatId === cat.id ? 'text-text-primary' : 'text-text-secondary',
+                  )}
+                >
+                  {cat.name}
+                </span>
+              </SelectGroupItem>
+            ))}
+          </SelectGroup>
+        </div>
 
-      <Frame.BottomBar>
-        <Button disabled={!selectedCatId} className="w-full" onClick={handleClickSelectButton}>
-          이 고양이와 함께하기
-        </Button>
-      </Frame.BottomBar>
-    </Frame>
+        <Frame.BottomBar>
+          <Button disabled={!selectedCatId} className="w-full" onClick={handleClickSelectButton}>
+            이 고양이와 함께하기
+          </Button>
+        </Frame.BottomBar>
+      </Frame>
+    </SimpleLayout>
   );
 };
 
