@@ -45,6 +45,15 @@ export const FocusScreen = ({
           <Icon name={getCategoryIconName(currentCategory)} size="sm" />
           {currentCategory}
         </div>
+        <div className="flex-1" />
+        <div className="flex gap-2">
+          <button className="rounded-full p-2 hover:bg-background-secondary">
+            <Icon name="pinOff" size="md" />
+          </button>
+          <button className="rounded-full p-2 hover:bg-background-secondary">
+            <Icon name="minimizeOff" size="md" />
+          </button>
+        </div>
       </header>
       <main className="flex flex-1 flex-col items-center justify-center">
         <Tooltip

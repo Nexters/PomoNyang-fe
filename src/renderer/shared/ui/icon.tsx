@@ -13,9 +13,13 @@ import ClockIcon from '@/shared/assets/svgs/clock.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
 import MenuIcon from '@/shared/assets/svgs/menu.svg?react';
+import MinimizeOff from '@/shared/assets/svgs/minimize-off.svg';
+import MinimizeOn from '@/shared/assets/svgs/minimize-on.svg';
 import MinusIcon from '@/shared/assets/svgs/minus.svg';
 import MinusSvgIcon from '@/shared/assets/svgs/minus.svg?react';
 import PenIcon from '@/shared/assets/svgs/pen.svg';
+import PinOff from '@/shared/assets/svgs/pin-off.svg';
+import PinOn from '@/shared/assets/svgs/pin-on.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
 import PlayIcon from '@/shared/assets/svgs/play.svg';
 import PlusIcon from '@/shared/assets/svgs/plus.svg';
@@ -50,6 +54,10 @@ const icons = {
   clock: ClockIcon,
   readyForStat: ReadyForStatIcon,
   clockLine: ClockLineIcon,
+  pinOff: PinOff,
+  pinOn: PinOn,
+  minimizeOff: MinimizeOff,
+  minimizeOn: MinimizeOn,
 } as const;
 const sizes = {
   xs: 16,
