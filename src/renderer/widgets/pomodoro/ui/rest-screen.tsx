@@ -14,6 +14,7 @@ type RestScreenProps = {
   exceededTime: number;
   currentRestMinutes: number;
   selectedNextAction: PomodoroNextAction | undefined;
+  minimized?: boolean;
   setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
   handleFocus: () => void;
   handleEnd: () => void;
@@ -26,6 +27,7 @@ export const RestScreen = ({
   exceededTime,
   currentRestMinutes,
   selectedNextAction,
+  minimized,
   setSelectedNextAction,
   handleFocus,
   handleEnd,
@@ -40,6 +42,48 @@ export const RestScreen = ({
     stateMachines: 'State Machine_Home',
     userCatType: user?.cat?.type,
   });
+
+  if (minimized) {
+    return (
+      <div className="flex h-full flex-col">
+        <header className="flex p-[10px]">
+          <div className="flex-1" />
+          <div className="flex gap-2">
+            <button className="rounded-full p-2 hover:bg-background-secondary">
+              <Icon name="pinOn" size="md" />
+            </button>
+            <button className="rounded-full p-2 hover:bg-background-secondary">
+              <Icon name="minimizeOn" size="md" />
+            </button>
+          </div>
+        </header>
+        <div className="flex items-center p-6 pt-3">
+          <div>
+            <h2 className="body-sb flex gap-1 text-text-tertiary">
+              <Icon name={getCategoryIconName(currentCategory)} size="sm" />
+              {currentCategory}
+            </h2>
+            <Time
+              minutes={minutes}
+              seconds={seconds}
+              className="mb-1 mt-2 gap-xs text-[40px] font-bold leading-[48px] tracking-[-.02em] text-text-primary"
+            />
+            <div className={cn('flex items-center gap-xs', isExceed ? 'opacity-100' : 'opacity-0')}>
+              <Time
+                minutes={exceedMinutes}
+                seconds={exceedSeconds}
+                className="header-5 gap-0 text-text-accent-1"
+              />
+              <span className="header-5 text-text-accent-1">초과</span>
+            </div>
+          </div>
+          <div className="flex-1" />
+          {/* FIXME: 임시 이미지 */}
+          <div className="h-[86px] w-[86px] bg-background-tertiary" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex h-full flex-col">
