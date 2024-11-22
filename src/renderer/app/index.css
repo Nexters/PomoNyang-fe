@@ -104,7 +104,7 @@
 .drag-region {
   -webkit-app-region: drag;
 }
-.drag-region > * {
+.drag-region > *:not(.drag-region) {
   -webkit-app-region: no-drag;
 }
 .no-drag-region {

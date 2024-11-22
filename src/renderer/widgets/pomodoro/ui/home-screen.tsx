@@ -9,7 +9,7 @@ import { useUser } from '@/features/user';
 import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useDisclosure, useRiveCat } from '@/shared/hooks';
-import { Button, Guide, Icon, Tooltip, useToast } from '@/shared/ui';
+import { Button, Guide, Icon, SidebarLayout, Tooltip, useToast } from '@/shared/ui';
 import { getCategoryIconName, createIsoDuration } from '@/shared/utils';
 
 const steps = [
@@ -72,7 +72,7 @@ export const HomeScreen = ({
   };
 
   return (
-    <>
+    <SidebarLayout>
       <div className="flex h-full flex-col">
         <main className="flex flex-1 flex-col items-center justify-center gap-[25px]">
           <Tooltip
@@ -192,7 +192,7 @@ export const HomeScreen = ({
         categoryTimeMinutes={clickedMode === 'focus' ? currentFocusMinutes : currentRestMinutes}
         categoryTimeSeconds={0}
       />
-    </>
+    </SidebarLayout>
   );
 };
 
