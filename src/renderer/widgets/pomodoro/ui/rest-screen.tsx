@@ -1,6 +1,7 @@
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { Time } from '@/features/time';
 import { useUser } from '@/features/user';
+import hairballImage from '@/shared/assets/images/hairball.png';
 import catRestMotionRiveFile from '@/shared/assets/rivs/cat_rest.riv';
 import { MAX_REST_MINUTES, MIN_REST_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { useRiveCat } from '@/shared/hooks';
@@ -90,8 +91,7 @@ export const RestScreen = ({
             </div>
           </div>
           <div className="flex-1" />
-          {/* FIXME: 임시 이미지 */}
-          <div className="h-[86px] w-[86px] bg-background-tertiary" />
+          <img src={hairballImage} width="86" height="86" />
         </div>
       </div>
     );

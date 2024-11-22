@@ -1,5 +1,6 @@
 import { Time } from '@/features/time';
 import { useUser } from '@/features/user';
+import hairballImage from '@/shared/assets/images/hairball.png';
 import catFocusMotionRiveFile from '@/shared/assets/rivs/cat_focus.riv';
 import { useRiveCat } from '@/shared/hooks';
 import { Button, Icon, Tooltip } from '@/shared/ui';
@@ -87,8 +88,7 @@ export const FocusScreen = ({
             </div>
           </div>
           <div className="flex-1" />
-          {/* FIXME: 임시 이미지 */}
-          <div className="h-[86px] w-[86px] bg-background-tertiary" />
+          <img src={hairballImage} width="86" height="86" />
         </div>
       </div>
     );
