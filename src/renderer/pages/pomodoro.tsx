@@ -8,7 +8,7 @@ import { TimeoutDialog } from '@/features/pomodoro/ui/timeout-dialog';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { MINUTES_GAP } from '@/shared/constants';
-import { useDisclosure } from '@/shared/hooks';
+import { useAlwaysOnTop, useDisclosure, useMinimize } from '@/shared/hooks';
 import { SidebarLayout, SimpleLayout, useToast } from '@/shared/ui';
 import {
   createIsoDuration,
@@ -54,6 +54,8 @@ const Pomodoro = () => {
   const { data: user } = useUser();
   const { mutate: updateCategory } = useUpdateCategory();
   const { mutate: savePomodoro } = useAddPomodoro();
+  const { minimized, setMinimized } = useMinimize();
+  const { alwaysOnTop, setAlwaysOnTop } = useAlwaysOnTop();
 
   const [currentCategory, setCurrentCategory] = useState(categories?.[0]);
   const currentCategoryTitle = currentCategory?.title || '';
@@ -138,6 +140,14 @@ const Pomodoro = () => {
     setSelectedNextAction(undefined);
   };
 
+  useEffect(() => {
+    // 휴식 대기중이거나 시작 대기전에는 최소화 및 항상 위에 표시를 해제
+    if (mode !== 'focus' && mode !== 'rest') {
+      setMinimized(false);
+      setAlwaysOnTop(false);
+    }
+  }, [mode]);
+
   if (mode === 'focus')
     return (
       <SimpleLayout>
@@ -146,12 +156,12 @@ const Pomodoro = () => {
           elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
           exceededTime={pomodoroTime.exceeded}
           currentCategory={currentCategoryTitle}
-          handleRest={() => {
-            startRestWait();
-          }}
-          handleEnd={() => {
-            endPomodoro();
-          }}
+          minimized={minimized}
+          alwaysOnTop={alwaysOnTop}
+          handleRest={startRestWait}
+          handleEnd={endPomodoro}
+          setMinimized={setMinimized}
+          setAlwaysOnTop={setAlwaysOnTop}
         />
       </SimpleLayout>
     );
@@ -188,6 +198,8 @@ const Pomodoro = () => {
           currentCategory={currentCategoryTitle}
           currentRestMinutes={currentRestMinutes}
           selectedNextAction={selectedNextAction}
+          minimized={minimized}
+          alwaysOnTop={alwaysOnTop}
           setSelectedNextAction={setSelectedNextAction}
           handleFocus={() => {
             updateCategoryTime('restTime', currentRestMinutes);
@@ -197,6 +209,8 @@ const Pomodoro = () => {
             updateCategoryTime('restTime', currentRestMinutes);
             endPomodoro();
           }}
+          setMinimized={setMinimized}
+          setAlwaysOnTop={setAlwaysOnTop}
         />
       </SimpleLayout>
     );

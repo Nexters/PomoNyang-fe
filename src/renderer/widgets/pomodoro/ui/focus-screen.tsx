@@ -10,9 +10,12 @@ type FocusScreenProps = {
   currentFocusTime: number;
   elapsedTime: number;
   exceededTime: number;
-  minimized?: boolean;
+  minimized: boolean;
+  alwaysOnTop: boolean;
   handleRest: () => void;
   handleEnd: () => void;
+  setMinimized: (next: boolean) => void;
+  setAlwaysOnTop: (next: boolean) => void;
 };
 
 const toolTipContentMap: Record<string, string> = {
@@ -26,8 +29,11 @@ export const FocusScreen = ({
   elapsedTime,
   exceededTime,
   minimized,
+  alwaysOnTop,
   handleRest,
   handleEnd,
+  setMinimized,
+  setAlwaysOnTop,
 }: FocusScreenProps) => {
   const isExceed = exceededTime > 0;
   const { minutes, seconds } = msToTime(currentFocusTime - elapsedTime);
@@ -46,10 +52,16 @@ export const FocusScreen = ({
         <header className="flex p-[10px]">
           <div className="flex-1" />
           <div className="flex gap-2">
-            <button className="rounded-full p-2 hover:bg-background-secondary">
-              <Icon name="pinOn" size="md" />
+            <button
+              className="rounded-full p-2 hover:bg-background-secondary"
+              onClick={() => setAlwaysOnTop(!alwaysOnTop)}
+            >
+              <Icon name={alwaysOnTop ? 'pinOn' : 'pinOff'} size="md" />
             </button>
-            <button className="rounded-full p-2 hover:bg-background-secondary">
+            <button
+              className="rounded-full p-2 hover:bg-background-secondary"
+              onClick={() => setMinimized(false)}
+            >
               <Icon name="minimizeOn" size="md" />
             </button>
           </div>
@@ -91,10 +103,16 @@ export const FocusScreen = ({
         </div>
         <div className="flex-1" />
         <div className="flex gap-2">
-          <button className="rounded-full p-2 hover:bg-background-secondary">
-            <Icon name="pinOff" size="md" />
+          <button
+            className="rounded-full p-2 hover:bg-background-secondary"
+            onClick={() => setAlwaysOnTop(!alwaysOnTop)}
+          >
+            <Icon name={alwaysOnTop ? 'pinOn' : 'pinOff'} size="md" />
           </button>
-          <button className="rounded-full p-2 hover:bg-background-secondary">
+          <button
+            className="rounded-full p-2 hover:bg-background-secondary"
+            onClick={() => setMinimized(true)}
+          >
             <Icon name="minimizeOff" size="md" />
           </button>
         </div>

@@ -126,4 +126,27 @@ app.whenReady().then(() => {
   ipcMain.handle('change-tray-icon', (event, icon: string) => {
     tray?.setImage(getTrayIcon(icon));
   });
+  ipcMain.handle('get-always-on-top', () => {
+    return mainWindow?.isAlwaysOnTop();
+  });
+  ipcMain.handle('set-always-on-top', (event, isAlwaysOnTop: boolean) => {
+    if (isAlwaysOnTop) {
+      mainWindow?.setAlwaysOnTop(true, 'screen-saver');
+    } else {
+      mainWindow?.setAlwaysOnTop(false);
+    }
+  });
+  ipcMain.handle('get-minimized', () => {
+    const [, height] = mainWindow?.getMinimumSize() || [0, 0];
+    return height === 220;
+  });
+  ipcMain.handle('set-minimized', (event, isMinimized: boolean) => {
+    if (isMinimized) {
+      mainWindow?.setMinimumSize(400, 220);
+      mainWindow?.setSize(400, 220);
+    } else {
+      mainWindow?.setMinimumSize(400, 800);
+      mainWindow?.setSize(400, 800);
+    }
+  });
 });

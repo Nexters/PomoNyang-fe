@@ -14,10 +14,13 @@ type RestScreenProps = {
   exceededTime: number;
   currentRestMinutes: number;
   selectedNextAction: PomodoroNextAction | undefined;
-  minimized?: boolean;
+  minimized: boolean;
+  alwaysOnTop: boolean;
   setSelectedNextAction: (nextAction: PomodoroNextAction) => void;
   handleFocus: () => void;
   handleEnd: () => void;
+  setMinimized: (next: boolean) => void;
+  setAlwaysOnTop: (next: boolean) => void;
 };
 
 export const RestScreen = ({
@@ -28,9 +31,12 @@ export const RestScreen = ({
   currentRestMinutes,
   selectedNextAction,
   minimized,
+  alwaysOnTop,
   setSelectedNextAction,
   handleFocus,
   handleEnd,
+  setMinimized,
+  setAlwaysOnTop,
 }: RestScreenProps) => {
   const isExceed = exceededTime > 0;
   const { minutes, seconds } = msToTime(currentRestTime - elapsedTime);
@@ -49,10 +55,16 @@ export const RestScreen = ({
         <header className="flex p-[10px]">
           <div className="flex-1" />
           <div className="flex gap-2">
-            <button className="rounded-full p-2 hover:bg-background-secondary">
-              <Icon name="pinOn" size="md" />
+            <button
+              className="rounded-full p-2 hover:bg-background-secondary"
+              onClick={() => setAlwaysOnTop(!alwaysOnTop)}
+            >
+              <Icon name={alwaysOnTop ? 'pinOn' : 'pinOff'} size="md" />
             </button>
-            <button className="rounded-full p-2 hover:bg-background-secondary">
+            <button
+              className="rounded-full p-2 hover:bg-background-secondary"
+              onClick={() => setMinimized(false)}
+            >
               <Icon name="minimizeOn" size="md" />
             </button>
           </div>
@@ -94,10 +106,16 @@ export const RestScreen = ({
         </div>
         <div className="flex-1" />
         <div className="flex gap-2">
-          <button className="rounded-full p-2 hover:bg-background-secondary">
-            <Icon name="pinOff" size="md" />
+          <button
+            className="rounded-full p-2 hover:bg-background-secondary"
+            onClick={() => setAlwaysOnTop(!alwaysOnTop)}
+          >
+            <Icon name={alwaysOnTop ? 'pinOn' : 'pinOff'} size="md" />
           </button>
-          <button className="rounded-full p-2 hover:bg-background-secondary">
+          <button
+            className="rounded-full p-2 hover:bg-background-secondary"
+            onClick={() => setMinimized(true)}
+          >
             <Icon name="minimizeOff" size="md" />
           </button>
         </div>
