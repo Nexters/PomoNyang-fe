@@ -8,8 +8,8 @@ import { TimeoutDialog } from '@/features/pomodoro/ui/timeout-dialog';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { MINUTES_GAP } from '@/shared/constants';
-import { useDisclosure } from '@/shared/hooks';
-import { SidebarLayout, SimpleLayout, useToast } from '@/shared/ui';
+import { useAlwaysOnTop, useDisclosure, useMinimize } from '@/shared/hooks';
+import { useToast } from '@/shared/ui';
 import {
   createIsoDuration,
   isoDurationToMs,
@@ -54,6 +54,8 @@ const Pomodoro = () => {
   const { data: user } = useUser();
   const { mutate: updateCategory } = useUpdateCategory();
   const { mutate: savePomodoro } = useAddPomodoro();
+  const { minimized, setMinimized } = useMinimize();
+  const { alwaysOnTop, setAlwaysOnTop } = useAlwaysOnTop();
 
   const [currentCategory, setCurrentCategory] = useState(categories?.[0]);
   const currentCategoryTitle = currentCategory?.title || '';
@@ -138,71 +140,77 @@ const Pomodoro = () => {
     setSelectedNextAction(undefined);
   };
 
+  useEffect(() => {
+    // 휴식 대기중이거나 시작 대기전에는 최소화 및 항상 위에 표시를 해제
+    if (mode !== 'focus' && mode !== 'rest') {
+      setMinimized(false);
+      setAlwaysOnTop(false);
+    }
+  }, [mode]);
+
   if (mode === 'focus')
     return (
-      <SimpleLayout>
-        <FocusScreen
-          currentFocusTime={currentFocusTime}
-          elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
-          exceededTime={pomodoroTime.exceeded}
-          currentCategory={currentCategoryTitle}
-          handleRest={() => {
-            startRestWait();
-          }}
-          handleEnd={() => {
-            endPomodoro();
-          }}
-        />
-      </SimpleLayout>
+      <FocusScreen
+        currentFocusTime={currentFocusTime}
+        elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
+        exceededTime={pomodoroTime.exceeded}
+        currentCategory={currentCategoryTitle}
+        minimized={minimized}
+        alwaysOnTop={alwaysOnTop}
+        handleRest={startRestWait}
+        handleEnd={endPomodoro}
+        setMinimized={setMinimized}
+        setAlwaysOnTop={setAlwaysOnTop}
+      />
     );
 
   if (mode === 'rest-wait')
     return (
-      <SimpleLayout>
-        <RestWaitScreen
-          elapsedTime={Math.min(latestFocusTime?.elapsed ?? 0, currentFocusTime)}
-          exceededTime={latestFocusTime?.exceeded ?? 0}
-          currentCategory={currentCategoryTitle}
-          currentFocusMinutes={currentFocusMinutes}
-          selectedNextAction={selectedNextAction}
-          setSelectedNextAction={setSelectedNextAction}
-          handleRest={() => {
-            updateCategoryTime('focusTime', currentFocusMinutes);
-            startRest();
-          }}
-          handleEnd={() => {
-            updateCategoryTime('focusTime', currentFocusMinutes);
-            endPomodoro();
-          }}
-        />
-      </SimpleLayout>
+      <RestWaitScreen
+        elapsedTime={Math.min(latestFocusTime?.elapsed ?? 0, currentFocusTime)}
+        exceededTime={latestFocusTime?.exceeded ?? 0}
+        currentCategory={currentCategoryTitle}
+        currentFocusMinutes={currentFocusMinutes}
+        selectedNextAction={selectedNextAction}
+        setSelectedNextAction={setSelectedNextAction}
+        handleRest={() => {
+          updateCategoryTime('focusTime', currentFocusMinutes);
+          startRest();
+        }}
+        handleEnd={() => {
+          updateCategoryTime('focusTime', currentFocusMinutes);
+          endPomodoro();
+        }}
+      />
     );
 
   if (mode === 'rest')
     return (
-      <SimpleLayout>
-        <RestScreen
-          currentRestTime={currentRestTime}
-          elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
-          exceededTime={pomodoroTime.exceeded}
-          currentCategory={currentCategoryTitle}
-          currentRestMinutes={currentRestMinutes}
-          selectedNextAction={selectedNextAction}
-          setSelectedNextAction={setSelectedNextAction}
-          handleFocus={() => {
-            updateCategoryTime('restTime', currentRestMinutes);
-            startFocus();
-          }}
-          handleEnd={() => {
-            updateCategoryTime('restTime', currentRestMinutes);
-            endPomodoro();
-          }}
-        />
-      </SimpleLayout>
+      <RestScreen
+        currentRestTime={currentRestTime}
+        elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
+        exceededTime={pomodoroTime.exceeded}
+        currentCategory={currentCategoryTitle}
+        currentRestMinutes={currentRestMinutes}
+        selectedNextAction={selectedNextAction}
+        minimized={minimized}
+        alwaysOnTop={alwaysOnTop}
+        setSelectedNextAction={setSelectedNextAction}
+        handleFocus={() => {
+          updateCategoryTime('restTime', currentRestMinutes);
+          startFocus();
+        }}
+        handleEnd={() => {
+          updateCategoryTime('restTime', currentRestMinutes);
+          endPomodoro();
+        }}
+        setMinimized={setMinimized}
+        setAlwaysOnTop={setAlwaysOnTop}
+      />
     );
 
   return (
-    <SidebarLayout>
+    <>
       <HomeScreen
         startTimer={startFocus}
         currentCategory={currentCategoryTitle}
@@ -220,7 +228,7 @@ const Pomodoro = () => {
           description={timeoutMessageMap[timeoutMode].description}
         />
       )}
-    </SidebarLayout>
+    </>
   );
 };
 

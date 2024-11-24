@@ -30,7 +30,7 @@ export const Dialog = ({
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay
           className={cn(
-            'fixed inset-0 z-50',
+            'no-drag-region fixed inset-0 z-50',
             !fullScreen && 'bg-black/80',
             animated &&
               'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
