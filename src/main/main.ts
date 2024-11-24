@@ -134,6 +134,7 @@ app.whenReady().then(() => {
     if (isAlwaysOnTop) {
       mainWindow?.setAlwaysOnTop(true, 'screen-saver');
     } else {
+      mainWindow?.focus();
       mainWindow?.setAlwaysOnTop(false);
     }
   });
