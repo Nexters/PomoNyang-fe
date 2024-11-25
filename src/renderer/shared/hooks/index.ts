@@ -7,3 +7,5 @@ export * from './use-disclosure';
 export * from './use-notification';
 export * from './use-rive-cat';
 export * from './use-interval';
+export * from './use-minimize';
+export * from './use-always-on-top';

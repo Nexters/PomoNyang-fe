@@ -29,6 +29,7 @@ const createWindow = () => {
     height: 800,
     minHeight: 800,
     title: '',
+    titleBarStyle: 'hidden',
   });
 
   // and load the index.html of the app.
@@ -134,5 +135,29 @@ app.whenReady().then(() => {
   });
   ipcMain.handle('change-tray-title', (event, title: string) => {
     tray?.setTitle(title);
+  });
+  ipcMain.handle('get-always-on-top', () => {
+    return mainWindow?.isAlwaysOnTop();
+  });
+  ipcMain.handle('set-always-on-top', (event, isAlwaysOnTop: boolean) => {
+    if (isAlwaysOnTop) {
+      mainWindow?.setAlwaysOnTop(true, 'screen-saver');
+    } else {
+      mainWindow?.focus();
+      mainWindow?.setAlwaysOnTop(false);
+    }
+  });
+  ipcMain.handle('get-minimized', () => {
+    const [, height] = mainWindow?.getMinimumSize() || [0, 0];
+    return height === 220;
+  });
+  ipcMain.handle('set-minimized', (event, isMinimized: boolean) => {
+    if (isMinimized) {
+      mainWindow?.setMinimumSize(400, 220);
+      mainWindow?.setSize(400, 220);
+    } else {
+      mainWindow?.setMinimumSize(400, 800);
+      mainWindow?.setSize(400, 800);
+    }
   });
 });

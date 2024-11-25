@@ -4,4 +4,8 @@ export interface IElectronAPI {
   getMachineId: () => Promise<string>;
   changeTrayIcon: (icon: string) => void;
   changeTrayTitle: (title: string) => void;
+  getAlwaysOnTop: () => Promise<boolean>;
+  setAlwaysOnTop: (isAlwaysOnTop: boolean) => Promise<void>;
+  getMinimized: () => Promise<boolean>;
+  setMinimized: (isMinimized: boolean) => Promise<void>;
 }

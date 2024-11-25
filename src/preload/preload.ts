@@ -9,6 +9,11 @@ const electronAPI: IElectronAPI = {
   getMachineId: () => ipcRenderer.invoke('get-machine-id'),
   changeTrayIcon: (icon: string) => ipcRenderer.invoke('change-tray-icon', icon),
   changeTrayTitle: (title: string) => ipcRenderer.invoke('change-tray-title', title),
+  getAlwaysOnTop: () => ipcRenderer.invoke('get-always-on-top'),
+  setAlwaysOnTop: (isAlwaysOnTop: boolean) =>
+    ipcRenderer.invoke('set-always-on-top', isAlwaysOnTop),
+  getMinimized: () => ipcRenderer.invoke('get-minimized'),
+  setMinimized: (isMinimized: boolean) => ipcRenderer.invoke('set-minimized', isMinimized),
 };
 
 contextBridge.exposeInMainWorld('electronAPI', electronAPI);
