@@ -80,10 +80,17 @@ export const ChangeTimeDialog = ({
   }, [open, categoryTimeMinutes, categoryTimeSeconds]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} fullScreen={false} animated={false}>
-      <div className="flex h-full flex-col">
-        <div className="flex flex-1 flex-col items-center justify-center gap-8">
-          <div className="flex items-center justify-center gap-2 px-4 py-2">
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      fullScreen={false}
+      animated={false}
+      contentClassname="w-[335px]"
+    >
+      <div className="flex h-full flex-col gap-1">
+        <div className="h-[40px]" />
+        <div className="flex flex-col">
+          <div className="mb-3 inline-flex items-center justify-center gap-2 px-4 py-2">
             <Icon name={getCategoryIconName(category)} size="sm" />
             <span className="body-sb text-text-secondary">{category}</span>
           </div>
@@ -99,9 +106,9 @@ export const ChangeTimeDialog = ({
               <Icon name="minus" size="md" />
             </Button>
 
-            <div className="flex items-center justify-center gap-3 rounded-md bg-background-secondary px-4 py-5">
+            <div className="flex items-center justify-center gap-3 rounded-md bg-background-secondary p-5">
               <Icon name={mode === 'focus' ? 'focusTime' : 'restTime'} size="md" />
-              <div className="header-1 flex items-center justify-center gap-0.5 tabular-nums text-text-primary">
+              <div className="header-2 flex items-center justify-center gap-0.5 tabular-nums text-text-primary">
                 <span>{padNumber(minutes)}</span>
                 {/* @note: 콜론 가운데 정렬이 되지 않아 이렇게 표시함 */}
                 <span className="mt-[-8px]">:</span>
@@ -125,12 +132,17 @@ export const ChangeTimeDialog = ({
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="w-full pb-6 pt-16 text-center">
-          <Button variant="secondary" size="icon" className="aspect-square p-7" onClick={applyTime}>
-            <Icon name="check" size="lg" />
-          </Button>
+          <div className="mt-11 w-full pb-3 text-center">
+            <Button
+              variant="secondary"
+              size="icon"
+              className="aspect-square p-7"
+              onClick={applyTime}
+            >
+              <Icon name="check" size="lg" />
+            </Button>
+          </div>
         </div>
       </div>
     </Dialog>
