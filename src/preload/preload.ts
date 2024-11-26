@@ -8,6 +8,7 @@ const electronAPI: IElectronAPI = {
   showWindow: () => ipcRenderer.send('show-window'),
   getMachineId: () => ipcRenderer.invoke('get-machine-id'),
   changeTrayIcon: (icon: string) => ipcRenderer.invoke('change-tray-icon', icon),
+  changeTrayTitle: (title: string) => ipcRenderer.invoke('change-tray-title', title),
   getAlwaysOnTop: () => ipcRenderer.invoke('get-always-on-top'),
   setAlwaysOnTop: (isAlwaysOnTop: boolean) =>
     ipcRenderer.invoke('set-always-on-top', isAlwaysOnTop),

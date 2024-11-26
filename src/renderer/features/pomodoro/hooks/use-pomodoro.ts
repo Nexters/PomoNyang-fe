@@ -1,8 +1,11 @@
+import { useEffect } from 'react';
+
 import { useLocalStorage } from 'usehooks-ts';
 
 import { PomodoroCycle, PomodoroEndReason, PomodoroMode, PomodoroTime } from '@/entities/pomodoro';
 import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useInterval } from '@/shared/hooks';
+import { msToTime, padNumber } from '@/shared/utils';
 
 // == usePomodoro 로직에 대한 description
 
@@ -62,6 +65,23 @@ const updateCycles = (cycles: PomodoroCycle[], nextCycle?: PomodoroCycle): Pomod
     },
     nextCycle,
   ].filter(isNotNil);
+};
+
+const getFormattedTime = (goalTime: number, { elapsed, exceeded }: PomodoroTime) => {
+  const isExceed = exceeded > 0;
+  const { minutes, seconds } = msToTime(isExceed ? exceeded : goalTime - elapsed);
+  const time = `${padNumber(minutes)}:${padNumber(seconds)}`;
+  return { isExceed, time };
+};
+
+const getTrayIcon = (mode: PomodoroMode, isExceed: boolean) => {
+  if (mode === 'focus') {
+    return isExceed ? 'focus-exceed' : 'focus';
+  }
+  if (mode === 'rest') {
+    return isExceed ? 'rest-exceed' : 'rest';
+  }
+  return '';
 };
 
 export const getPomodoroTime = (cycle: PomodoroCycle): PomodoroTime => {
@@ -170,6 +190,24 @@ export const usePomodoro = ({
     },
     pomodoroCycles.length > 0 ? 250 : null,
   );
+
+  useEffect(() => {
+    const currentCycle = pomodoroCycles[pomodoroCycles.length - 1];
+    if (!currentCycle) {
+      window.electronAPI.changeTrayIcon('');
+      window.electronAPI.changeTrayTitle('');
+      return;
+    }
+
+    const { isExceed, time: trayTitle } = getFormattedTime(currentCycle.goalTime, pomodoroTime);
+    const mode = currentCycle.mode;
+    // 휴식 대기 중에는 직전의 집중 시간을 표시하기 위함
+    if (mode !== 'rest-wait') {
+      const trayIcon = getTrayIcon(mode, isExceed);
+      window.electronAPI.changeTrayIcon(trayIcon);
+      window.electronAPI.changeTrayTitle(trayTitle);
+    }
+  }, [pomodoroCycles, pomodoroTime]);
 
   return {
     pomodoroCycles,
