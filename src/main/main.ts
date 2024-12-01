@@ -17,6 +17,11 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+const WindowSizeMap = {
+  minimized: { width: 400, height: 220 },
+  normal: { width: 400, height: 720 },
+};
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -24,10 +29,10 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       webSecurity: false,
     },
-    width: 400,
-    minWidth: 400,
-    height: 800,
-    minHeight: 800,
+    width: WindowSizeMap.normal.width,
+    minWidth: WindowSizeMap.normal.width,
+    height: WindowSizeMap.normal.height,
+    minHeight: WindowSizeMap.normal.height,
     title: '',
     titleBarStyle: 'hidden',
   });
@@ -153,11 +158,11 @@ app.whenReady().then(() => {
   });
   ipcMain.handle('set-minimized', (event, isMinimized: boolean) => {
     if (isMinimized) {
-      mainWindow?.setMinimumSize(400, 220);
-      mainWindow?.setSize(400, 220);
+      mainWindow?.setMinimumSize(WindowSizeMap.minimized.width, WindowSizeMap.minimized.height);
+      mainWindow?.setSize(WindowSizeMap.minimized.width, WindowSizeMap.minimized.height);
     } else {
-      mainWindow?.setMinimumSize(400, 800);
-      mainWindow?.setSize(400, 800);
+      mainWindow?.setMinimumSize(WindowSizeMap.normal.width, WindowSizeMap.normal.height);
+      mainWindow?.setSize(WindowSizeMap.normal.width, WindowSizeMap.normal.height);
     }
   });
 });
