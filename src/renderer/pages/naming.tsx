@@ -60,7 +60,7 @@ const Naming = () => {
               }}
             />
             <div className="relative flex flex-col gap-2">
-              <label className="subBody-4 text-text-secondary">내 고양이의 이름</label>
+              <label className="subBody-r text-text-secondary">내 고양이의 이름</label>
               <input
                 value={typedCatName}
                 placeholder={selectedCatName}

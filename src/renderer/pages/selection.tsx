@@ -139,7 +139,7 @@ const Selection = () => {
                 value={cat.id}
                 className="flex h-[80px] flex-1 flex-col gap-1"
               >
-                <span className="subBody-4 flex gap-1 text-text-tertiary">
+                <span className="subBody-r flex gap-1 text-text-tertiary">
                   {cat.adjective} <Icon size="xs" name={cat.iconName} />
                 </span>
                 <span
