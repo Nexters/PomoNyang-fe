@@ -126,16 +126,18 @@ export const RestScreen = ({
           <Tooltip
             content={!isExceed ? '쉬는게 제일 좋다냥' : '이제 다시 사냥놀이 하자냥!'}
             color="white"
-            sideOffset={-20}
+            sideOffset={-40}
             rootProps={{ open: true }}
             arrowProps={{ width: 14, height: 9 }}
-          />
-          <RiveComponent
-            className="h-[240px] w-full cursor-pointer select-none"
-            onClick={() => {
-              clickCatInput?.fire();
-            }}
-          />
+          >
+            <RiveComponent
+              className="h-[240px] w-[240px] cursor-pointer select-none"
+              onClick={() => {
+                clickCatInput?.fire();
+              }}
+            />
+          </Tooltip>
+
           <div className="flex flex-col items-center py-3">
             <div className="flex gap-xs">
               <Icon name="restTime" width={20} height={20} />

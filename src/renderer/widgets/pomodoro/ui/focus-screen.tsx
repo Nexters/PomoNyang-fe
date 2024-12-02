@@ -122,16 +122,18 @@ export const FocusScreen = ({
           <Tooltip
             content={isExceed ? toolTipContentMap.exceed : toolTipContentMap.default}
             color="white"
-            sideOffset={-20}
+            sideOffset={-40}
             rootProps={{ open: true }}
             arrowProps={{ width: 14, height: 9 }}
-          />
-          <RiveComponent
-            className="h-[240px] w-full cursor-pointer select-none"
-            onClick={() => {
-              clickCatInput?.fire();
-            }}
-          />
+          >
+            <RiveComponent
+              className="h-[240px] w-[240px] cursor-pointer select-none"
+              onClick={() => {
+                clickCatInput?.fire();
+              }}
+            />
+          </Tooltip>
+
           <div className="mt-xl flex flex-col items-center">
             <div className="flex gap-xs">
               <Icon name="focusTime" width={20} height={20} />
