@@ -81,14 +81,15 @@ export const HomeScreen = ({
             sideOffset={-40}
             rootProps={{ open: !showGuide }}
             arrowProps={{ width: 14, height: 9 }}
-          />
-          <RiveComponent
-            className="h-[240px] w-full cursor-pointer select-none"
-            onClick={() => {
-              showRandomMessage();
-              clickCatInput?.fire();
-            }}
-          />
+          >
+            <RiveComponent
+              className="h-[240px] w-[240px] cursor-pointer select-none"
+              onClick={() => {
+                showRandomMessage();
+                clickCatInput?.fire();
+              }}
+            />
+          </Tooltip>
 
           <div className="header-4 text-text-tertiary">{user?.cat?.name}</div>
           <div className="flex flex-col gap-md p-lg">

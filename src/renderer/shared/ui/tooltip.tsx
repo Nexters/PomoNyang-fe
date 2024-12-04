@@ -33,7 +33,7 @@ export const Tooltip = ({
           className={cn(
             color === 'black' && 'bg-gray-900 text-white',
             color === 'white' && 'bg-white text-gray-600',
-            'shadow-xs body-sb z-50 rounded-xs px-lg py-md',
+            'shadow-xs body-sb z-50 select-none rounded-xs px-lg py-md',
             'animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
             className,
           )}

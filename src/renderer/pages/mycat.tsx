@@ -43,27 +43,25 @@ const MyCat = () => {
       <Frame>
         <Frame.NavBar title="나의 고양이" onBack={() => navigate(PATH.MY_PAGE)} />
 
-        <div className="flex h-full items-center justify-center">
-          <div className="flex w-full flex-col">
-            <Tooltip
-              content="사냥놀이를 하고싶다냥"
-              color="white"
-              sideOffset={-20}
-              rootProps={{ open: true }}
-              arrowProps={{ width: 14, height: 9 }}
-            />
+        <div className="flex h-full flex-col items-center justify-center">
+          <Tooltip
+            content="사냥놀이를 하고싶다냥"
+            color="white"
+            sideOffset={-40}
+            rootProps={{ open: true }}
+            arrowProps={{ width: 14, height: 9 }}
+          >
+            <RiveComponent className="h-[240px] w-[240px] select-none" />
+          </Tooltip>
 
-            <RiveComponent className="h-[240px] w-full select-none" />
-
-            <div className="flex w-full items-center justify-center">
-              <button
-                className="flex items-center justify-center gap-1 p-3"
-                onClick={handleClickEditNameButton}
-              >
-                <span className="header-4 text-text-secondary">{user?.cat?.name}</span>
-                <Icon name="pen" size="md" />
-              </button>
-            </div>
+          <div className="flex w-full items-center justify-center">
+            <button
+              className="flex items-center justify-center gap-1 p-3"
+              onClick={handleClickEditNameButton}
+            >
+              <span className="header-4 text-text-secondary">{user?.cat?.name}</span>
+              <Icon name="pen" size="md" />
+            </button>
           </div>
         </div>
 

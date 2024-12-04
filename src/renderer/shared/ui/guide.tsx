@@ -81,7 +81,7 @@ export const Guide = ({ steps, handler }: TGuideProps) => {
       {/* 3. 툴팁 메세지 */}
       <div
         className={cn(
-          'transition-position rounded-xs bg-white p-md text-text-secondary duration-300',
+          'transition-position body-sb w-max rounded-xs bg-white px-4 py-3 text-text-secondary duration-300',
           isAnimating ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100',
         )}
         style={{
