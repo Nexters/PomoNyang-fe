@@ -18,7 +18,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 const WindowSizeMap = {
-  minimized: { width: 400, height: 220 },
+  minimized: { width: 400, height: 200 },
   normal: { width: 400, height: 720 },
 };
 
@@ -158,7 +158,7 @@ app.whenReady().then(() => {
   });
   ipcMain.handle('get-minimized', () => {
     const [, height] = mainWindow?.getMinimumSize() || [0, 0];
-    return height === 220;
+    return height === WindowSizeMap.minimized.height;
   });
   ipcMain.handle('set-minimized', (event, isMinimized: boolean) => {
     if (isMinimized) {
