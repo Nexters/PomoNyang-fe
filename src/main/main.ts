@@ -72,7 +72,11 @@ const trayIconMap: Record<string, string> = {
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADoSURBVHgB3ZIxDoIwFIb/Eg7gEWBxldFNiLOJR+AG6g3AY+Cio6NxcDK66cgN8AawmLjVV62JkhYrOBi/5IWmr+/j5bXAr8N0Cc55Rh9HmdytgeMWuJwLMGvO4mRSKSSZL8qUss3yLnvtK2bTJBIrC2o86EgPik0+eqx0wh5q8nmH3b5qd6EV0vwc6C5DEAwAt72n6Re3AKf5zcba8yQc8mpy8VMZrXK9rXD6qEZIMrk+UbjPSdUMOzBn9fYENyeCCeJRU4Qy8kYyw24j1IEKva/JpLD8fEI0QXRTR2ZX5AoZAWMsxd9wBR1E9hNu08zLAAAAAElFTkSuQmCC',
 };
 const getTrayIcon = (icon: string): NativeImage => {
-  return nativeImage.createFromDataURL(trayIconMap[icon] ?? trayIconMap.default);
+  const image = nativeImage.createFromDataURL(trayIconMap[icon] ?? trayIconMap.default);
+  // https://stackoverflow.com/questions/41664208/electron-tray-icon-change-depending-on-dark-theme
+  // @note: 템플릿 이미지 설정을 해줘야 배경에 맞춰 자동으로 아이콘 색상 변경됨
+  image.setTemplateImage(true);
+  return image;
 };
 
 const createTray = (mainWindow: BrowserWindow) => {
