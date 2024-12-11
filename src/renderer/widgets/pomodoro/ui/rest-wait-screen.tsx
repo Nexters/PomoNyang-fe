@@ -38,7 +38,7 @@ export const RestWaitScreen = ({
   return (
     <SimpleLayout>
       <div className="flex h-full flex-col">
-        <header className="h-[56px]" />
+        <header className="h-[16px]" />
         <main className="flex flex-1 flex-col items-center justify-center gap-5">
           <div className="flex flex-col items-center justify-center gap-sm">
             <CategoryChip category={currentCategory} />
