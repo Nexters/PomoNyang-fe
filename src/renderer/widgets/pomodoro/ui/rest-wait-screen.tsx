@@ -114,7 +114,7 @@ export const RestWaitScreen = ({
           <Button variant="primary" className="w-[200px] p-xl" size="lg" onClick={handleRest}>
             휴식 시작하기
           </Button>
-          <Button variant="text-secondary" size="md" onClick={handleEnd}>
+          <Button variant="text-secondary" size="md" className="h-[40px]" onClick={handleEnd}>
             집중 끝내기
           </Button>
         </div>

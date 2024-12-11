@@ -102,7 +102,7 @@ export const RestScreen = ({
   return (
     <SimpleLayout>
       <div className="relative flex h-full flex-col">
-        <header className="flex p-4">
+        <header className="flex p-4 pt-0">
           <div className="subBody-sb flex h-[40px] items-center gap-sm rounded-xs bg-background-secondary px-3 py-2 text-text-tertiary">
             <Icon name={getCategoryIconName(currentCategory)} size="sm" />
             {currentCategory}
@@ -124,7 +124,7 @@ export const RestScreen = ({
           </div>
         </header>
 
-        <main className="flex flex-1 flex-col items-center justify-center gap-5">
+        <main className="flex flex-1 flex-col items-center justify-center gap-4">
           <Tooltip
             content={!isExceed ? '쉬는게 제일 좋다냥' : '이제 다시 사냥놀이 하자냥!'}
             color="white"
@@ -191,7 +191,7 @@ export const RestScreen = ({
           <Button variant="secondary" className="w-[200px]" size="lg" onClick={handleFocus}>
             한번 더 집중하기
           </Button>
-          <Button variant="text-secondary" size="md" onClick={handleEnd}>
+          <Button variant="text-secondary" size="md" className="h-[40px]" onClick={handleEnd}>
             집중 끝내기
           </Button>
         </div>

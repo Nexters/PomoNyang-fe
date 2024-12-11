@@ -134,6 +134,7 @@ module.exports = {
           inverse: colors.white,
           accent: {
             1: colors.orange[500],
+            red: colors.red[300],
           },
         },
 

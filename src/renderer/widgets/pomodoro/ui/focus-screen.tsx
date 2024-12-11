@@ -99,7 +99,7 @@ export const FocusScreen = ({
   return (
     <SimpleLayout>
       <div className="relative flex h-full flex-col">
-        <header className="flex p-4">
+        <header className="flex p-4 pt-0">
           <div className="subBody-sb flex w-[80px] gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary">
             <Icon name={getCategoryIconName(currentCategory)} size="sm" />
             {currentCategory}
@@ -150,9 +150,9 @@ export const FocusScreen = ({
               <Time
                 minutes={exceedMinutes}
                 seconds={exceedSeconds}
-                className="header-4 gap-0 text-text-accent-1"
+                className="header-4 text-text-accent-red gap-0"
               />
-              <span className="header-4 text-text-accent-1">초과</span>
+              <span className="header-4 text-text-accent-red">초과</span>
             </div>
           </div>
         </main>
@@ -165,7 +165,7 @@ export const FocusScreen = ({
           >
             휴식하기
           </Button>
-          <Button variant="text-secondary" size="md" onClick={handleEnd}>
+          <Button variant="text-secondary" size="md" className="h-[40px]" onClick={handleEnd}>
             집중 끝내기
           </Button>
         </div>
