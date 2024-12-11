@@ -71,7 +71,7 @@ export const RestScreen = ({
           </div>
         </header>
         <div className="flex items-center p-6 pt-3">
-          <div>
+          <div className="flex flex-col items-start justify-center">
             <h2 className="body-sb flex gap-1 text-text-tertiary">
               <Icon name={getCategoryIconName(currentCategory)} size="sm" />
               {currentCategory}
@@ -81,14 +81,16 @@ export const RestScreen = ({
               seconds={seconds}
               className="mb-1 mt-2 gap-xs text-[40px] font-bold leading-[48px] tracking-[-.02em] text-text-primary"
             />
-            <div className={cn('flex items-center gap-xs', isExceed ? 'opacity-100' : 'opacity-0')}>
-              <Time
-                minutes={exceedMinutes}
-                seconds={exceedSeconds}
-                className="header-5 gap-0 text-text-accent-1"
-              />
-              <span className="header-5 text-text-accent-1">초과</span>
-            </div>
+            {isExceed && (
+              <div className="flex items-center gap-xs">
+                <Time
+                  minutes={exceedMinutes}
+                  seconds={exceedSeconds}
+                  className="header-5 gap-0 text-text-accent-1"
+                />
+                <span className="header-5 text-text-accent-1">초과</span>
+              </div>
+            )}
           </div>
           <div className="flex-1" />
           <img src={hairballImage} width="86" height="86" />
