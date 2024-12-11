@@ -95,7 +95,7 @@ const Selection = () => {
       <Frame>
         <Frame.NavBar title="고양이 선택" onBack={handleClickBackButton} />
 
-        <div className="flex w-full flex-col gap-[42px]">
+        <div className="flex w-full flex-col gap-[24px]">
           <div className="flex flex-col gap-1">
             <h1 className="header-3 text-text-primary">어떤 고양이와 함께할까요?</h1>
             <p className="body-r text-text-secondary">언제든지 다른 고양이와 함께할 수 있어요</p>
