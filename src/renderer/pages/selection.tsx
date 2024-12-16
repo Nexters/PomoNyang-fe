@@ -35,6 +35,11 @@ const alarmMessageMap: Record<CatType, string> = {
   BLACK: '어디갔나옹...',
   THREE_COLOR: '내가 여기있는데 어디갔냐옹!',
 };
+const typeNameMap: Record<CatType, string> = {
+  CHEESE: '치즈냥',
+  BLACK: '까만냥',
+  THREE_COLOR: '삼색냥',
+};
 const RIVE_STATE_MACHINE_NAME = 'State Machine_selectCat';
 
 const Selection = () => {
@@ -49,6 +54,7 @@ const Selection = () => {
         no: cat.no,
         name: cat.name,
         type: cat.type,
+        typeName: typeNameMap[cat.type],
         id: String(cat.no),
         iconName: iconNameMap[cat.type],
         adjective: adjectiveMap[cat.type],
@@ -95,7 +101,7 @@ const Selection = () => {
       <Frame>
         <Frame.NavBar title="고양이 선택" onBack={handleClickBackButton} />
 
-        <div className="flex w-full flex-col gap-[42px]">
+        <div className="flex w-full flex-col gap-[24px]">
           <div className="flex flex-col gap-1">
             <h1 className="header-3 text-text-primary">어떤 고양이와 함께할까요?</h1>
             <p className="body-r text-text-secondary">언제든지 다른 고양이와 함께할 수 있어요</p>
@@ -148,7 +154,8 @@ const Selection = () => {
                     selectedCatId === cat.id ? 'text-text-primary' : 'text-text-secondary',
                   )}
                 >
-                  {cat.name}
+                  {/* @note: 유저가 입력한 고양이 이름이 아닌 종류에 대한 이름을 보여준다 */}
+                  {cat.typeName}
                 </span>
               </SelectGroupItem>
             ))}

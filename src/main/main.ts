@@ -12,19 +12,24 @@ updateElectronApp({
   },
 });
 
+let mainWindow: BrowserWindow | null = null;
+let tray: Tray | null = null;
+let forceQuit = false;
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
+  forceQuit = true;
   app.quit();
 }
 
 const WindowSizeMap = {
-  minimized: { width: 400, height: 220 },
+  minimized: { width: 400, height: 200 },
   normal: { width: 400, height: 720 },
 };
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  const browserWindow = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       webSecurity: false,
@@ -39,17 +44,17 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    browserWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    browserWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
   // // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  // browserWindow.webContents.openDevTools();
 
   // @note: 외부 링크 클릭 시 별도 브라우저로 열도록 설정함
   // 외부 링크 여부는 url이 https://로 시작하는지로 판단함
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+  browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https://')) {
       shell.openExternal(url);
       return { action: 'deny' };
@@ -57,7 +62,16 @@ const createWindow = () => {
     return { action: 'allow' };
   });
 
-  return mainWindow;
+  // @see: https://stackoverflow.com/questions/38309240/object-has-been-destroyed-when-open-secondary-child-window-in-electron-js/39135293
+  // 창이 닫히지 않고 숨겨지도록 설정함
+  browserWindow.on('close', (event) => {
+    if (!forceQuit) {
+      event.preventDefault();
+      browserWindow?.hide();
+    }
+  });
+
+  return browserWindow;
 };
 
 const trayIconMap: Record<string, string> = {
@@ -72,7 +86,11 @@ const trayIconMap: Record<string, string> = {
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADoSURBVHgB3ZIxDoIwFIb/Eg7gEWBxldFNiLOJR+AG6g3AY+Cio6NxcDK66cgN8AawmLjVV62JkhYrOBi/5IWmr+/j5bXAr8N0Cc55Rh9HmdytgeMWuJwLMGvO4mRSKSSZL8qUss3yLnvtK2bTJBIrC2o86EgPik0+eqx0wh5q8nmH3b5qd6EV0vwc6C5DEAwAt72n6Re3AKf5zcba8yQc8mpy8VMZrXK9rXD6qEZIMrk+UbjPSdUMOzBn9fYENyeCCeJRU4Qy8kYyw24j1IEKva/JpLD8fEI0QXRTR2ZX5AoZAWMsxd9wBR1E9hNu08zLAAAAAElFTkSuQmCC',
 };
 const getTrayIcon = (icon: string): NativeImage => {
-  return nativeImage.createFromDataURL(trayIconMap[icon] ?? trayIconMap.default);
+  const image = nativeImage.createFromDataURL(trayIconMap[icon] ?? trayIconMap.default);
+  // https://stackoverflow.com/questions/41664208/electron-tray-icon-change-depending-on-dark-theme
+  // @note: 템플릿 이미지 설정을 해줘야 배경에 맞춰 자동으로 아이콘 색상 변경됨
+  image.setTemplateImage(true);
+  return image;
 };
 
 const createTray = (mainWindow: BrowserWindow) => {
@@ -88,14 +106,17 @@ const createTray = (mainWindow: BrowserWindow) => {
       },
     },
     { type: 'separator' },
-    { label: '종료', role: 'quit' },
+    {
+      label: '종료',
+      click: () => {
+        forceQuit = true;
+        app.quit();
+      },
+    },
   ]);
   tray.setContextMenu(contextMenu);
   return tray;
 };
-
-let mainWindow: BrowserWindow | null = null;
-let tray: Tray | null = null;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -109,6 +130,7 @@ app.on('ready', () => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    forceQuit = true;
     app.quit();
   }
 });
@@ -154,7 +176,7 @@ app.whenReady().then(() => {
   });
   ipcMain.handle('get-minimized', () => {
     const [, height] = mainWindow?.getMinimumSize() || [0, 0];
-    return height === 220;
+    return height === WindowSizeMap.minimized.height;
   });
   ipcMain.handle('set-minimized', (event, isMinimized: boolean) => {
     if (isMinimized) {

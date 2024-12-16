@@ -38,7 +38,7 @@ export const RestWaitScreen = ({
   return (
     <SimpleLayout>
       <div className="flex h-full flex-col">
-        <header className="h-[56px]" />
+        <header className="h-[16px]" />
         <main className="flex flex-1 flex-col items-center justify-center gap-5">
           <div className="flex flex-col items-center justify-center gap-sm">
             <CategoryChip category={currentCategory} />
@@ -110,11 +110,16 @@ export const RestWaitScreen = ({
             </SelectGroup>
           </div>
         </main>
-        <div className="flex w-full flex-col items-center pb-5">
-          <Button variant="primary" className="w-[200px] p-xl" size="lg" onClick={handleRest}>
+        <div className="flex w-full flex-col items-center gap-2 pb-5">
+          <Button
+            variant="primary"
+            className="h-[60px] w-[200px] p-xl"
+            size="lg"
+            onClick={handleRest}
+          >
             휴식 시작하기
           </Button>
-          <Button variant="text-secondary" size="md" onClick={handleEnd}>
+          <Button variant="text-secondary" size="md" className="h-[40px]" onClick={handleEnd}>
             집중 끝내기
           </Button>
         </div>
