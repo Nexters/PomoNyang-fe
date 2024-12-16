@@ -102,7 +102,7 @@ export const RestScreen = ({
   return (
     <SimpleLayout>
       <div className="relative flex h-full flex-col">
-        <header className="flex p-4 pt-0">
+        <header className="flex px-4 py-2">
           <div className="subBody-sb flex h-[40px] items-center gap-sm rounded-xs bg-background-secondary px-3 py-2 text-text-tertiary">
             <Icon name={getCategoryIconName(currentCategory)} size="sm" />
             {currentCategory}
@@ -187,8 +187,13 @@ export const RestScreen = ({
           </div>
         </main>
 
-        <div className="flex w-full flex-col items-center pb-5">
-          <Button variant="secondary" className="w-[200px]" size="lg" onClick={handleFocus}>
+        <div className="flex w-full flex-col items-center gap-2 pb-5">
+          <Button
+            variant="secondary"
+            className="h-[60px] w-[200px]"
+            size="lg"
+            onClick={handleFocus}
+          >
             한번 더 집중하기
           </Button>
           <Button variant="text-secondary" size="md" className="h-[40px]" onClick={handleEnd}>

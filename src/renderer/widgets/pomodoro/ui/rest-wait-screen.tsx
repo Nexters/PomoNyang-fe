@@ -110,8 +110,13 @@ export const RestWaitScreen = ({
             </SelectGroup>
           </div>
         </main>
-        <div className="flex w-full flex-col items-center pb-5">
-          <Button variant="primary" className="w-[200px] p-xl" size="lg" onClick={handleRest}>
+        <div className="flex w-full flex-col items-center gap-2 pb-5">
+          <Button
+            variant="primary"
+            className="h-[60px] w-[200px] p-xl"
+            size="lg"
+            onClick={handleRest}
+          >
             휴식 시작하기
           </Button>
           <Button variant="text-secondary" size="md" className="h-[40px]" onClick={handleEnd}>

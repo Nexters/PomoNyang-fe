@@ -99,7 +99,7 @@ export const FocusScreen = ({
   return (
     <SimpleLayout>
       <div className="relative flex h-full flex-col">
-        <header className="flex p-4 pt-0">
+        <header className="flex px-4 py-2">
           <div className="subBody-sb flex w-[80px] gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary">
             <Icon name={getCategoryIconName(currentCategory)} size="sm" />
             {currentCategory}
@@ -150,16 +150,16 @@ export const FocusScreen = ({
               <Time
                 minutes={exceedMinutes}
                 seconds={exceedSeconds}
-                className="header-4 text-text-accent-red gap-0"
+                className="header-4 gap-0 text-text-accent-red"
               />
               <span className="header-4 text-text-accent-red">초과</span>
             </div>
           </div>
         </main>
-        <div className="flex w-full flex-col items-center pb-5">
+        <div className="flex w-full flex-col items-center gap-2 pb-5">
           <Button
             variant={isExceed ? 'primary' : 'secondary'}
-            className="w-[200px] p-xl"
+            className="h-[60px] w-[200px] p-xl"
             size="lg"
             onClick={handleRest}
           >
