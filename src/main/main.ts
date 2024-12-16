@@ -12,8 +12,13 @@ updateElectronApp({
   },
 });
 
+let mainWindow: BrowserWindow | null = null;
+let tray: Tray | null = null;
+let forceQuit = false;
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
+  forceQuit = true;
   app.quit();
 }
 
@@ -24,7 +29,7 @@ const WindowSizeMap = {
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  const browserWindow = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       webSecurity: false,
@@ -39,17 +44,17 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    browserWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    browserWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
   // // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  // browserWindow.webContents.openDevTools();
 
   // @note: 외부 링크 클릭 시 별도 브라우저로 열도록 설정함
   // 외부 링크 여부는 url이 https://로 시작하는지로 판단함
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+  browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https://')) {
       shell.openExternal(url);
       return { action: 'deny' };
@@ -57,7 +62,16 @@ const createWindow = () => {
     return { action: 'allow' };
   });
 
-  return mainWindow;
+  // @see: https://stackoverflow.com/questions/38309240/object-has-been-destroyed-when-open-secondary-child-window-in-electron-js/39135293
+  // 창이 닫히지 않고 숨겨지도록 설정함
+  browserWindow.on('close', (event) => {
+    if (!forceQuit) {
+      event.preventDefault();
+      browserWindow?.hide();
+    }
+  });
+
+  return browserWindow;
 };
 
 const trayIconMap: Record<string, string> = {
@@ -92,14 +106,17 @@ const createTray = (mainWindow: BrowserWindow) => {
       },
     },
     { type: 'separator' },
-    { label: '종료', role: 'quit' },
+    {
+      label: '종료',
+      click: () => {
+        forceQuit = true;
+        app.quit();
+      },
+    },
   ]);
   tray.setContextMenu(contextMenu);
   return tray;
 };
-
-let mainWindow: BrowserWindow | null = null;
-let tray: Tray | null = null;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -113,6 +130,7 @@ app.on('ready', () => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    forceQuit = true;
     app.quit();
   }
 });
