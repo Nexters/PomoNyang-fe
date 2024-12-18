@@ -21,7 +21,7 @@ import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/p
 
 // @note: 개발할 때, 초과시간까지 빠르게 테스트하기 위해 설정함
 // 원래대로 하고 싶으면 false로 변경해서 사용하면 됩니다
-const isFastForward = false; //import.meta.env.DEV;
+const isFastForward = import.meta.env.DEV;
 const taping = (ms: number) => (isFastForward ? Math.floor(ms / 60) : ms);
 
 const focusExceedMaxTime = taping(minutesToMs(60));
@@ -76,6 +76,8 @@ const Pomodoro = () => {
       onceExceedGoalTime: (mode) => {
         if (!user?.cat?.type) return;
         // 목표시간 초과 시 알림
+        // 초과시점에 창에 포커스 맞추기
+        window.electronAPI.showWindow();
         if (mode === 'focus') return createNotificationByMode(user.cat.type, 'focus-end');
         if (mode === 'rest') return createNotificationByMode(user.cat.type, 'rest-end');
       },
