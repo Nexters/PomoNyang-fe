@@ -12,15 +12,15 @@
     "lint": "eslint --ext .ts,.tsx ."
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.6.0",
-    "@electron-forge/maker-deb": "^7.6.0",
-    "@electron-forge/maker-rpm": "^7.6.0",
-    "@electron-forge/maker-squirrel": "^7.6.0",
-    "@electron-forge/maker-zip": "^7.6.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.6.0",
-    "@electron-forge/plugin-fuses": "^7.6.0",
-    "@electron-forge/plugin-vite": "^7.6.0",
-    "@electron-forge/publisher-github": "^7.6.0",
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron-forge/plugin-vite": "^7.4.0",
+    "@electron-forge/publisher-github": "^7.4.0",
     "@electron/fuses": "^1.8.0",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
@@ -38,10 +38,10 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.6",
-    "tailwindcss": "^3.4.16",
+    "tailwindcss": "^3.4.4",
     "ts-node": "^10.0.0",
     "typescript": "~4.5.4",
-    "vite": "^5.4.11",
+    "vite": "^5.0.12",
     "vite-plugin-svgr": "^4.2.0"
   },
   "author": {
@@ -88,10 +88,5 @@
     "update-electron-app": "^3.0.0",
     "usehooks-ts": "^3.1.0",
     "vaul": "^0.9.1"
-  },
-  "resolutions": {
-    "cross-spawn": "^7.0.3",
-    "path-to-regexp": "^0.1.10",
-    "body-parser": "^1.20.3"
   }
 }
