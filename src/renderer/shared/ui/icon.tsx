@@ -11,6 +11,7 @@ import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
 import ClockLineIcon from '@/shared/assets/svgs/clock-line.svg?react';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
+import EllipsisIcon from '@/shared/assets/svgs/ellipsis.svg?react';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
 import MenuIcon from '@/shared/assets/svgs/menu.svg?react';
 import MinimizeOff from '@/shared/assets/svgs/minimize-off.svg';
@@ -58,6 +59,7 @@ const icons = {
   pinOn: PinOn,
   minimizeOff: MinimizeOff,
   minimizeOn: MinimizeOn,
+  ellipsis: EllipsisIcon,
 } as const;
 const sizes = {
   xs: 16,
