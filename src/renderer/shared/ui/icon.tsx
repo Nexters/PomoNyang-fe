@@ -18,7 +18,7 @@ import MinimizeOff from '@/shared/assets/svgs/minimize-off.svg';
 import MinimizeOn from '@/shared/assets/svgs/minimize-on.svg';
 import MinusIcon from '@/shared/assets/svgs/minus.svg';
 import MinusSvgIcon from '@/shared/assets/svgs/minus.svg?react';
-import PenIcon from '@/shared/assets/svgs/pen.svg';
+import PenIcon from '@/shared/assets/svgs/pen.svg?react';
 import PinOff from '@/shared/assets/svgs/pin-off.svg';
 import PinOn from '@/shared/assets/svgs/pin-on.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
@@ -29,6 +29,7 @@ import PositiveIcon from '@/shared/assets/svgs/positive.svg';
 import ReadyForStatIcon from '@/shared/assets/svgs/ready-for-stat.svg';
 import RestTimeIcon from '@/shared/assets/svgs/rest-time.svg';
 import StimulusIcon from '@/shared/assets/svgs/stimulus.svg';
+import TrashIcon from '@/shared/assets/svgs/trash.svg';
 
 const icons = {
   placeholder: PlaceholderIcon,
@@ -60,6 +61,7 @@ const icons = {
   minimizeOff: MinimizeOff,
   minimizeOn: MinimizeOn,
   ellipsis: EllipsisIcon,
+  trash: TrashIcon,
 } as const;
 const sizes = {
   xs: 16,
