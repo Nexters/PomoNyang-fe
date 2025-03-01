@@ -10,6 +10,7 @@ import {
   SelectGroup,
   SelectGroupItem,
   DrawerDescription,
+  Popover,
 } from '@/shared/ui';
 import { cn, getCategoryIconName } from '@/shared/utils';
 
@@ -36,6 +37,12 @@ export const ChangeCategoryDrawer = ({
     setSelectedCategory(defaultCategory);
   }, [defaultCategory]);
 
+  useEffect(() => {
+    if (open) {
+      setMode('select');
+    }
+  }, [open]);
+
   const SelectModeDrawerContent = () => (
     <>
       <DrawerTitle asChild>
@@ -43,28 +50,54 @@ export const ChangeCategoryDrawer = ({
           <h2 className="header-3 py-1">카테고리</h2>
           <div className="flex gap-2">
             <button
-              className="h-10 w-10"
+              className="p-2"
               onClick={() => {
                 // TODO: 카테고리 추가 모달 열기
               }}
             >
               <Icon name="plusSvg" size="md" className="[&>path]:stroke-icon-primary" />
             </button>
-            <button
-              className="h-10 w-10"
-              onClick={() => {
-                // TODO: 수정/삭제 메뉴 오픈
-              }}
+            <Popover
+              content={
+                <div>
+                  <button
+                    className="body-sb flex items-center gap-2 px-3 py-2 text-text-secondary"
+                    onClick={() => setMode('edit')}
+                  >
+                    <Icon
+                      name="pen"
+                      size="sm"
+                      className="[&>path]:fill-icon-primary [&>path]:stroke-icon-primary"
+                    />
+                    수정
+                  </button>
+                  <button
+                    className="body-sb flex items-center gap-2 px-3 py-2 text-text-secondary"
+                    onClick={() => setMode('delete')}
+                  >
+                    <Icon
+                      name="trash"
+                      size="sm"
+                      className="[&>path]:fill-icon-primary [&>path]:stroke-icon-primary"
+                    />
+                    삭제
+                  </button>
+                </div>
+              }
+              contentProps={{ align: 'end' }}
             >
-              <Icon name="ellipsis" size="md" className="[&>path]:stroke-icon-primary" />
-            </button>
+              <button className="p-2">
+                <Icon name="ellipsis" size="md" className="[&>path]:stroke-icon-primary" />
+              </button>
+            </Popover>
           </div>
         </div>
       </DrawerTitle>
       <DrawerDescription asChild>
         <SelectGroup
-          defaultValue={selectedCategory}
+          value={selectedCategory}
           onValueChange={(value) => {
+            if (!value) return;
             onChangeCategory(value);
           }}
           className={cn(
