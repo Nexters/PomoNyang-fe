@@ -12,3 +12,4 @@ export * from './frame';
 export * from './guide';
 export * from './dialog';
 export * from './layouts';
+export * from './popover';
