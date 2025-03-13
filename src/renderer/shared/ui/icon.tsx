@@ -72,7 +72,7 @@ const sizes = {
 } as const;
 
 export type IconName = keyof typeof icons;
-export type IconSize = keyof typeof sizes;
+export type IconSize = keyof typeof sizes | number;
 
 export type IconProps = {
   name?: IconName;
@@ -87,7 +87,7 @@ export function Icon({
   ...restProps
 }: IconProps): JSX.Element {
   const Icon = icons[name];
-  const sizeValue = sizes[size];
+  const sizeValue = typeof size === 'string' ? sizes[size] : size;
 
   return typeof Icon === 'function' ? (
     <Icon className={className} style={{ ...style, width: sizeValue, height: sizeValue }} />
