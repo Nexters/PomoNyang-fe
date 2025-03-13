@@ -4,10 +4,7 @@ import { Category } from '@/entities/category';
 import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
 import { useAuthClient } from '@/shared/hooks';
 
-type UpdateCategoryBody = {
-  focusTime?: string;
-  restTime?: string;
-};
+type UpdateCategoryBody = Partial<Pick<Category, 'title' | 'iconType' | 'focusTime' | 'restTime'>>;
 
 type UpdateCategoryParams = {
   no: number;
