@@ -50,18 +50,14 @@ const Pomodoro = () => {
   const [timeoutMode, setTimeoutMode] = useState<Exclude<PomodoroMode, 'focus'> | null>(null);
   const timeoutDialogProps = useDisclosure();
 
-  const { data: categories } = useCategories();
+  const { currentCategory } = useCategories();
   const { data: user } = useUser();
   const { mutate: updateCategory } = useUpdateCategory();
   const { mutate: savePomodoro } = useAddPomodoro();
   const { minimized, setMinimized } = useMinimize();
   const { alwaysOnTop, setAlwaysOnTop } = useAlwaysOnTop();
 
-  const [currentCategory, setCurrentCategory] = useState(categories?.[0]);
   const currentCategoryTitle = currentCategory?.title || '';
-  useEffect(() => {
-    setCurrentCategory(categories?.[0]);
-  }, [categories]);
 
   const currentFocusTime = taping(isoDurationToMs(currentCategory?.focusTime));
   const currentRestTime = taping(isoDurationToMs(currentCategory?.restTime));
@@ -216,9 +212,6 @@ const Pomodoro = () => {
       <HomeScreen
         startTimer={startFocus}
         currentCategory={currentCategoryTitle}
-        setCurrentCategory={(title) => {
-          setCurrentCategory(categories?.find((category) => category.title === title));
-        }}
         currentFocusMinutes={msToMinutes(currentFocusTime)}
         currentRestMinutes={msToMinutes(currentRestTime)}
       />

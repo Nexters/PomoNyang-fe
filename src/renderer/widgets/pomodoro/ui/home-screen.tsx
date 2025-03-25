@@ -30,7 +30,6 @@ const getTooltipMessages = (catType?: CatType) => {
 type HomeScreenProps = {
   startTimer: () => void;
   currentCategory: string;
-  setCurrentCategory: (category: string) => void;
   currentFocusMinutes: number;
   currentRestMinutes: number;
 };
@@ -38,7 +37,6 @@ type HomeScreenProps = {
 export const HomeScreen = ({
   startTimer,
   currentCategory,
-  setCurrentCategory,
   currentFocusMinutes,
   currentRestMinutes,
 }: HomeScreenProps) => {
@@ -154,16 +152,6 @@ export const HomeScreen = ({
       <ChangeCategoryDrawer
         open={changeCategoryDrawerProps.isOpen}
         onOpenChange={changeCategoryDrawerProps.setIsOpen}
-        defaultCategory={currentCategory}
-        onChangeCategory={(category) => {
-          if (category === currentCategory) return;
-          setCurrentCategory(category);
-          toast({
-            iconName: 'check',
-            iconClassName: '[&>path]:stroke-icon-tertiary',
-            message: '카테고리를 변경했어요',
-          });
-        }}
       />
 
       {showGuide && (
