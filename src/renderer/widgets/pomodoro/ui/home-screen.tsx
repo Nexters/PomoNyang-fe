@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
@@ -41,6 +42,9 @@ export const HomeScreen = ({
   currentFocusMinutes,
   currentRestMinutes,
 }: HomeScreenProps) => {
+  const location = useLocation();
+  const openChangeCategoryDrawer = location.state?.openChangeCategoryDrawer ?? false;
+
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(LOCAL_STORAGE_KEY.GUIDE_SHOWN, true);
@@ -64,6 +68,12 @@ export const HomeScreen = ({
   useEffect(() => {
     showRandomMessage();
   }, [user?.cat?.type]);
+
+  useEffect(() => {
+    if (openChangeCategoryDrawer) {
+      changeCategoryDrawerProps.onOpen();
+    }
+  }, [openChangeCategoryDrawer]);
 
   const showRandomMessage = () => {
     const messages = getTooltipMessages(user?.cat?.type);
