@@ -1,5 +1,6 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
+import { Category } from '@/entities/category';
 import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
 import { useAuthClient } from '@/shared/hooks';
 
@@ -17,6 +18,18 @@ export const useSelectCategory = () => {
         `/api/v1/categories/select/${no}`,
         undefined,
       );
+    },
+    onMutate: ({ no }) => {
+      queryClient.cancelQueries({ queryKey: QUERY_KEY.CATEGORIES });
+
+      const categories = queryClient.getQueryData<Category[]>(QUERY_KEY.CATEGORIES);
+      if (!categories) return;
+
+      const optimisticCategories = categories.map((category) => ({
+        ...category,
+        isSelected: category.no === no,
+      }));
+      queryClient.setQueryData<Category[]>(QUERY_KEY.CATEGORIES, optimisticCategories);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY.CATEGORIES });
