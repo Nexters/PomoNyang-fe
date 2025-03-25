@@ -163,6 +163,7 @@ export const RestScreen = ({
           <div className="flex flex-col gap-3">
             <p className="body-sb text-text-disabled">다음부터 휴식시간을 바꿀까요?</p>
             <SelectGroup
+              type="single"
               className="flex"
               value={selectedNextAction}
               onValueChange={setSelectedNextAction}

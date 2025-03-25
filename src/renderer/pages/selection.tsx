@@ -120,6 +120,7 @@ const Selection = () => {
           </div>
 
           <SelectGroup
+            type="single"
             className="flex"
             value={selectedCatId}
             onValueChange={(nextCatId) => {

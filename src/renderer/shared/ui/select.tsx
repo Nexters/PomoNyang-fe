@@ -1,17 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import React__default from 'react';
 
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/shared/utils';
-
-declare const CustomSingleSelectGroup: React__default.ForwardRefExoticComponent<
-  Omit<ToggleGroupPrimitive.ToggleGroupSingleProps, 'type'> &
-    React__default.RefAttributes<HTMLDivElement>
->;
 
 const selectVariants = cva(
   'flex-col items-center justify-center rounded-xs ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ',
@@ -38,14 +32,13 @@ const ToggleGroupContext = React.createContext<VariantProps<typeof selectVariant
 });
 
 const SelectGroup = React.forwardRef<
-  React.ElementRef<typeof CustomSingleSelectGroup>,
-  React.ComponentPropsWithoutRef<typeof CustomSingleSelectGroup> &
+  React.ElementRef<typeof ToggleGroupPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> &
     VariantProps<typeof selectVariants>
 >(({ className, variant, size, children, ...props }, ref) => {
   return (
     <ToggleGroupPrimitive.Root
       ref={ref}
-      type="single"
       className={cn('flex items-center justify-center gap-1', className)}
       {...props}
     >
