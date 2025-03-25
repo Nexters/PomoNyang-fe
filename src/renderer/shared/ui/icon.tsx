@@ -25,6 +25,7 @@ import ClockIcon from '@/shared/assets/svgs/clock.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
 import EllipsisIcon from '@/shared/assets/svgs/ellipsis.svg?react';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
+import LockIcon from '@/shared/assets/svgs/lock.svg?react';
 import MenuIcon from '@/shared/assets/svgs/menu.svg?react';
 import MinimizeOff from '@/shared/assets/svgs/minimize-off.svg';
 import MinimizeOn from '@/shared/assets/svgs/minimize-on.svg';
@@ -86,6 +87,7 @@ const icons = {
   minimizeOn: MinimizeOn,
   ellipsis: EllipsisIcon,
   trash: TrashIcon,
+  lock: LockIcon,
 } as const;
 const sizes = {
   xs: 16,

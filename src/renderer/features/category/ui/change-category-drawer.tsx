@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { useCategories } from '@/features/category';
 import { PATH } from '@/shared/constants';
@@ -15,7 +15,7 @@ import {
   DrawerDescription,
   Popover,
 } from '@/shared/ui';
-import { cn, getCategoryIconName } from '@/shared/utils';
+import { cn, getCategoryIconNameByIconType } from '@/shared/utils';
 
 type ChangeCategoryDrawerProps = {
   open: boolean;
@@ -33,7 +33,7 @@ export const ChangeCategoryDrawer = ({
 }: ChangeCategoryDrawerProps) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
-  const [mode, setMode] = useState<ChangeCategoryDrawerMode>('select');
+  const [mode, setMode] = useState<ChangeCategoryDrawerMode>('edit');
   const { data: categories } = useCategories();
   const hasMultipleCategories = !!categories && categories.length > 1;
 
@@ -43,7 +43,7 @@ export const ChangeCategoryDrawer = ({
 
   useEffect(() => {
     if (open) {
-      setMode('select');
+      // setMode('select');
     }
   }, [open]);
 
@@ -115,7 +115,7 @@ export const ChangeCategoryDrawer = ({
               value={category.title}
               className="flex w-full flex-row items-center justify-start gap-2 p-5"
             >
-              <Icon name={getCategoryIconName(category.title)} size="sm" />
+              <Icon name={getCategoryIconNameByIconType(category.iconType)} size="sm" />
               <span className="body-sb text-text-primary">{category.title}</span>
             </SelectGroupItem>
           ))}
@@ -123,7 +123,59 @@ export const ChangeCategoryDrawer = ({
       </DrawerDescription>
     </>
   );
-  const EditModeDrawerContent = () => <></>;
+  const EditModeDrawerContent = () => (
+    <>
+      <DrawerTitle asChild>
+        <div className="ml-xl mr-sm">
+          <div className="mb-1 flex items-center justify-between gap-2">
+            <h2 className="header-3 py-1">카테고리 수정</h2>
+            <button
+              className="body-sb px-4 py-2 text-text-secondary"
+              onClick={() => setMode('select')}
+            >
+              취소
+            </button>
+          </div>
+          <p className="body-r text-text-secondary">수정할 카테고리를 선택해주세요.</p>
+        </div>
+      </DrawerTitle>
+      <DrawerDescription asChild>
+        <SelectGroup
+          // @hack: lock 걸린 SelectGroupItem 클릭 시 선택되었다는 표시를 보여주지 않기 위함
+          value={undefined}
+          className={cn(
+            'grid min-h-[120px] gap-2 px-4 py-5',
+            hasMultipleCategories ? 'grid-cols-2' : 'grid-cols-1',
+          )}
+        >
+          {categories?.map((category, index) => {
+            const disabled = index === 0;
+            return (
+              <SelectGroupItem
+                key={category.no}
+                value={category.title}
+                className="flex w-full flex-row items-center justify-start gap-2 p-5"
+                onClick={() => {
+                  if (disabled) return;
+                  navigate(generatePath(PATH.CATEGORY, { id: `${category.no}` }));
+                }}
+              >
+                <Icon
+                  name={disabled ? 'lock' : getCategoryIconNameByIconType(category.iconType)}
+                  size="sm"
+                />
+                <span
+                  className={cn('body-sb', disabled ? 'text-text-disabled' : 'text-text-primary')}
+                >
+                  {category.title}
+                </span>
+              </SelectGroupItem>
+            );
+          })}
+        </SelectGroup>
+      </DrawerDescription>
+    </>
+  );
   const DeleteModeDrawerContent = () => <></>;
 
   return (
