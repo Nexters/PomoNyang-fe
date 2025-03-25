@@ -19,12 +19,12 @@ import { CategoryIconTypeMap, cn } from '@/shared/utils';
 
 const CategoryPage = () => {
   const { id } = useParams();
-  const categoryId = id != null ? +id : undefined;
-  const isEditMode = !!categoryId;
+  const categoryNo = id ? +id : undefined;
+  const isEditMode = !!categoryNo;
   const navigate = useNavigate();
   const drawerProps = useDisclosure();
 
-  const { data: category } = useCategory(categoryId);
+  const { data: category } = useCategory(categoryNo);
   const { mutateAsync: createCategory } = useCreateCategory();
   const { mutateAsync: updateCategory } = useUpdateCategory();
 
@@ -61,7 +61,7 @@ const CategoryPage = () => {
 
     if (isEditMode) {
       await updateCategory({
-        no: categoryId,
+        no: categoryNo,
         body: {
           title: trimmedCategoryName,
           iconType: selectedCategoryIconType,

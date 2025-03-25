@@ -67,7 +67,7 @@ const SelectModeDrawerContent = ({ setMode }: SelectModeDrawerContentProps) => {
             <button
               className="p-2"
               onClick={() => {
-                navigate(PATH.CATEGORY);
+                navigate(generatePath(PATH.CATEGORY));
               }}
             >
               <Icon name="plusSvg" size="md" className="[&>path]:stroke-icon-primary" />
