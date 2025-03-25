@@ -6,11 +6,13 @@ import { useAuthClient } from '@/shared/hooks';
 
 export const useCategories = () => {
   const authClient = useAuthClient();
-  return useQuery({
+  const query = useQuery({
     queryKey: QUERY_KEY.CATEGORIES,
     queryFn: async () => {
       return await authClient?.get<Category[]>('/api/v1/categories');
     },
     enabled: !!authClient,
   });
+  const currentCategory = query.data?.find((category) => category.isSelected);
+  return { ...query, currentCategory };
 };

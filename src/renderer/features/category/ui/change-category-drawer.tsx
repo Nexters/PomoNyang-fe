@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import { Category } from '@/entities/category';
-import { useCategories, useDeleteCategories } from '@/features/category';
+import { useCategories, useDeleteCategories, useSelectCategory } from '@/features/category';
 import { PATH } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
 import {
@@ -19,32 +17,18 @@ import {
   Button,
   DrawerFooter,
   Dialog,
+  useToast,
 } from '@/shared/ui';
 import { cn, getCategoryIconNameByIconType } from '@/shared/utils';
 
 type ChangeCategoryDrawerProps = {
   open: boolean;
-  defaultCategory: string;
   onOpenChange: (isOpen: boolean) => void;
-  onChangeCategory: (category: string) => void;
 };
 type ChangeCategoryDrawerMode = 'select' | 'edit' | 'delete';
 
-export const ChangeCategoryDrawer = ({
-  open,
-  defaultCategory,
-  onOpenChange,
-  onChangeCategory,
-}: ChangeCategoryDrawerProps) => {
-  const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
+export const ChangeCategoryDrawer = ({ open, onOpenChange }: ChangeCategoryDrawerProps) => {
   const [mode, setMode] = useState<ChangeCategoryDrawerMode>('select');
-  const { data: categories } = useCategories();
-  const hasMultipleCategories = !!categories && categories.length > 1;
-
-  useEffect(() => {
-    setSelectedCategory(defaultCategory);
-  }, [defaultCategory]);
 
   useEffect(() => {
     if (open) {
@@ -52,7 +36,29 @@ export const ChangeCategoryDrawer = ({
     }
   }, [open]);
 
-  const SelectModeDrawerContent = () => (
+  return (
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <DrawerContent>
+        {mode === 'select' && <SelectModeDrawerContent setMode={setMode} />}
+        {mode === 'edit' && <EditModeDrawerContent setMode={setMode} />}
+        {mode === 'delete' && <DeleteModeDrawerContent setMode={setMode} />}
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+type SelectModeDrawerContentProps = {
+  setMode: (mode: ChangeCategoryDrawerMode) => void;
+};
+const SelectModeDrawerContent = ({ setMode }: SelectModeDrawerContentProps) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const { mutateAsync: selectCategory } = useSelectCategory();
+  const { data: categories, currentCategory } = useCategories();
+  const hasMultipleCategories = !!categories && categories.length > 1;
+
+  return (
     <>
       <DrawerTitle asChild>
         <div className="ml-xl mr-sm flex items-center justify-between gap-2">
@@ -105,10 +111,16 @@ export const ChangeCategoryDrawer = ({
       <DrawerDescription asChild>
         <SelectGroup
           type="single"
-          value={selectedCategory}
-          onValueChange={(value) => {
+          value={`${currentCategory?.no}`}
+          onValueChange={async (value) => {
             if (!value) return;
-            onChangeCategory(value);
+            if (value === `${currentCategory?.no}`) return;
+            await selectCategory({ no: Number(value) });
+            toast({
+              iconName: 'check',
+              iconClassName: '[&>path]:stroke-icon-tertiary',
+              message: '카테고리를 변경했어요',
+            });
           }}
           className={cn(
             'grid min-h-[120px] gap-2 px-4 py-5',
@@ -118,7 +130,7 @@ export const ChangeCategoryDrawer = ({
           {categories?.map((category) => (
             <SelectGroupItem
               key={category.no}
-              value={category.title}
+              value={`${category.no}`}
               className="flex w-full flex-row items-center justify-start gap-2 p-5"
             >
               <Icon name={getCategoryIconNameByIconType(category.iconType)} size="sm" />
@@ -129,7 +141,17 @@ export const ChangeCategoryDrawer = ({
       </DrawerDescription>
     </>
   );
-  const EditModeDrawerContent = () => (
+};
+
+//
+type EditModeDrawerContentProps = {
+  setMode: (mode: ChangeCategoryDrawerMode) => void;
+};
+const EditModeDrawerContent = ({ setMode }: EditModeDrawerContentProps) => {
+  const navigate = useNavigate();
+  const { data: categories } = useCategories();
+  const hasMultipleCategories = !!categories && categories.length > 1;
+  return (
     <>
       <DrawerTitle asChild>
         <div className="ml-xl mr-sm">
@@ -160,7 +182,7 @@ export const ChangeCategoryDrawer = ({
             return (
               <SelectGroupItem
                 key={category.no}
-                value={category.title}
+                value={`${category.no}`}
                 className="flex w-full flex-row items-center justify-start gap-2 p-5"
                 onClick={() => {
                   if (disabled) return;
@@ -183,34 +205,21 @@ export const ChangeCategoryDrawer = ({
       </DrawerDescription>
     </>
   );
-
-  return (
-    <Drawer
-      open={open}
-      onOpenChange={onOpenChange}
-      onClose={() => {
-        setSelectedCategory(defaultCategory);
-      }}
-    >
-      <DrawerContent>
-        {mode === 'select' && <SelectModeDrawerContent />}
-        {mode === 'edit' && <EditModeDrawerContent />}
-        {mode === 'delete' && <DeleteModeDrawerContent categories={categories} setMode={setMode} />}
-      </DrawerContent>
-    </Drawer>
-  );
 };
+
+//
 
 type DeleteModeDrawerContentProps = {
-  categories?: Category[];
   setMode: (mode: ChangeCategoryDrawerMode) => void;
 };
-const DeleteModeDrawerContent = ({ categories, setMode }: DeleteModeDrawerContentProps) => {
+const DeleteModeDrawerContent = ({ setMode }: DeleteModeDrawerContentProps) => {
+  const { data: categories } = useCategories();
+  const hasMultipleCategories = !!categories && categories.length > 1;
+
   const { mutateAsync: deleteCategories } = useDeleteCategories();
   const confirmDeleteDialogProps = useDisclosure();
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
-  const hasMultipleCategories = !!categories && categories.length > 1;
   const isDisabledCompleteButton = selectedCategoryIds.length === 0;
 
   const handleClickDeleteButton = async () => {
