@@ -3,17 +3,19 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
 import { useAuthClient } from '@/shared/hooks';
 
-type DeleteCategoryParams = {
-  no: number;
+type DeleteCategoriesParams = {
+  body: {
+    no: number[];
+  };
 };
 
-export const useDeleteCategory = () => {
+export const useDeleteCategories = () => {
   const queryClient = useQueryClient();
   const authClient = useAuthClient();
   return useMutation({
     mutationKey: MUTATION_KEY.DELETE_CATEGORY,
-    mutationFn: async ({ no }: DeleteCategoryParams) => {
-      return await authClient?.delete<unknown>(`/api/v1/categories/${no}`);
+    mutationFn: async ({ body }: DeleteCategoriesParams) => {
+      return await authClient?.delete<unknown>('api/v1/categories', body);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY.CATEGORIES });
