@@ -20,6 +20,8 @@ import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
 import CheckIcon from '@/shared/assets/svgs/check.svg?react';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
 import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
+import CircleCheck from '@/shared/assets/svgs/circle-check.svg';
+import CircleUncheck from '@/shared/assets/svgs/circle-uncheck.svg';
 import ClockLineIcon from '@/shared/assets/svgs/clock-line.svg?react';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
@@ -88,6 +90,8 @@ const icons = {
   ellipsis: EllipsisIcon,
   trash: TrashIcon,
   lock: LockIcon,
+  circleCheck: CircleCheck,
+  circleUncheck: CircleUncheck,
 } as const;
 const sizes = {
   xs: 16,
