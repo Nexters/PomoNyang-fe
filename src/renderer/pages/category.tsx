@@ -31,6 +31,9 @@ const CategoryPage = () => {
   const [typedCategoryName, setTypedCategoryName] = useState(category?.title || '');
   const trimmedCategoryName = typedCategoryName.trim();
   const isEmptyCategoryName = !trimmedCategoryName;
+  const isDisabledCompleteButton = isEditMode
+    ? isEmptyCategoryName || category?.title === trimmedCategoryName
+    : isEmptyCategoryName;
 
   const [selectedCategoryIconType, setSelectedCategoryIconType] = useState<CategoryIconType>(
     category?.iconType || 'CAT',
@@ -108,7 +111,7 @@ const CategoryPage = () => {
         <Frame.BottomBar>
           <Button
             className="w-full"
-            disabled={isEmptyCategoryName}
+            disabled={isDisabledCompleteButton}
             onClick={handleClickCompleteButton}
           >
             확인
