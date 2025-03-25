@@ -88,7 +88,7 @@ const CategoryPage = () => {
         <div className="flex h-full w-full flex-col items-center">
           <button className="relative mt-8 h-[80px] w-[80px]" onClick={handleClickChangeIconButton}>
             <div className="flex h-full w-full items-center justify-center rounded-md bg-background-secondary">
-              <Icon name={CategoryIconTypeMap[selectedCategoryIconType]} size={30} />
+              <Icon name={CategoryIconTypeMap[selectedCategoryIconType]} size={40} />
             </div>
             <div className="absolute bottom-0 right-[-8px] h-[36px] w-[36px] rounded-full bg-background-inverse p-2">
               <Icon
@@ -122,7 +122,7 @@ const CategoryPage = () => {
       <Drawer open={drawerProps.isOpen} onOpenChange={drawerProps.setIsOpen}>
         <DrawerContent>
           <DrawerDescription className="p-5">
-            <div className="grid grid-cols-[repeat(4,minmax(0,56px))] justify-between gap-y-2 p-3">
+            <div className="mx-auto grid max-w-md grid-cols-[repeat(4,minmax(0,56px))] justify-between gap-y-2 p-3">
               {Object.entries(CategoryIconTypeMap).map(([categoryIconType, iconName], index) => (
                 <button
                   key={index}
@@ -136,7 +136,7 @@ const CategoryPage = () => {
                     drawerProps.setIsOpen(false);
                   }}
                 >
-                  <Icon name={iconName} size={24} />
+                  <Icon name={iconName} size={32} />
                 </button>
               ))}
             </div>
