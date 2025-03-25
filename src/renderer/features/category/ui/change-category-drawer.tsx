@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import { useCategories } from '@/features/category';
+import { PATH } from '@/shared/constants';
 import {
   Icon,
   Drawer,
@@ -28,6 +31,7 @@ export const ChangeCategoryDrawer = ({
   onOpenChange,
   onChangeCategory,
 }: ChangeCategoryDrawerProps) => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
   const [mode, setMode] = useState<ChangeCategoryDrawerMode>('select');
   const { data: categories } = useCategories();
@@ -52,7 +56,7 @@ export const ChangeCategoryDrawer = ({
             <button
               className="p-2"
               onClick={() => {
-                // TODO: 카테고리 추가 모달 열기
+                navigate(PATH.CATEGORY);
               }}
             >
               <Icon name="plusSvg" size="md" className="[&>path]:stroke-icon-primary" />
