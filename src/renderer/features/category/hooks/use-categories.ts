@@ -13,6 +13,7 @@ export const useCategories = () => {
     },
     enabled: !!authClient,
   });
+  const sortedData = query.data?.sort((a, b) => a.position - b.position);
   const currentCategory = query.data?.find((category) => category.isSelected);
-  return { ...query, currentCategory };
+  return { ...query, data: sortedData, currentCategory };
 };
