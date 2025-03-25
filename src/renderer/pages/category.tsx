@@ -13,27 +13,9 @@ import {
   DrawerDescription,
   Frame,
   Icon,
-  IconName,
   SimpleLayout,
 } from '@/shared/ui';
-import { cn } from '@/shared/utils';
-
-const CategoryIconTypeMap: Record<CategoryIconType, IconName> = {
-  CAT: 'categoryCat',
-  BOX_PEN: 'categoryBoxPen',
-  OPEN_BOOK: 'categoryOpenBook',
-  BRIEFCASE: 'categoryBriefcase',
-  //
-  LAPTOP: 'categoryLaptop',
-  DUMBBELL: 'categoryDumbbell',
-  LIGHTNING: 'categoryLightning',
-  FIRE: 'categoryFire',
-  //
-  HEART: 'categoryHeart',
-  ASTERISK: 'categoryAsterisk',
-  SUN: 'categorySun',
-  MOON: 'categoryMoon',
-};
+import { CategoryIconTypeMap, cn } from '@/shared/utils';
 
 const CategoryPage = () => {
   const { id } = useParams();
