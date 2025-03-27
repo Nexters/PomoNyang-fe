@@ -29,15 +29,16 @@ const CategoryPage = () => {
   const { mutateAsync: updateCategory } = useUpdateCategory();
 
   const [typedCategoryName, setTypedCategoryName] = useState(category?.title || '');
-  const trimmedCategoryName = typedCategoryName.trim();
-  const isEmptyCategoryName = !trimmedCategoryName;
-  const isDisabledCompleteButton = isEditMode
-    ? isEmptyCategoryName || category?.title === trimmedCategoryName
-    : isEmptyCategoryName;
-
   const [selectedCategoryIconType, setSelectedCategoryIconType] = useState<CategoryIconType>(
     category?.iconType || 'CAT',
   );
+
+  const trimmedCategoryName = typedCategoryName.trim();
+  const isEmptyCategoryName = !trimmedCategoryName;
+  const isDisabledCompleteButton = isEditMode
+    ? isEmptyCategoryName ||
+      (category?.title === trimmedCategoryName && category?.iconType === selectedCategoryIconType)
+    : isEmptyCategoryName;
 
   useEffect(() => {
     // sync
