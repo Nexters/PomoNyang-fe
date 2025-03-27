@@ -2,11 +2,9 @@ import { cn } from '../utils';
 
 import BackIcon from '@/shared/assets/svgs/back.svg';
 import CategoryAsteriskIcon from '@/shared/assets/svgs/category-asterisk.svg';
-import CategoryBookIcon from '@/shared/assets/svgs/category-book.svg';
 import CategoryBoxPenIcon from '@/shared/assets/svgs/category-box-pen.svg';
 import CategoryBriefcaseIcon from '@/shared/assets/svgs/category-briefcase.svg';
 import CategoryCatIcon from '@/shared/assets/svgs/category-cat.svg';
-import CategoryDefaultIcon from '@/shared/assets/svgs/category-default.svg';
 import CategoryDumbbellIcon from '@/shared/assets/svgs/category-dumbbell.svg';
 import CategoryFireIcon from '@/shared/assets/svgs/category-fire.svg';
 import CategoryHeartIcon from '@/shared/assets/svgs/category-heart.svg';
@@ -14,9 +12,7 @@ import CategoryLaptopIcon from '@/shared/assets/svgs/category-laptop.svg';
 import CategoryLightningIcon from '@/shared/assets/svgs/category-lightning.svg';
 import CategoryMoonIcon from '@/shared/assets/svgs/category-moon.svg';
 import CategoryOpenBookIcon from '@/shared/assets/svgs/category-open-book.svg';
-import CategoryStudyIcon from '@/shared/assets/svgs/category-study.svg';
 import CategorySunIcon from '@/shared/assets/svgs/category-sun.svg';
-import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
 import CheckIcon from '@/shared/assets/svgs/check.svg?react';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
 import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
@@ -50,10 +46,6 @@ const icons = {
   placeholder: PlaceholderIcon,
   back: BackIcon,
   menu: MenuIcon,
-  categoryDefault: CategoryDefaultIcon,
-  categoryStudy: CategoryStudyIcon,
-  categoryWork: CategoryWorkIcon,
-  categoryBook: CategoryBookIcon,
   categoryCat: CategoryCatIcon,
   categoryBoxPen: CategoryBoxPenIcon,
   categoryOpenBook: CategoryOpenBookIcon,
