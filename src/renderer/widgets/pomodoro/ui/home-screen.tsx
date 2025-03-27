@@ -4,14 +4,15 @@ import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
-import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
+import { Category } from '@/entities/category';
+import { useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useDisclosure, useRiveCat } from '@/shared/hooks';
 import { Button, Guide, Icon, SidebarLayout, Tooltip, useToast } from '@/shared/ui';
-import { getCategoryIconName, createIsoDuration } from '@/shared/utils';
+import { createIsoDuration, getCategoryIconName } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
@@ -29,7 +30,7 @@ const getTooltipMessages = (catType?: CatType) => {
 
 type HomeScreenProps = {
   startTimer: () => void;
-  currentCategory: string;
+  currentCategory: Category;
   currentFocusMinutes: number;
   currentRestMinutes: number;
 };
@@ -50,7 +51,6 @@ export const HomeScreen = ({
   const changeTimeDialogProps = useDisclosure();
   const changeCategoryDrawerProps = useDisclosure();
 
-  const { data: categories } = useCategories();
   const { mutate: updateCategory } = useUpdateCategory();
   const { data: user } = useUser();
 
@@ -110,8 +110,8 @@ export const HomeScreen = ({
                 changeCategoryDrawerProps.onOpen();
               }}
             >
-              <Icon name={getCategoryIconName(currentCategory)} size="sm" />
-              {currentCategory}
+              <Icon name={getCategoryIconName(currentCategory.iconType)} size="sm" />
+              {currentCategory.title}
             </Button>
             <div className="flex items-center gap-md p-xs" id="timeAdjustDiv">
               <button
@@ -171,7 +171,7 @@ export const HomeScreen = ({
           if (clickedMode === 'focus' && minutes === currentFocusMinutes) return;
           if (clickedMode === 'rest' && minutes === currentRestMinutes) return;
 
-          const categoryNo = categories?.find((_category) => _category.title === category)?.no;
+          const categoryNo = category.no;
           if (!categoryNo) return;
 
           const body =

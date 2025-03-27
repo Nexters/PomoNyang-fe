@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { Category } from '@/entities/category';
 import {
   MAX_FOCUS_MINUTES,
   MAX_REST_MINUTES,
@@ -12,11 +13,11 @@ import { getCategoryIconName, padNumber } from '@/shared/utils';
 
 export type ChangeTimeDialogProps = Pick<DialogProps, 'open' | 'onOpenChange'> & {
   mode: 'focus' | 'rest';
-  category: string;
+  category: Category;
   // FIXME: 분, 초를 나누어서 받는게 괜찮을지 다시 확인 필요
   categoryTimeMinutes: number;
   categoryTimeSeconds: number;
-  onChangeCategoryTime?: (category: string, minutes: number, seconds: number) => void;
+  onChangeCategoryTime?: (category: Category, minutes: number, seconds: number) => void;
 };
 
 export const ChangeTimeDialog = ({
@@ -91,8 +92,8 @@ export const ChangeTimeDialog = ({
         <div className="h-[40px]" />
         <div className="flex flex-col">
           <div className="mb-3 inline-flex items-center justify-center gap-2 px-4 py-2">
-            <Icon name={getCategoryIconName(category)} size="sm" />
-            <span className="body-sb text-text-secondary">{category}</span>
+            <Icon name={getCategoryIconName(category.iconType)} size="sm" />
+            <span className="body-sb text-text-secondary">{category.title}</span>
           </div>
 
           <div className="relative flex select-none items-center justify-center gap-3">

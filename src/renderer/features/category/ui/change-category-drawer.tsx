@@ -19,7 +19,7 @@ import {
   Dialog,
   // useToast,
 } from '@/shared/ui';
-import { cn, getCategoryIconNameByIconType } from '@/shared/utils';
+import { cn, getCategoryIconName } from '@/shared/utils';
 
 type ChangeCategoryDrawerProps = {
   open: boolean;
@@ -138,7 +138,7 @@ const SelectModeDrawerContent = ({ setMode, onClose }: SelectModeDrawerContentPr
               value={`${category.no}`}
               className="flex w-full flex-row items-center justify-start gap-2 p-5"
             >
-              <Icon name={getCategoryIconNameByIconType(category.iconType)} size="sm" />
+              <Icon name={getCategoryIconName(category.iconType)} size="sm" />
               <span className="body-sb text-text-primary">{category.title}</span>
             </SelectGroupItem>
           ))}
@@ -194,10 +194,7 @@ const EditModeDrawerContent = ({ setMode }: EditModeDrawerContentProps) => {
                   navigate(generatePath(PATH.CATEGORY, { id: `${category.no}` }));
                 }}
               >
-                <Icon
-                  name={disabled ? 'lock' : getCategoryIconNameByIconType(category.iconType)}
-                  size="sm"
-                />
+                <Icon name={disabled ? 'lock' : getCategoryIconName(category.iconType)} size="sm" />
                 <span
                   className={cn('body-sb', disabled ? 'text-text-disabled' : 'text-text-primary')}
                 >

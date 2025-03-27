@@ -1,5 +1,6 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
+import { Category } from '@/entities/category';
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
@@ -10,7 +11,7 @@ import { Button, Icon, SelectGroup, SelectGroupItem, SimpleLayout } from '@/shar
 import { msToTime } from '@/shared/utils';
 
 type RestWaitScreenProps = {
-  currentCategory: string;
+  currentCategory: Category;
   currentFocusMinutes: number;
   elapsedTime: number;
   exceededTime: number;
