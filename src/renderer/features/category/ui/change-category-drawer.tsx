@@ -17,7 +17,7 @@ import {
   Button,
   DrawerFooter,
   Dialog,
-  useToast,
+  // useToast,
 } from '@/shared/ui';
 import { cn, getCategoryIconNameByIconType } from '@/shared/utils';
 
@@ -39,7 +39,9 @@ export const ChangeCategoryDrawer = ({ open, onOpenChange }: ChangeCategoryDrawe
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent>
-        {mode === 'select' && <SelectModeDrawerContent setMode={setMode} />}
+        {mode === 'select' && (
+          <SelectModeDrawerContent setMode={setMode} onClose={() => onOpenChange(false)} />
+        )}
         {mode === 'edit' && <EditModeDrawerContent setMode={setMode} />}
         {mode === 'delete' && <DeleteModeDrawerContent setMode={setMode} />}
       </DrawerContent>
@@ -49,10 +51,11 @@ export const ChangeCategoryDrawer = ({ open, onOpenChange }: ChangeCategoryDrawe
 
 type SelectModeDrawerContentProps = {
   setMode: (mode: ChangeCategoryDrawerMode) => void;
+  onClose: () => void;
 };
-const SelectModeDrawerContent = ({ setMode }: SelectModeDrawerContentProps) => {
+const SelectModeDrawerContent = ({ setMode, onClose }: SelectModeDrawerContentProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  // const { toast } = useToast();
 
   const { mutateAsync: selectCategory } = useSelectCategory();
   const { data: categories, currentCategory } = useCategories();
@@ -116,11 +119,13 @@ const SelectModeDrawerContent = ({ setMode }: SelectModeDrawerContentProps) => {
             if (!value) return;
             if (value === `${currentCategory?.no}`) return;
             await selectCategory({ no: Number(value) });
-            toast({
-              iconName: 'check',
-              iconClassName: '[&>path]:stroke-icon-tertiary',
-              message: '카테고리를 변경했어요',
-            });
+            onClose();
+            // 닫히고 토스트 띄우는게 별로인 것 같아 임의 주석처리
+            // toast({
+            //   iconName: 'check',
+            //   iconClassName: '[&>path]:stroke-icon-tertiary',
+            //   message: '카테고리를 변경했어요',
+            // });
           }}
           className={cn(
             'grid min-h-[120px] gap-2 px-4 py-5',
