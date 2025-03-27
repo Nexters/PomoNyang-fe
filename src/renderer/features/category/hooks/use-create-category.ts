@@ -6,7 +6,7 @@ import { useAuthClient } from '@/shared/hooks';
 
 type CreateCategoryBody = {
   title: string;
-  iconType: string;
+  iconType: CategoryIconType;
 };
 type CreateCategoryParams = {
   body: CreateCategoryBody;
@@ -30,7 +30,7 @@ export const useCreateCategory = () => {
       const optimisticCategory: Category = {
         no: Date.now(),
         title: body.title,
-        iconType: body.iconType as CategoryIconType,
+        iconType: body.iconType,
         position: lastCategory.position + 1,
         focusTime: 'PT25M',
         restTime: 'PT10M',
