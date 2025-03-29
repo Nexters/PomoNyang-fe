@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { CategoryIconType } from '@/entities/category';
-import { useUpdateCategory, useCategory, useCreateCategory } from '@/features/category';
+import {
+  useUpdateCategory,
+  useCategory,
+  useCreateCategory,
+  useCategories,
+} from '@/features/category';
 import { PATH } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
 import {
@@ -17,6 +22,8 @@ import {
 } from '@/shared/ui';
 import { CategoryIconTypeMap, cn } from '@/shared/utils';
 
+const CATEGORY_NAME_MAX_LENGTH = 10;
+
 const CategoryPage = () => {
   const { id } = useParams();
   const categoryNo = id ? +id : undefined;
@@ -25,20 +32,24 @@ const CategoryPage = () => {
   const drawerProps = useDisclosure();
 
   const { data: category } = useCategory(categoryNo);
-  const { mutateAsync: createCategory } = useCreateCategory();
-  const { mutateAsync: updateCategory } = useUpdateCategory();
+  const { data: categories } = useCategories();
+  const { mutateAsync: createCategory, isPending: isCreating } = useCreateCategory();
+  const { mutateAsync: updateCategory, isPending: isUpdating } = useUpdateCategory();
+  const isPending = isCreating || isUpdating;
 
   const [typedCategoryName, setTypedCategoryName] = useState(category?.title || '');
   const [selectedCategoryIconType, setSelectedCategoryIconType] = useState<CategoryIconType>(
     category?.iconType || 'CAT',
   );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const trimmedCategoryName = typedCategoryName.trim();
   const isEmptyCategoryName = !trimmedCategoryName;
-  const isDisabledCompleteButton = isEditMode
+  const isNotSavable = isEditMode
     ? isEmptyCategoryName ||
       (category?.title === trimmedCategoryName && category?.iconType === selectedCategoryIconType)
     : isEmptyCategoryName;
+  const isDisabledCompleteButton = isPending || isNotSavable || !!errorMessage;
 
   useEffect(() => {
     // sync
@@ -47,6 +58,20 @@ const CategoryPage = () => {
       setSelectedCategoryIconType(category.iconType as CategoryIconType);
     }
   }, [category]);
+
+  useEffect(() => {
+    const isTooLong = trimmedCategoryName.length > CATEGORY_NAME_MAX_LENGTH;
+    const isDuplicated = categories?.some(
+      (category) => category.title === trimmedCategoryName && category.no !== categoryNo,
+    );
+    if (isTooLong) {
+      return setErrorMessage(`최대 ${CATEGORY_NAME_MAX_LENGTH}글자까지 입력할 수 있어요.`);
+    }
+    if (isDuplicated) {
+      return setErrorMessage('이미 존재하는 카테고리예요.');
+    }
+    setErrorMessage(null);
+  }, [trimmedCategoryName, categories, categoryNo]);
 
   const handleClickChangeIconButton = () => {
     drawerProps.setIsOpen(true);
@@ -107,6 +132,9 @@ const CategoryPage = () => {
             placeholder="카테고리 이름"
             className="body-sb mt-6 w-full rounded-sm bg-white p-lg text-text-primary caret-text-accent-1 placeholder:text-text-disabled"
           />
+
+          {/* FIXME: 에러 메시지 스타일 임의로 지정 */}
+          {errorMessage && <p className="subBody-r mt-3 text-text-accent-1">{errorMessage}</p>}
         </div>
 
         <Frame.BottomBar>
