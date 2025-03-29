@@ -134,7 +134,9 @@ const CategoryPage = () => {
           />
 
           {/* FIXME: 에러 메시지 스타일 임의로 지정 */}
-          {errorMessage && <p className="subBody-r mt-3 text-text-accent-1">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="subBody-r mt-3 w-full text-left text-text-accent-1">{errorMessage}</p>
+          )}
         </div>
 
         <Frame.BottomBar>
