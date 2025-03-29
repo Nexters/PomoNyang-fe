@@ -49,6 +49,8 @@ export const ChangeCategoryDrawer = ({ open, onOpenChange }: ChangeCategoryDrawe
   );
 };
 
+const MAX_CATEGORY_COUNT = 10;
+
 type SelectModeDrawerContentProps = {
   setMode: (mode: ChangeCategoryDrawerMode) => void;
   onClose: () => void;
@@ -60,6 +62,7 @@ const SelectModeDrawerContent = ({ setMode, onClose }: SelectModeDrawerContentPr
   const { mutateAsync: selectCategory } = useSelectCategory();
   const { data: categories, currentCategory } = useCategories();
   const hasMultipleCategories = !!categories && categories.length > 1;
+  const showAddButton = !!categories && categories.length < MAX_CATEGORY_COUNT;
 
   return (
     <>
@@ -67,14 +70,16 @@ const SelectModeDrawerContent = ({ setMode, onClose }: SelectModeDrawerContentPr
         <div className="ml-xl mr-sm flex items-center justify-between gap-2">
           <h2 className="header-3 py-1">카테고리</h2>
           <div className="flex gap-2">
-            <button
-              className="p-2"
-              onClick={() => {
-                navigate(generatePath(PATH.CATEGORY));
-              }}
-            >
-              <Icon name="plusSvg" size="md" className="[&>path]:stroke-icon-primary" />
-            </button>
+            {showAddButton && (
+              <button
+                className="p-2"
+                onClick={() => {
+                  navigate(generatePath(PATH.CATEGORY));
+                }}
+              >
+                <Icon name="plusSvg" size="md" className="[&>path]:stroke-icon-primary" />
+              </button>
+            )}
             <Popover
               content={
                 <div>
