@@ -194,8 +194,8 @@ const EditModeDrawerContent = ({ setMode }: EditModeDrawerContentProps) => {
                 key={category.no}
                 value={`${category.no}`}
                 className="flex w-full flex-row items-center justify-start gap-2 p-5"
+                disabled={disabled}
                 onClick={() => {
-                  if (disabled) return;
                   navigate(generatePath(PATH.CATEGORY, { id: `${category.no}` }));
                 }}
               >
@@ -272,6 +272,7 @@ const DeleteModeDrawerContent = ({ setMode }: DeleteModeDrawerContentProps) => {
               <SelectGroupItem
                 key={category.no}
                 value={`${category.no}`}
+                disabled={disabled}
                 className="flex w-full flex-row items-center justify-start gap-2 p-5"
               >
                 <Icon
