@@ -5,14 +5,14 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
 import { Category } from '@/entities/category';
-import { useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
+import { useUpdateCategory, ChangeCategoryDrawer, CategoryChip } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useDisclosure, useRiveCat } from '@/shared/hooks';
 import { Button, Guide, Icon, SidebarLayout, Tooltip, useToast } from '@/shared/ui';
-import { createIsoDuration, getCategoryIconName } from '@/shared/utils';
+import { createIsoDuration } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
@@ -100,19 +100,13 @@ export const HomeScreen = ({
           </Tooltip>
 
           <div className="header-4 text-text-tertiary">{user?.cat?.name}</div>
-          <div className="flex flex-col gap-md p-lg">
-            <Button
-              variant="tertiary"
-              className="mx-auto w-[80px]"
-              size="sm"
-              id="categoryButton"
+          <div className="flex flex-col items-center gap-md p-lg">
+            <CategoryChip
+              category={currentCategory}
               onClick={() => {
                 changeCategoryDrawerProps.onOpen();
               }}
-            >
-              <Icon name={getCategoryIconName(currentCategory.iconType)} size="sm" />
-              {currentCategory.title}
-            </Button>
+            />
             <div className="flex items-center gap-md p-xs" id="timeAdjustDiv">
               <button
                 className="flex cursor-pointer items-center gap-sm p-sm"
