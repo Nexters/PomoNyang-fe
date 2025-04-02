@@ -50,18 +50,12 @@ const Pomodoro = () => {
   const [timeoutMode, setTimeoutMode] = useState<Exclude<PomodoroMode, 'focus'> | null>(null);
   const timeoutDialogProps = useDisclosure();
 
-  const { data: categories } = useCategories();
+  const { currentCategory } = useCategories();
   const { data: user } = useUser();
   const { mutate: updateCategory } = useUpdateCategory();
   const { mutate: savePomodoro } = useAddPomodoro();
   const { minimized, setMinimized } = useMinimize();
   const { alwaysOnTop, setAlwaysOnTop } = useAlwaysOnTop();
-
-  const [currentCategory, setCurrentCategory] = useState(categories?.[0]);
-  const currentCategoryTitle = currentCategory?.title || '';
-  useEffect(() => {
-    setCurrentCategory(categories?.[0]);
-  }, [categories]);
 
   const currentFocusTime = taping(isoDurationToMs(currentCategory?.focusTime));
   const currentRestTime = taping(isoDurationToMs(currentCategory?.restTime));
@@ -150,13 +144,15 @@ const Pomodoro = () => {
     }
   }, [mode]);
 
+  // TODO: loading 처리?
+  if (!currentCategory) return null;
   if (mode === 'focus')
     return (
       <FocusScreen
         currentFocusTime={currentFocusTime}
         elapsedTime={Math.min(pomodoroTime.elapsed, currentFocusTime)}
         exceededTime={pomodoroTime.exceeded}
-        currentCategory={currentCategoryTitle}
+        currentCategory={currentCategory}
         minimized={minimized}
         alwaysOnTop={alwaysOnTop}
         handleRest={startRestWait}
@@ -171,7 +167,7 @@ const Pomodoro = () => {
       <RestWaitScreen
         elapsedTime={Math.min(latestFocusTime?.elapsed ?? 0, currentFocusTime)}
         exceededTime={latestFocusTime?.exceeded ?? 0}
-        currentCategory={currentCategoryTitle}
+        currentCategory={currentCategory}
         currentFocusMinutes={currentFocusMinutes}
         selectedNextAction={selectedNextAction}
         setSelectedNextAction={setSelectedNextAction}
@@ -192,7 +188,7 @@ const Pomodoro = () => {
         currentRestTime={currentRestTime}
         elapsedTime={Math.min(pomodoroTime.elapsed, currentRestTime)}
         exceededTime={pomodoroTime.exceeded}
-        currentCategory={currentCategoryTitle}
+        currentCategory={currentCategory}
         currentRestMinutes={currentRestMinutes}
         selectedNextAction={selectedNextAction}
         minimized={minimized}
@@ -215,10 +211,7 @@ const Pomodoro = () => {
     <>
       <HomeScreen
         startTimer={startFocus}
-        currentCategory={currentCategoryTitle}
-        setCurrentCategory={(title) => {
-          setCurrentCategory(categories?.find((category) => category.title === title));
-        }}
+        currentCategory={currentCategory}
         currentFocusMinutes={msToMinutes(currentFocusTime)}
         currentRestMinutes={msToMinutes(currentRestTime)}
       />

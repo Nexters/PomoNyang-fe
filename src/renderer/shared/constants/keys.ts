@@ -20,6 +20,9 @@ export const MUTATION_KEY = {
 
   // category
   UPDATE_CATEGORY: ['updateCategory'],
+  CREATE_CATEGORY: ['createCategory'],
+  SELECT_CATEGORY: ['selectCategory'],
+  DELETE_CATEGORY: ['deleteCategory'],
 };
 
 export const LOCAL_STORAGE_KEY = {

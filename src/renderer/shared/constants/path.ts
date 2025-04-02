@@ -6,4 +6,5 @@ export const PATH = {
   NAMING: '/naming',
   MY_PAGE: '/mypage',
   MY_CAT: '/mycat',
+  CATEGORY: '/category/:id?',
 } as const;

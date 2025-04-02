@@ -6,11 +6,14 @@ import { useAuthClient } from '@/shared/hooks';
 
 export const useCategories = () => {
   const authClient = useAuthClient();
-  return useQuery({
+  const query = useQuery({
     queryKey: QUERY_KEY.CATEGORIES,
     queryFn: async () => {
       return await authClient?.get<Category[]>('/api/v1/categories');
     },
     enabled: !!authClient,
   });
+  const sortedData = query.data?.sort((a, b) => a.position - b.position);
+  const currentCategory = query.data?.find((category) => category.isSelected) ?? sortedData?.[0];
+  return { ...query, data: sortedData, currentCategory };
 };

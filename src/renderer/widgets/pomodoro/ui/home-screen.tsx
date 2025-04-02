@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 
+import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CatType } from '@/entities/cat';
-import { useCategories, useUpdateCategory, ChangeCategoryDrawer } from '@/features/category';
+import { Category } from '@/entities/category';
+import { useUpdateCategory, ChangeCategoryDrawer, CategoryChip } from '@/features/category';
 import { ChangeTimeDialog } from '@/features/time';
 import { useUser } from '@/features/user';
 import catHomeMotionRiveFile from '@/shared/assets/rivs/cat_home.riv';
 import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useDisclosure, useRiveCat } from '@/shared/hooks';
 import { Button, Guide, Icon, SidebarLayout, Tooltip, useToast } from '@/shared/ui';
-import { getCategoryIconName, createIsoDuration } from '@/shared/utils';
+import { createIsoDuration } from '@/shared/utils';
 
 const steps = [
   { id: 'categoryButton', message: '눌러서 카테고리를 변경할 수 있어요' },
@@ -28,8 +30,7 @@ const getTooltipMessages = (catType?: CatType) => {
 
 type HomeScreenProps = {
   startTimer: () => void;
-  currentCategory: string;
-  setCurrentCategory: (category: string) => void;
+  currentCategory: Category;
   currentFocusMinutes: number;
   currentRestMinutes: number;
 };
@@ -37,10 +38,12 @@ type HomeScreenProps = {
 export const HomeScreen = ({
   startTimer,
   currentCategory,
-  setCurrentCategory,
   currentFocusMinutes,
   currentRestMinutes,
 }: HomeScreenProps) => {
+  const location = useLocation();
+  const openChangeCategoryDrawer = location.state?.openChangeCategoryDrawer ?? false;
+
   const [clickedMode, setClickedMode] = useState<'focus' | 'rest'>('focus');
 
   const [showGuide, setShowGuide] = useLocalStorage<boolean>(LOCAL_STORAGE_KEY.GUIDE_SHOWN, true);
@@ -48,7 +51,6 @@ export const HomeScreen = ({
   const changeTimeDialogProps = useDisclosure();
   const changeCategoryDrawerProps = useDisclosure();
 
-  const { data: categories } = useCategories();
   const { mutate: updateCategory } = useUpdateCategory();
   const { data: user } = useUser();
 
@@ -64,6 +66,12 @@ export const HomeScreen = ({
   useEffect(() => {
     showRandomMessage();
   }, [user?.cat?.type]);
+
+  useEffect(() => {
+    if (openChangeCategoryDrawer) {
+      changeCategoryDrawerProps.onOpen();
+    }
+  }, [openChangeCategoryDrawer]);
 
   const showRandomMessage = () => {
     const messages = getTooltipMessages(user?.cat?.type);
@@ -92,19 +100,13 @@ export const HomeScreen = ({
           </Tooltip>
 
           <div className="header-4 text-text-tertiary">{user?.cat?.name}</div>
-          <div className="flex flex-col gap-md p-lg">
-            <Button
-              variant="tertiary"
-              className="mx-auto w-[80px]"
-              size="sm"
-              id="categoryButton"
+          <div className="flex flex-col items-center gap-md p-lg">
+            <CategoryChip
+              category={currentCategory}
               onClick={() => {
                 changeCategoryDrawerProps.onOpen();
               }}
-            >
-              <Icon name={getCategoryIconName(currentCategory)} size="sm" />
-              {currentCategory}
-            </Button>
+            />
             <div className="flex items-center gap-md p-xs" id="timeAdjustDiv">
               <button
                 className="flex cursor-pointer items-center gap-sm p-sm"
@@ -144,16 +146,6 @@ export const HomeScreen = ({
       <ChangeCategoryDrawer
         open={changeCategoryDrawerProps.isOpen}
         onOpenChange={changeCategoryDrawerProps.setIsOpen}
-        defaultCategory={currentCategory}
-        onChangeCategory={(category) => {
-          if (category === currentCategory) return;
-          setCurrentCategory(category);
-          toast({
-            iconName: 'check',
-            iconClassName: '[&>path]:stroke-icon-tertiary',
-            message: '카테고리를 변경했어요',
-          });
-        }}
       />
 
       {showGuide && (
@@ -173,7 +165,7 @@ export const HomeScreen = ({
           if (clickedMode === 'focus' && minutes === currentFocusMinutes) return;
           if (clickedMode === 'rest' && minutes === currentRestMinutes) return;
 
-          const categoryNo = categories?.find((_category) => _category.title === category)?.no;
+          const categoryNo = category.no;
           if (!categoryNo) return;
 
           const body =

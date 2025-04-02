@@ -1,3 +1,4 @@
+import { Category } from '@/entities/category';
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { Time } from '@/features/time';
 import { useUser } from '@/features/user';
@@ -9,7 +10,7 @@ import { Button, Icon, SelectGroup, SelectGroupItem, SimpleLayout, Tooltip } fro
 import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
 type RestScreenProps = {
-  currentCategory: string;
+  currentCategory: Category;
   currentRestTime: number;
   elapsedTime: number;
   exceededTime: number;
@@ -73,8 +74,8 @@ export const RestScreen = ({
         <div className="flex items-center p-6 pt-3">
           <div className="flex flex-col items-start justify-center">
             <h2 className="body-sb flex gap-1 text-text-tertiary">
-              <Icon name={getCategoryIconName(currentCategory)} size="sm" />
-              {currentCategory}
+              <Icon name={getCategoryIconName(currentCategory.iconType)} size="sm" />
+              {currentCategory.title}
             </h2>
             <Time
               minutes={minutes}
@@ -104,8 +105,8 @@ export const RestScreen = ({
       <div className="relative flex h-full flex-col">
         <header className="flex px-4 py-2">
           <div className="subBody-sb flex h-[40px] items-center gap-sm rounded-xs bg-background-secondary px-3 py-2 text-text-tertiary">
-            <Icon name={getCategoryIconName(currentCategory)} size="sm" />
-            {currentCategory}
+            <Icon name={getCategoryIconName(currentCategory.iconType)} size="sm" />
+            {currentCategory.title}
           </div>
           <div className="flex-1" />
           <div className="flex gap-2">
@@ -163,6 +164,7 @@ export const RestScreen = ({
           <div className="flex flex-col gap-3">
             <p className="body-sb text-text-disabled">다음부터 휴식시간을 바꿀까요?</p>
             <SelectGroup
+              type="single"
               className="flex"
               value={selectedNextAction}
               onValueChange={setSelectedNextAction}

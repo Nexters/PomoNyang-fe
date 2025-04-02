@@ -1,3 +1,5 @@
+import { Category } from '@/entities/category';
+import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
 import { useUser } from '@/features/user';
 import hairballImage from '@/shared/assets/images/hairball.png';
@@ -7,7 +9,7 @@ import { Button, Icon, SimpleLayout, Tooltip } from '@/shared/ui';
 import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
 
 type FocusScreenProps = {
-  currentCategory: string;
+  currentCategory: Category;
   currentFocusTime: number;
   elapsedTime: number;
   exceededTime: number;
@@ -70,8 +72,8 @@ export const FocusScreen = ({
         <div className="flex items-center p-6 pt-3">
           <div className="flex flex-col items-start justify-center">
             <h2 className="body-sb flex gap-1 text-text-tertiary">
-              <Icon name={getCategoryIconName(currentCategory)} size="sm" />
-              {currentCategory}
+              <Icon name={getCategoryIconName(currentCategory.iconType)} size="sm" />
+              {currentCategory.title}
             </h2>
             <Time
               minutes={minutes}
@@ -100,10 +102,7 @@ export const FocusScreen = ({
     <SimpleLayout>
       <div className="relative flex h-full flex-col">
         <header className="flex px-4 py-2">
-          <div className="subBody-sb flex w-[80px] gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary">
-            <Icon name={getCategoryIconName(currentCategory)} size="sm" />
-            {currentCategory}
-          </div>
+          <CategoryChip category={currentCategory} />
           <div className="flex-1" />
           <div className="flex gap-2">
             <button

@@ -1,5 +1,6 @@
 import { Navigate, MemoryRouter as ReactRouter, Route, Routes } from 'react-router-dom';
 
+import Category from '@/pages/category';
 import Home from '@/pages/home';
 import MyCat from '@/pages/mycat';
 import MyPage from '@/pages/mypage';
@@ -20,6 +21,7 @@ export const Router = () => {
         <Route path={PATH.NAMING} element={<Naming />} />
         <Route path={PATH.MY_PAGE} element={<MyPage />} />
         <Route path={PATH.MY_CAT} element={<MyCat />} />
+        <Route path={PATH.CATEGORY} element={<Category />} />
         <Route path="*" element={<Navigate to={PATH.HOME} replace />} />
       </Routes>
     </ReactRouter>

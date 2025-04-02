@@ -1,5 +1,6 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
+import { Category } from '@/entities/category';
 import { PomodoroNextAction } from '@/entities/pomodoro';
 import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
@@ -10,7 +11,7 @@ import { Button, Icon, SelectGroup, SelectGroupItem, SimpleLayout } from '@/shar
 import { msToTime } from '@/shared/utils';
 
 type RestWaitScreenProps = {
-  currentCategory: string;
+  currentCategory: Category;
   currentFocusMinutes: number;
   elapsedTime: number;
   exceededTime: number;
@@ -87,6 +88,7 @@ export const RestWaitScreen = ({
           <div className="flex flex-col gap-3">
             <p className="body-sb text-text-disabled">다음부터 집중시간을 바꿀까요?</p>
             <SelectGroup
+              type="single"
               className="flex"
               value={selectedNextAction}
               onValueChange={setSelectedNextAction}

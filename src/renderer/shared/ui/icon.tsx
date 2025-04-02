@@ -1,23 +1,35 @@
 import { cn } from '../utils';
 
 import BackIcon from '@/shared/assets/svgs/back.svg';
-import CategoryBookIcon from '@/shared/assets/svgs/category-book.svg';
-import CategoryDefaultIcon from '@/shared/assets/svgs/category-default.svg';
-import CategoryStudyIcon from '@/shared/assets/svgs/category-study.svg';
-import CategoryWorkIcon from '@/shared/assets/svgs/category-work.svg';
+import CategoryAsteriskIcon from '@/shared/assets/svgs/category-asterisk.svg';
+import CategoryBoxPenIcon from '@/shared/assets/svgs/category-box-pen.svg';
+import CategoryBriefcaseIcon from '@/shared/assets/svgs/category-briefcase.svg';
+import CategoryCatIcon from '@/shared/assets/svgs/category-cat.svg';
+import CategoryDumbbellIcon from '@/shared/assets/svgs/category-dumbbell.svg';
+import CategoryFireIcon from '@/shared/assets/svgs/category-fire.svg';
+import CategoryHeartIcon from '@/shared/assets/svgs/category-heart.svg';
+import CategoryLaptopIcon from '@/shared/assets/svgs/category-laptop.svg';
+import CategoryLightningIcon from '@/shared/assets/svgs/category-lightning.svg';
+import CategoryMoonIcon from '@/shared/assets/svgs/category-moon.svg';
+import CategoryOpenBookIcon from '@/shared/assets/svgs/category-open-book.svg';
+import CategorySunIcon from '@/shared/assets/svgs/category-sun.svg';
 import CheckIcon from '@/shared/assets/svgs/check.svg?react';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
 import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
+import CircleCheck from '@/shared/assets/svgs/circle-check.svg';
+import CircleUncheck from '@/shared/assets/svgs/circle-uncheck.svg';
 import ClockLineIcon from '@/shared/assets/svgs/clock-line.svg?react';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
+import EllipsisIcon from '@/shared/assets/svgs/ellipsis.svg?react';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
+import LockIcon from '@/shared/assets/svgs/lock.svg?react';
 import MenuIcon from '@/shared/assets/svgs/menu.svg?react';
 import MinimizeOff from '@/shared/assets/svgs/minimize-off.svg';
 import MinimizeOn from '@/shared/assets/svgs/minimize-on.svg';
 import MinusIcon from '@/shared/assets/svgs/minus.svg';
 import MinusSvgIcon from '@/shared/assets/svgs/minus.svg?react';
-import PenIcon from '@/shared/assets/svgs/pen.svg';
+import PenIcon from '@/shared/assets/svgs/pen.svg?react';
 import PinOff from '@/shared/assets/svgs/pin-off.svg';
 import PinOn from '@/shared/assets/svgs/pin-on.svg';
 import PlaceholderIcon from '@/shared/assets/svgs/placeholder.svg';
@@ -28,15 +40,24 @@ import PositiveIcon from '@/shared/assets/svgs/positive.svg';
 import ReadyForStatIcon from '@/shared/assets/svgs/ready-for-stat.svg';
 import RestTimeIcon from '@/shared/assets/svgs/rest-time.svg';
 import StimulusIcon from '@/shared/assets/svgs/stimulus.svg';
+import TrashIcon from '@/shared/assets/svgs/trash.svg';
 
 const icons = {
   placeholder: PlaceholderIcon,
   back: BackIcon,
   menu: MenuIcon,
-  categoryDefault: CategoryDefaultIcon,
-  categoryStudy: CategoryStudyIcon,
-  categoryWork: CategoryWorkIcon,
-  categoryBook: CategoryBookIcon,
+  categoryCat: CategoryCatIcon,
+  categoryBoxPen: CategoryBoxPenIcon,
+  categoryOpenBook: CategoryOpenBookIcon,
+  categoryBriefcase: CategoryBriefcaseIcon,
+  categoryLaptop: CategoryLaptopIcon,
+  categoryDumbbell: CategoryDumbbellIcon,
+  categoryLightning: CategoryLightningIcon,
+  categoryFire: CategoryFireIcon,
+  categoryHeart: CategoryHeartIcon,
+  categoryAsterisk: CategoryAsteriskIcon,
+  categorySun: CategorySunIcon,
+  categoryMoon: CategoryMoonIcon,
   play: PlayIcon,
   close: CloseIcon,
   focusTime: FocusTimeIcon,
@@ -58,6 +79,11 @@ const icons = {
   pinOn: PinOn,
   minimizeOff: MinimizeOff,
   minimizeOn: MinimizeOn,
+  ellipsis: EllipsisIcon,
+  trash: TrashIcon,
+  lock: LockIcon,
+  circleCheck: CircleCheck,
+  circleUncheck: CircleUncheck,
 } as const;
 const sizes = {
   xs: 16,
@@ -68,7 +94,7 @@ const sizes = {
 } as const;
 
 export type IconName = keyof typeof icons;
-export type IconSize = keyof typeof sizes;
+export type IconSize = keyof typeof sizes | number;
 
 export type IconProps = {
   name?: IconName;
@@ -83,7 +109,7 @@ export function Icon({
   ...restProps
 }: IconProps): JSX.Element {
   const Icon = icons[name];
-  const sizeValue = sizes[size];
+  const sizeValue = typeof size === 'string' ? sizes[size] : size;
 
   return typeof Icon === 'function' ? (
     <Icon className={className} style={{ ...style, width: sizeValue, height: sizeValue }} />
