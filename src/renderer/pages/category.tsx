@@ -61,9 +61,12 @@ const CategoryPage = () => {
 
   useEffect(() => {
     const isTooLong = trimmedCategoryName.length > CATEGORY_NAME_MAX_LENGTH;
-    const isDuplicated = categories?.some(
-      (category) => category.title === trimmedCategoryName && category.no !== categoryNo,
-    );
+    const isDuplicated = isPending
+      ? // @note: 낙관적 업데이트를 하기 때문에 카테고리 생성 중에 중복 에러 메시지 보이지 않도록 함
+        false
+      : categories?.some(
+          (category) => category.title === trimmedCategoryName && category.no !== categoryNo,
+        );
     if (isTooLong) {
       return setErrorMessage(`최대 ${CATEGORY_NAME_MAX_LENGTH}글자까지 입력할 수 있어요.`);
     }
@@ -71,7 +74,7 @@ const CategoryPage = () => {
       return setErrorMessage('이미 존재하는 카테고리예요.');
     }
     setErrorMessage(null);
-  }, [trimmedCategoryName, categories, categoryNo]);
+  }, [trimmedCategoryName, categories, categoryNo, isPending]);
 
   const handleClickChangeIconButton = () => {
     drawerProps.setIsOpen(true);
