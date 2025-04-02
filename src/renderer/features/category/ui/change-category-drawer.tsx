@@ -266,7 +266,7 @@ const DeleteModeDrawerContent = ({ setMode }: DeleteModeDrawerContentProps) => {
           )}
         >
           {categories?.map((category, index) => {
-            const disabled = index === 0 || category.isSelected;
+            const disabled = index === 0;
             const checked = selectedCategoryIds.includes(`${category.no}`);
             return (
               <SelectGroupItem
