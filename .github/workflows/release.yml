@@ -22,10 +22,17 @@ jobs:
           cache: 'yarn'
       - name: install dependencies
         run: yarn install
+      - name: set api endpoint
+        run: |
+          if [[ "${{ github.event.inputs.tag }}" == *"qa"* ]]; then
+            echo "VITE_API_SERVER_URL=${{ secrets.VITE_DEV_API_SERVER_URL }}" >> $GITHUB_ENV
+          else
+            echo "VITE_API_SERVER_URL=${{ secrets.VITE_API_SERVER_URL }}" >> $GITHUB_ENV
+          fi
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VITE_API_SERVER_URL: ${{ secrets.VITE_API_SERVER_URL }}
+          VITE_API_SERVER_URL: ${{ env.VITE_API_SERVER_URL }}
           VITE_DATADOG_APPLICATION_ID: ${{ secrets.VITE_DATADOG_APPLICATION_ID }}
           VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_CLIENT_TOKEN }}
           VITE_DATADOG_ENV: ${{ secrets.VITE_DATADOG_ENV }}
@@ -51,10 +58,17 @@ jobs:
           echo "${{ secrets.APPLE_API_KEY_CONTENT }}" > authKey.p8
           APPLE_API_KEY=$(realpath authKey.p8)
           echo "APPLE_API_KEY=$APPLE_API_KEY" >> $GITHUB_ENV
+      - name: set api endpoint
+        run: |
+          if [[ "${{ github.event.inputs.tag }}" == *"qa"* ]]; then
+            echo "VITE_API_SERVER_URL=${{ secrets.VITE_DEV_API_SERVER_URL }}" >> $GITHUB_ENV
+          else
+            echo "VITE_API_SERVER_URL=${{ secrets.VITE_API_SERVER_URL }}" >> $GITHUB_ENV
+          fi
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VITE_API_SERVER_URL: ${{ secrets.VITE_API_SERVER_URL }}
+          VITE_API_SERVER_URL: ${{ env.VITE_API_SERVER_URL }}
           VITE_DATADOG_APPLICATION_ID: ${{ secrets.VITE_DATADOG_APPLICATION_ID }}
           VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_CLIENT_TOKEN }}
           VITE_DATADOG_ENV: ${{ secrets.VITE_DATADOG_ENV }}
@@ -72,10 +86,17 @@ jobs:
           node-version: 18
       - name: install dependencies
         run: yarn install
+      - name: set api endpoint
+        run: |
+          if [[ "${{ github.event.inputs.tag }}" == *"qa"* ]]; then
+            echo "VITE_API_SERVER_URL=${{ secrets.VITE_DEV_API_SERVER_URL }}" >> $GITHUB_ENV
+          else
+            echo "VITE_API_SERVER_URL=${{ secrets.VITE_API_SERVER_URL }}" >> $GITHUB_ENV
+          fi
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VITE_API_SERVER_URL: ${{ secrets.VITE_API_SERVER_URL }}
+          VITE_API_SERVER_URL: ${{ env.VITE_API_SERVER_URL }}
           VITE_DATADOG_APPLICATION_ID: ${{ secrets.VITE_DATADOG_APPLICATION_ID }}
           VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_CLIENT_TOKEN }}
           VITE_DATADOG_ENV: ${{ secrets.VITE_DATADOG_ENV }}
