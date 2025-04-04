@@ -24,10 +24,15 @@ import { cn, getCategoryIconName } from '@/shared/utils';
 type ChangeCategoryDrawerProps = {
   open: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  onClose: () => void;
 };
 type ChangeCategoryDrawerMode = 'select' | 'edit' | 'delete';
 
-export const ChangeCategoryDrawer = ({ open, onOpenChange }: ChangeCategoryDrawerProps) => {
+export const ChangeCategoryDrawer = ({
+  open,
+  onOpenChange,
+  onClose,
+}: ChangeCategoryDrawerProps) => {
   const [mode, setMode] = useState<ChangeCategoryDrawerMode>('select');
 
   useEffect(() => {
@@ -37,7 +42,7 @@ export const ChangeCategoryDrawer = ({ open, onOpenChange }: ChangeCategoryDrawe
   }, [open]);
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
+    <Drawer open={open} onOpenChange={onOpenChange} onClose={onClose}>
       <DrawerContent>
         {mode === 'select' && (
           <SelectModeDrawerContent setMode={setMode} onClose={() => onOpenChange(false)} />
