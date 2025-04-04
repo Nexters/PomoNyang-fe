@@ -11,8 +11,8 @@ export const CategoryChip = ({ category, onClick }: CategoryChipProps) => {
   return (
     <div
       className={cn(
-        'subBody-sb flex min-w-[80px] gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary',
-        onClick ? 'cursor-pointer' : 'select-none',
+        'subBody-sb flex min-w-[80px] select-none gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary',
+        onClick && 'cursor-pointer',
       )}
       onClick={onClick}
     >
