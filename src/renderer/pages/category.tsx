@@ -3,12 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { CategoryIconType } from '@/entities/category';
-import {
-  useUpdateCategory,
-  useCategory,
-  useCreateCategory,
-  useCategories,
-} from '@/features/category';
+import { useUpdateCategory, useCategory, useCreateCategory } from '@/features/category';
 import { PATH } from '@/shared/constants';
 import { useDisclosure } from '@/shared/hooks';
 import {
@@ -21,6 +16,7 @@ import {
   SimpleLayout,
 } from '@/shared/ui';
 import { CategoryIconTypeMap, cn } from '@/shared/utils';
+import { isErrorResponse } from '@/shared/utils/error';
 
 const CATEGORY_NAME_MAX_LENGTH = 10;
 
@@ -32,7 +28,6 @@ const CategoryPage = () => {
   const drawerProps = useDisclosure();
 
   const { data: category } = useCategory(categoryNo);
-  const { data: categories } = useCategories();
   const { mutateAsync: createCategory, isPending: isCreating } = useCreateCategory();
   const { mutateAsync: updateCategory, isPending: isUpdating } = useUpdateCategory();
   const isPending = isCreating || isUpdating;
@@ -59,23 +54,14 @@ const CategoryPage = () => {
     }
   }, [category]);
 
-  useEffect(() => {
-    const isTooLong = trimmedCategoryName.length > CATEGORY_NAME_MAX_LENGTH;
-    const isDuplicated = isPending
-      ? // @note: 낙관적 업데이트를 하기 때문에 카테고리 생성 중에 중복 에러 메시지 보이지 않도록 함
-        false
-      : categories?.some(
-          (category) => category.title === trimmedCategoryName && category.no !== categoryNo,
-        );
-    if (isTooLong) {
-      return setErrorMessage(`최대 ${CATEGORY_NAME_MAX_LENGTH}글자까지 입력할 수 있어요.`);
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTypedCategoryName(e.target.value);
+    if (e.target.value.length > CATEGORY_NAME_MAX_LENGTH) {
+      setErrorMessage(`카테고리 이름은 ${CATEGORY_NAME_MAX_LENGTH}자 이내로 입력해주세요.`);
+    } else {
+      setErrorMessage(null);
     }
-    if (isDuplicated) {
-      return setErrorMessage('이미 존재하는 카테고리예요.');
-    }
-    setErrorMessage(null);
-  }, [trimmedCategoryName, categories, categoryNo, isPending]);
-
+  };
   const handleClickChangeIconButton = () => {
     drawerProps.setIsOpen(true);
   };
@@ -83,28 +69,31 @@ const CategoryPage = () => {
     navigate(PATH.POMODORO, { state: { openChangeCategoryDrawer: true } });
   };
   const handleClickCompleteButton = async () => {
-    // TODO:
-    // - 카테고리 api 호출 에러 처리
-    //  - 이미 존재하는 카테고리인 경우
-    //  - 카테고리 이름이 너무 긴 경우
+    try {
+      if (isEditMode) {
+        await updateCategory({
+          no: categoryNo,
+          body: {
+            title: trimmedCategoryName,
+            iconType: selectedCategoryIconType,
+          },
+        });
+      } else {
+        await createCategory({
+          body: {
+            title: trimmedCategoryName,
+            iconType: selectedCategoryIconType,
+          },
+        });
+      }
+      navigate(PATH.POMODORO, { state: { openChangeCategoryDrawer: true } });
+    } catch (error) {
+      const errorMessage = isErrorResponse(error)
+        ? error.message
+        : '알 수 없는 오류가 발생했습니다.';
 
-    if (isEditMode) {
-      await updateCategory({
-        no: categoryNo,
-        body: {
-          title: trimmedCategoryName,
-          iconType: selectedCategoryIconType,
-        },
-      });
-    } else {
-      await createCategory({
-        body: {
-          title: trimmedCategoryName,
-          iconType: selectedCategoryIconType,
-        },
-      });
+      setErrorMessage(errorMessage);
     }
-    navigate(PATH.POMODORO, { state: { openChangeCategoryDrawer: true } });
   };
 
   return (
@@ -130,7 +119,7 @@ const CategoryPage = () => {
 
           <input
             value={typedCategoryName}
-            onChange={(e) => setTypedCategoryName(e.target.value)}
+            onChange={handleInput}
             type="text"
             placeholder="카테고리 이름"
             className="body-sb mt-6 w-full rounded-sm bg-white p-lg text-text-primary caret-text-accent-1 placeholder:text-text-disabled"

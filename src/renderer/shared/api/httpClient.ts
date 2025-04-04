@@ -42,6 +42,9 @@ const __fetch = async <T = unknown, D = unknown>(
   });
 
   if (!response.ok) {
+    if (response.headers.get('Content-type')?.includes('application/json')) {
+      throw await response.json();
+    }
     const error = new Error();
     const text = await response.text();
     error.message = text;

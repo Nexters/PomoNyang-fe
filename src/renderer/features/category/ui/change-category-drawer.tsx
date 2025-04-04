@@ -17,9 +17,10 @@ import {
   Button,
   DrawerFooter,
   Dialog,
-  // useToast,
+  useToast,
 } from '@/shared/ui';
 import { cn, getCategoryIconName } from '@/shared/utils';
+import { isErrorResponse } from '@/shared/utils/error';
 
 type ChangeCategoryDrawerProps = {
   open: boolean;
@@ -230,6 +231,7 @@ const DeleteModeDrawerContent = ({ setMode }: DeleteModeDrawerContentProps) => {
 
   const { mutateAsync: deleteCategories } = useDeleteCategories();
   const confirmDeleteDialogProps = useDisclosure();
+  const { toast } = useToast();
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const isDisabledCompleteButton = selectedCategoryIds.length === 0;
@@ -238,9 +240,16 @@ const DeleteModeDrawerContent = ({ setMode }: DeleteModeDrawerContentProps) => {
     confirmDeleteDialogProps.setIsOpen(true);
   };
   const handleDeleteCategories = async () => {
-    // TODO: api 호출 실패시 에러 처리
-    await deleteCategories({ body: { no: selectedCategoryIds.map(Number) } });
-    setMode('select');
+    try {
+      await deleteCategories({ body: { no: selectedCategoryIds.map(Number) } });
+      setMode('select');
+    } catch (error) {
+      const errorMessage = isErrorResponse(error)
+        ? error.message
+        : '알 수 없는 오류가 발생했습니다.';
+      // TODO: 토스트 아이콘 적용?
+      toast({ message: errorMessage });
+    }
   };
 
   return (
