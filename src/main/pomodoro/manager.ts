@@ -205,12 +205,15 @@ export class PomodoroManager {
     const currentCycle = cycles[cycles.length - 1];
     if (!currentCycle) return { icon: '', time: '' };
 
+    const mode = currentCycle.mode;
+    // 휴식 대기 중에는 직전 아이콘 그대로 보여주기 위해 null 반환
+    if (mode === 'rest-wait') return null;
+
     const { isExceed, time: formattedTime } = PomodoroManager.getFormattedTime(
       currentCycle.goalTime,
       time,
     );
     const trayIcon = PomodoroManager.getTrayIcon(currentCycle.mode, isExceed);
-
     return { icon: trayIcon, time: formattedTime };
   }
 }

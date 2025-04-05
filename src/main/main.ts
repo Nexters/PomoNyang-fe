@@ -191,8 +191,10 @@ app.whenReady().then(() => {
         mainWindow?.webContents.send('tick-pomodoro', cycles, time);
 
         const trayInfo = PomodoroManager.getTrayInfo(cycles, time);
-        tray?.setImage(getTrayIcon(trayInfo.icon));
-        tray?.setTitle(trayInfo.time);
+        if (trayInfo) {
+          tray?.setImage(getTrayIcon(trayInfo.icon));
+          tray?.setTitle(trayInfo.time);
+        }
       },
       onEndPomodoro: (cycles: PomodoroCycle[], reason: PomodoroEndReason) => {
         mainWindow?.webContents.send('end-pomodoro', cycles, reason);
