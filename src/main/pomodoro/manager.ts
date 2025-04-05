@@ -35,7 +35,10 @@ export class PomodoroManager {
       (this.storage.getItem(STORAGE_KEY.POMODORO_CALLED_ONCE_FOR_EXCEED_TIME), false);
 
     // run tick
-    this._runTick();
+    const isRunning = this.pomodoroCycles.length > 0;
+    if (isRunning) {
+      this._runTick();
+    }
   }
 
   _save() {
@@ -82,9 +85,8 @@ export class PomodoroManager {
     }
   }
 
-  // FIXME: tick이 타이머 실행중일 때만 돌 수 있도록 해야함
   _runTick() {
-    clearInterval(this.tickId);
+    this._stopTick();
 
     this.tickId = setInterval(() => {
       // @note: hmr로 인해 this 객체가 사라지면, 에러가 발생함.
@@ -95,6 +97,11 @@ export class PomodoroManager {
         clearInterval(this.tickId);
       }
     }, 200);
+  }
+
+  _stopTick() {
+    this.config.onTickPomodoro?.(this.pomodoroCycles, this.pomodoroTime);
+    clearInterval(this.tickId);
   }
 
   updateConfig(config: Partial<PomodoroManagerConfig>) {
@@ -119,6 +126,7 @@ export class PomodoroManager {
     this.pomodoroTime = DEFAULT_POMODORO_TIME;
     this.calledOnceForExceedGoalTime = false;
     this._save();
+    this._runTick();
   }
 
   startRestWait() {
@@ -153,6 +161,7 @@ export class PomodoroManager {
 
     // 상위로 전달했으니 cycle 데이터 초기화
     this._clear();
+    this._stopTick();
   }
 
   static updateCycles(cycles: PomodoroCycle[], nextCycle?: PomodoroCycle): PomodoroCycle[] {
