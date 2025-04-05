@@ -312,6 +312,7 @@ const DeleteModeDrawerContent = ({ setMode }: DeleteModeDrawerContentProps) => {
       <DrawerFooter>
         <Button
           className="w-full"
+          variant="secondary"
           disabled={isDisabledCompleteButton}
           onClick={handleClickDeleteButton}
         >
