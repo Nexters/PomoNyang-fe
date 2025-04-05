@@ -156,8 +156,12 @@ const Pomodoro = () => {
         currentCategory={currentCategory}
         minimized={minimized}
         alwaysOnTop={alwaysOnTop}
-        handleRest={startRestWait}
-        handleEnd={endPomodoro}
+        handleRest={() => {
+          startRestWait();
+        }}
+        handleEnd={() => {
+          endPomodoro();
+        }}
         setMinimized={setMinimized}
         setAlwaysOnTop={setAlwaysOnTop}
       />
