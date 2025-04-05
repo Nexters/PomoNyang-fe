@@ -71,6 +71,10 @@ const createWindow = () => {
     return { action: 'allow' };
   });
 
+  browserWindow.on('closed', () => {
+    mainWindow = null;
+  });
+
   return browserWindow;
 };
 
