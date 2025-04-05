@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { padNumber } from 'shared/util';
+
 import { Category } from '@/entities/category';
 import {
   MAX_FOCUS_MINUTES,
@@ -9,7 +11,7 @@ import {
   MINUTES_GAP,
 } from '@/shared/constants';
 import { Button, Dialog, DialogProps, Icon } from '@/shared/ui';
-import { getCategoryIconName, padNumber } from '@/shared/utils';
+import { getCategoryIconName } from '@/shared/utils';
 
 export type ChangeTimeDialogProps = Pick<DialogProps, 'open' | 'onOpenChange'> & {
   mode: 'focus' | 'rest';

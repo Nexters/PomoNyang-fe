@@ -5,11 +5,9 @@ import {
   PomodoroMode,
   PomodoroTime,
 } from '../../shared/type';
+import { parse, padNumber, msToTime, getPomodoroTime } from '../../shared/util';
 
-import { parse } from './util/others';
 import { SimpleStorage } from './util/storage';
-import { padNumber } from './util/string';
-import { msToTime } from './util/time';
 
 const STORAGE_KEY = {
   POMODORO_CYCLES: 'pomodoroCycles',
@@ -63,7 +61,7 @@ export class PomodoroManager {
     const currentCycle = this.pomodoroCycles[this.pomodoroCycles.length - 1];
     if (!currentCycle) return;
 
-    const { elapsed, exceeded } = PomodoroManager.getPomodoroTime(currentCycle);
+    const { elapsed, exceeded } = getPomodoroTime(currentCycle);
     this.pomodoroTime = { elapsed, exceeded };
 
     if (exceeded > 0 && !this.calledOnceForExceedGoalTime) {
@@ -155,15 +153,6 @@ export class PomodoroManager {
 
     // 상위로 전달했으니 cycle 데이터 초기화
     this._clear();
-  }
-
-  static getPomodoroTime(cycle: PomodoroCycle): PomodoroTime {
-    const now = cycle.endAt ?? Date.now();
-    const maxElapsedTime = cycle.goalTime + cycle.exceedMaxTime;
-    const elapsed = Math.min(maxElapsedTime, now - cycle.startAt);
-    const exceeded = Math.min(cycle.exceedMaxTime, elapsed - cycle.goalTime);
-
-    return { elapsed, exceeded };
   }
 
   static updateCycles(cycles: PomodoroCycle[], nextCycle?: PomodoroCycle): PomodoroCycle[] {

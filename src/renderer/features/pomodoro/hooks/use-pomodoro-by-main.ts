@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import {
-  PomodoroCycle,
-  PomodoroEndReason,
-  PomodoroManagerConfig,
-  PomodoroTime,
-} from '../../../../shared/type';
+import { PomodoroCycle, PomodoroEndReason, PomodoroManagerConfig, PomodoroTime } from 'shared/type';
 
-export type UsePomodoroParams = PomodoroManagerConfig;
+export type UsePomodoroParams = Omit<PomodoroManagerConfig, 'onTickPomodoro'>;
 
 export const usePomodoroByMain = (params: UsePomodoroParams) => {
   const [pomodoroCycles, setPomodoroCycles] = useState<PomodoroCycle[]>([]);

@@ -1,3 +1,5 @@
+import { msToTime } from 'shared/util';
+
 import { Category } from '@/entities/category';
 import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
@@ -6,7 +8,7 @@ import hairballImage from '@/shared/assets/images/hairball.png';
 import catFocusMotionRiveFile from '@/shared/assets/rivs/cat_focus.riv';
 import { useRiveCat } from '@/shared/hooks';
 import { Button, Icon, SimpleLayout, Tooltip } from '@/shared/ui';
-import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
+import { cn, getCategoryIconName } from '@/shared/utils';
 
 type FocusScreenProps = {
   currentCategory: Category;

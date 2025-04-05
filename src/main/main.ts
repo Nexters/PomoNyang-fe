@@ -2,14 +2,15 @@ import { app, BrowserWindow, ipcMain, Menu, NativeImage, nativeImage, shell, Tra
 import path from 'path';
 
 import { machineId } from 'node-machine-id';
+import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
+
 import {
   PomodoroCycle,
   PomodoroEndReason,
   PomodoroManagerConfigWithoutCallbacks,
   PomodoroMode,
   PomodoroTime,
-} from 'src/shared/type';
-import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
+} from '../shared/type';
 
 import { PomodoroManager } from './pomodoro/manager';
 
