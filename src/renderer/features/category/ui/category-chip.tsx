@@ -1,6 +1,6 @@
 import { Category } from '@/entities/category';
 import { Icon } from '@/shared/ui';
-import { getCategoryIconName } from '@/shared/utils';
+import { cn, getCategoryIconName } from '@/shared/utils';
 
 type CategoryChipProps = {
   category: Category;
@@ -10,7 +10,10 @@ type CategoryChipProps = {
 export const CategoryChip = ({ category, onClick }: CategoryChipProps) => {
   return (
     <div
-      className="subBody-sb flex min-w-[80px] gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary"
+      className={cn(
+        'subBody-sb flex min-w-[80px] select-none gap-sm rounded-xs bg-background-secondary p-md text-text-tertiary',
+        onClick && 'cursor-pointer',
+      )}
       onClick={onClick}
     >
       <Icon name={getCategoryIconName(category.iconType)} size="sm" />

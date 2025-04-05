@@ -73,6 +73,12 @@ export const HomeScreen = ({
     }
   }, [openChangeCategoryDrawer]);
 
+  const handleCloseDrawer = () => {
+    if (openChangeCategoryDrawer) {
+      location.state = { openChangeCategoryDrawer: false };
+    }
+  };
+
   const showRandomMessage = () => {
     const messages = getTooltipMessages(user?.cat?.type);
     const randomIndex = Math.floor(Math.random() * messages.length);
@@ -146,6 +152,7 @@ export const HomeScreen = ({
       <ChangeCategoryDrawer
         open={changeCategoryDrawerProps.isOpen}
         onOpenChange={changeCategoryDrawerProps.setIsOpen}
+        onClose={handleCloseDrawer}
       />
 
       {showGuide && (
