@@ -172,15 +172,12 @@ export const HomeScreen = ({
           if (clickedMode === 'focus' && minutes === currentFocusMinutes) return;
           if (clickedMode === 'rest' && minutes === currentRestMinutes) return;
 
-          const categoryNo = category.no;
-          if (!categoryNo) return;
-
           const body =
             clickedMode === 'focus'
               ? { focusTime: createIsoDuration({ minutes }) }
               : { restTime: createIsoDuration({ minutes }) };
           updateCategory({
-            no: categoryNo,
+            no: category.no,
             body,
           });
           toast({
