@@ -97,7 +97,7 @@ const getTrayIcon = (icon: string): NativeImage => {
   return image;
 };
 
-const createTray = (mainWindow: BrowserWindow) => {
+const createTray = () => {
   const tray = new Tray(getTrayIcon('cat'));
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -146,9 +146,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 app.whenReady().then(() => {
-  if (mainWindow) {
-    tray = createTray(mainWindow);
-  }
+  tray = createTray();
 
   // event handling
   ipcMain.handle('get-machine-id', async () => {
