@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { PomodoroMode, PomodoroNextAction } from '@/entities/pomodoro';
 import { useCategories, useUpdateCategory } from '@/features/category';
 import { useAddPomodoro } from '@/features/pomodoro';
-import { getPomodoroTime, usePomodoro } from '@/features/pomodoro/hooks/use-pomodoro';
+import { getPomodoroTime } from '@/features/pomodoro/hooks/use-pomodoro';
+import { usePomodoroByMain } from '@/features/pomodoro/hooks/use-pomodoro-by-main';
 import { TimeoutDialog } from '@/features/pomodoro/ui/timeout-dialog';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
@@ -61,7 +62,7 @@ const Pomodoro = () => {
   const currentRestTime = taping(isoDurationToMs(currentCategory?.restTime));
 
   const { pomodoroCycles, pomodoroTime, startFocus, startRestWait, startRest, endPomodoro } =
-    usePomodoro({
+    usePomodoroByMain({
       focusTime: currentFocusTime,
       focusExceedMaxTime,
       restWaitExceedMaxTime,

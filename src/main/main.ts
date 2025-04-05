@@ -2,7 +2,16 @@ import { app, BrowserWindow, ipcMain, Menu, NativeImage, nativeImage, shell, Tra
 import path from 'path';
 
 import { machineId } from 'node-machine-id';
+import {
+  PomodoroCycle,
+  PomodoroEndReason,
+  PomodoroManagerConfigWithoutCallbacks,
+  PomodoroMode,
+  PomodoroTime,
+} from 'src/shared/type';
 import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
+
+import { PomodoroManager } from './pomodoro/manager';
 
 updateElectronApp({
   updateSource: {
@@ -14,11 +23,10 @@ updateElectronApp({
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
-let forceQuit = false;
+let pomodoroManager: PomodoroManager;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
-  forceQuit = true;
   app.quit();
 }
 
@@ -62,15 +70,6 @@ const createWindow = () => {
     return { action: 'allow' };
   });
 
-  // @see: https://stackoverflow.com/questions/38309240/object-has-been-destroyed-when-open-secondary-child-window-in-electron-js/39135293
-  // 창이 닫히지 않고 숨겨지도록 설정함
-  browserWindow.on('close', (event) => {
-    if (!forceQuit) {
-      event.preventDefault();
-      browserWindow?.hide();
-    }
-  });
-
   return browserWindow;
 };
 
@@ -108,10 +107,7 @@ const createTray = (mainWindow: BrowserWindow) => {
     { type: 'separator' },
     {
       label: '종료',
-      click: () => {
-        forceQuit = true;
-        app.quit();
-      },
+      role: 'quit',
     },
   ]);
   tray.setContextMenu(contextMenu);
@@ -130,7 +126,6 @@ app.on('ready', () => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    forceQuit = true;
     app.quit();
   }
 });
@@ -186,5 +181,43 @@ app.whenReady().then(() => {
       mainWindow?.setMinimumSize(WindowSizeMap.normal.width, WindowSizeMap.normal.height);
       mainWindow?.setSize(WindowSizeMap.normal.width, WindowSizeMap.normal.height);
     }
+  });
+
+  // pomodoro
+  ipcMain.handle('setup-pomodoro', (event, _config: PomodoroManagerConfigWithoutCallbacks) => {
+    const config = {
+      ..._config,
+      onTickPomodoro: (cycles: PomodoroCycle[], time: PomodoroTime) => {
+        mainWindow?.webContents.send('tick-pomodoro', cycles, time);
+
+        const trayInfo = PomodoroManager.getTrayInfo(cycles, time);
+        tray?.setImage(getTrayIcon(trayInfo.icon));
+        tray?.setTitle(trayInfo.time);
+      },
+      onEndPomodoro: (cycles: PomodoroCycle[], reason: PomodoroEndReason) => {
+        mainWindow?.webContents.send('end-pomodoro', cycles, reason);
+      },
+      onceExceedGoalTime: (mode: PomodoroMode) => {
+        mainWindow?.webContents.send('once-exceed-goal-time', mode);
+      },
+    };
+
+    if (pomodoroManager) {
+      pomodoroManager.updateConfig(config);
+    } else {
+      pomodoroManager = new PomodoroManager(config);
+    }
+  });
+  ipcMain.handle('start-focus', () => {
+    pomodoroManager.startFocus();
+  });
+  ipcMain.handle('start-rest-wait', () => {
+    pomodoroManager.startRestWait();
+  });
+  ipcMain.handle('start-rest', () => {
+    pomodoroManager.startRest();
+  });
+  ipcMain.handle('end-pomodoro', (event, mode) => {
+    pomodoroManager.endPomodoro(mode);
   });
 });
