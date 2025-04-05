@@ -150,7 +150,7 @@ const SelectModeDrawerContent = ({ setMode, onClose }: SelectModeDrawerContentPr
               className="flex w-full flex-row items-center justify-start gap-2 p-5"
             >
               <Icon name={getCategoryIconName(category.iconType)} size="sm" />
-              <span className="body-sb text-text-primary">{category.title}</span>
+              <span className="body-sb truncate text-text-primary">{category.title}</span>
             </SelectGroupItem>
           ))}
         </SelectGroup>
@@ -207,7 +207,10 @@ const EditModeDrawerContent = ({ setMode }: EditModeDrawerContentProps) => {
               >
                 <Icon name={disabled ? 'lock' : getCategoryIconName(category.iconType)} size="sm" />
                 <span
-                  className={cn('body-sb', disabled ? 'text-text-disabled' : 'text-text-primary')}
+                  className={cn(
+                    'body-sb truncate',
+                    disabled ? 'text-text-disabled' : 'text-text-primary',
+                  )}
                 >
                   {category.title}
                 </span>
@@ -294,7 +297,10 @@ const DeleteModeDrawerContent = ({ setMode }: DeleteModeDrawerContentProps) => {
                   size="md"
                 />
                 <span
-                  className={cn('body-sb', disabled ? 'text-text-disabled' : 'text-text-primary')}
+                  className={cn(
+                    'body-sb truncate',
+                    disabled ? 'text-text-disabled' : 'text-text-primary',
+                  )}
                 >
                   {category.title}
                 </span>
