@@ -1,5 +1,7 @@
+import { PomodoroNextAction } from 'shared/type';
+import { msToTime } from 'shared/util';
+
 import { Category } from '@/entities/category';
-import { PomodoroNextAction } from '@/entities/pomodoro';
 import { Time } from '@/features/time';
 import { useUser } from '@/features/user';
 import hairballImage from '@/shared/assets/images/hairball.png';
@@ -7,7 +9,7 @@ import catRestMotionRiveFile from '@/shared/assets/rivs/cat_rest.riv';
 import { MAX_REST_MINUTES, MIN_REST_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { useRiveCat } from '@/shared/hooks';
 import { Button, Icon, SelectGroup, SelectGroupItem, SimpleLayout, Tooltip } from '@/shared/ui';
-import { cn, getCategoryIconName, msToTime } from '@/shared/utils';
+import { cn, getCategoryIconName } from '@/shared/utils';
 
 type RestScreenProps = {
   currentCategory: Category;

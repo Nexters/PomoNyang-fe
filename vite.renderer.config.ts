@@ -26,6 +26,7 @@ export default defineConfig((env) => {
     resolve: {
       preserveSymlinks: true,
       alias: {
+        shared: path.resolve(__dirname, './src/shared'),
         '@': path.resolve(__dirname, './src/renderer'),
       },
     },

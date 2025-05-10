@@ -1,14 +1,14 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { PomodoroNextAction } from 'shared/type';
+import { msToTime } from 'shared/util';
 
 import { Category } from '@/entities/category';
-import { PomodoroNextAction } from '@/entities/pomodoro';
 import { CategoryChip } from '@/features/category';
 import { Time } from '@/features/time';
 import completeFocusLottie from '@/shared/assets/lotties/loti_complete_focus.json?url';
 import particleLottie from '@/shared/assets/lotties/loti_particle.json?url';
 import { MAX_FOCUS_MINUTES, MIN_FOCUS_MINUTES, MINUTES_GAP } from '@/shared/constants';
 import { Button, Icon, SelectGroup, SelectGroupItem, SimpleLayout } from '@/shared/ui';
-import { msToTime } from '@/shared/utils';
 
 type RestWaitScreenProps = {
   currentCategory: Category;

@@ -1,4 +1,6 @@
-import { cn, padNumber } from '@/shared/utils';
+import { padNumber } from 'shared/util';
+
+import { cn } from '@/shared/utils';
 
 type TimeProps = {
   minutes: number;

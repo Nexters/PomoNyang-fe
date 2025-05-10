@@ -14,6 +14,20 @@ const electronAPI: IElectronAPI = {
     ipcRenderer.invoke('set-always-on-top', isAlwaysOnTop),
   getMinimized: () => ipcRenderer.invoke('get-minimized'),
   setMinimized: (isMinimized: boolean) => ipcRenderer.invoke('set-minimized', isMinimized),
+
+  // pomodoro
+  setupPomodoro: (config) => ipcRenderer.invoke('setup-pomodoro', config),
+  startFocus: () => ipcRenderer.invoke('start-focus'),
+  startRestWait: () => ipcRenderer.invoke('start-rest-wait'),
+  startRest: () => ipcRenderer.invoke('start-rest'),
+  endPomodoro: (reason) => ipcRenderer.invoke('end-pomodoro', reason),
+
+  onTickPomodoro: (callback) =>
+    ipcRenderer.on('tick-pomodoro', (_, cycles, time) => callback(cycles, time)),
+  onEndPomodoro: (callback) =>
+    ipcRenderer.on('end-pomodoro', (_, cycles, reason) => callback(cycles, reason)),
+  onOnceExceedGoalTime: (callback) =>
+    ipcRenderer.on('once-exceed-goal-time', (_, mode) => callback(mode)),
 };
 
 contextBridge.exposeInMainWorld('electronAPI', electronAPI);

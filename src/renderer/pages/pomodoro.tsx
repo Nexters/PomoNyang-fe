@@ -1,27 +1,22 @@
 import { useEffect, useState } from 'react';
 
-import { PomodoroMode, PomodoroNextAction } from '@/entities/pomodoro';
+import { PomodoroMode, PomodoroNextAction } from 'shared/type';
+import { getPomodoroTime, minutesToMs, msToMinutes } from 'shared/util';
+
 import { useCategories, useUpdateCategory } from '@/features/category';
-import { useAddPomodoro } from '@/features/pomodoro';
-import { getPomodoroTime, usePomodoro } from '@/features/pomodoro/hooks/use-pomodoro';
+import { useAddPomodoro, usePomodoroByMain } from '@/features/pomodoro';
 import { TimeoutDialog } from '@/features/pomodoro/ui/timeout-dialog';
 import { useFocusNotification } from '@/features/time';
 import { useUser } from '@/features/user';
 import { MINUTES_GAP } from '@/shared/constants';
 import { useAlwaysOnTop, useDisclosure, useMinimize } from '@/shared/hooks';
 import { useToast } from '@/shared/ui';
-import {
-  createIsoDuration,
-  isoDurationToMs,
-  minutesToMs,
-  msToIsoDuration,
-  msToMinutes,
-} from '@/shared/utils';
+import { createIsoDuration, isoDurationToMs, msToIsoDuration } from '@/shared/utils';
 import { FocusScreen, HomeScreen, RestScreen, RestWaitScreen } from '@/widgets/pomodoro';
 
 // @note: 개발할 때, 초과시간까지 빠르게 테스트하기 위해 설정함
 // 원래대로 하고 싶으면 false로 변경해서 사용하면 됩니다
-const isFastForward = import.meta.env.DEV;
+const isFastForward = false; // import.meta.env.DEV;
 const taping = (ms: number) => (isFastForward ? Math.floor(ms / 60) : ms);
 
 const focusExceedMaxTime = taping(minutesToMs(60));
@@ -61,7 +56,7 @@ const Pomodoro = () => {
   const currentRestTime = taping(isoDurationToMs(currentCategory?.restTime));
 
   const { pomodoroCycles, pomodoroTime, startFocus, startRestWait, startRest, endPomodoro } =
-    usePomodoro({
+    usePomodoroByMain({
       focusTime: currentFocusTime,
       focusExceedMaxTime,
       restWaitExceedMaxTime,
@@ -155,8 +150,12 @@ const Pomodoro = () => {
         currentCategory={currentCategory}
         minimized={minimized}
         alwaysOnTop={alwaysOnTop}
-        handleRest={startRestWait}
-        handleEnd={endPomodoro}
+        handleRest={() => {
+          startRestWait();
+        }}
+        handleEnd={() => {
+          endPomodoro();
+        }}
         setMinimized={setMinimized}
         setAlwaysOnTop={setAlwaysOnTop}
       />

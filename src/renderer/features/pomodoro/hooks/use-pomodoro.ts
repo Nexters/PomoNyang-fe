@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
+import { PomodoroCycle, PomodoroEndReason, PomodoroMode, PomodoroTime } from 'shared/type';
+import { msToTime, padNumber } from 'shared/util';
 import { useLocalStorage } from 'usehooks-ts';
 
-import { PomodoroCycle, PomodoroEndReason, PomodoroMode, PomodoroTime } from '@/entities/pomodoro';
 import { LOCAL_STORAGE_KEY } from '@/shared/constants';
 import { useInterval } from '@/shared/hooks';
-import { msToTime, padNumber } from '@/shared/utils';
 
 // == usePomodoro 로직에 대한 description
 
