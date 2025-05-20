@@ -25,11 +25,6 @@ const MyPage = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <h2 className="subBody-sb text-text-secondary">통계</h2>
-            <ReadyForStat />
-          </div>
-
-          <div className="flex flex-col gap-2">
             <h2 className="subBody-sb text-text-secondary">알림</h2>
             <div className="w-full rounded-sm bg-background-secondary px-5 py-6">
               <div className="flex w-full items-center">
@@ -76,46 +71,5 @@ const ActionButton = ({ children, onClick }: ActionButtonProps) => (
     <Icon name="chevronRight" size="md" />
   </button>
 );
-
-const ReadyForStat = () => (
-  <div className="flex flex-col items-center justify-center gap-2 rounded-sm bg-background-secondary py-5">
-    <Icon name="readyForStat" width={100} height={100} />
-    <div className="flex flex-col gap-1 text-center">
-      <h3 className="body-sb text-text-primary">통계 기능을 준비하고 있어요</h3>
-      <p className="subBody-r text-text-secondary">
-        집중시간을 모아보는 통계가
-        <br />곧 업데이트될 예정이에요
-      </p>
-    </div>
-  </div>
-);
-
-// TODO: 통계쪽 디자인 가이드 완성되면 반영 예정
-// const OfflineStat = () => (
-//   <div className="flex flex-col justify-center items-center gap-2 py-[62px] bg-background-secondary rounded-sm">
-//     <img src={OfflineStatIcon} width={100} height={100} />
-//     <div className="flex flex-col gap-1 text-center">
-//       <h3 className="header-5 text-text-primary">지금은 통계를 확인할 수 없어요</h3>
-//       <p className="subBody-r text-text-secondary">인터넷에 연결하면 통계를 볼 수 있어요</p>
-//     </div>
-//   </div>
-// );
-
-// TODO: 디자인 가이드 업데이트 가능성이 있어서 일단 작업 보류함
-// const OnlineStat = () => {
-//   const statics = {
-//     today: '3시간 35분',
-//     week: '23시간 45분',
-//     categories: [
-//       { name: '집중', time: '2시간 30분' },
-//       { name: '휴식', time: '1시간 5분' },
-//     ],
-//   }
-//   return <div className='w-full p-5 rounded-sm bg-background-secondary'>
-//     <div>
-
-//     </div>
-//   </div>
-// }
 
 export default MyPage;
