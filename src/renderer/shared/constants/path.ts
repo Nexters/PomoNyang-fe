@@ -7,4 +7,5 @@ export const PATH = {
   MY_PAGE: '/mypage',
   MY_CAT: '/mycat',
   CATEGORY: '/category/:id?',
+  STATS: '/stats',
 } as const;

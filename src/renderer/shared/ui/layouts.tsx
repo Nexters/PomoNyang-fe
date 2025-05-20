@@ -42,26 +42,18 @@ export const SidebarLayout = ({ title, children }: SidebarLayoutProps) => {
 const DesktopSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const isSelected = (path: string) => location.pathname === path;
 
   return (
     <div className="flex flex-col items-center justify-center gap-1">
-      <button
-        className={cn(
-          'h-12 w-12 p-2',
-          location.pathname === PATH.POMODORO ? 'text-icon-primary' : 'text-icon-tertiary',
-        )}
-        onClick={() => navigate(PATH.POMODORO)}
-      >
-        <Icon size="lg" name="clockLine" className="*:stroke-current" />
+      <button className={cn('h-12 w-12 p-2')} onClick={() => navigate(PATH.POMODORO)}>
+        <Icon size="lg" name={isSelected(PATH.POMODORO) ? 'houseFill' : 'houseLine'} />
       </button>
-      <button
-        className={cn(
-          'h-12 w-12 p-2',
-          location.pathname === PATH.MY_PAGE ? 'text-icon-primary' : 'text-icon-tertiary',
-        )}
-        onClick={() => navigate(PATH.MY_PAGE)}
-      >
-        <Icon size="lg" name="menu" className="*:stroke-current" />
+      <button className={cn('h-12 w-12 p-2')} onClick={() => navigate(PATH.STATS)}>
+        <Icon size="lg" name={isSelected(PATH.STATS) ? 'chartFill' : 'chartLine'} />
+      </button>
+      <button className={cn('h-12 w-12 p-2')} onClick={() => navigate(PATH.MY_PAGE)}>
+        <Icon size="lg" name={isSelected(PATH.MY_PAGE) ? 'userFill' : 'userLine'} />
       </button>
     </div>
   );

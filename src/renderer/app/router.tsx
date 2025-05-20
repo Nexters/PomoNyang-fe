@@ -8,6 +8,7 @@ import Naming from '@/pages/naming';
 import Onboarding from '@/pages/onboarding';
 import Pomodoro from '@/pages/pomodoro';
 import Selection from '@/pages/selection';
+import StatsPage from '@/pages/stats';
 import { PATH } from '@/shared/constants';
 
 export const Router = () => {
@@ -22,6 +23,7 @@ export const Router = () => {
         <Route path={PATH.MY_PAGE} element={<MyPage />} />
         <Route path={PATH.MY_CAT} element={<MyCat />} />
         <Route path={PATH.CATEGORY} element={<Category />} />
+        <Route path={PATH.STATS} element={<StatsPage />} />
         <Route path="*" element={<Navigate to={PATH.HOME} replace />} />
       </Routes>
     </ReactRouter>
