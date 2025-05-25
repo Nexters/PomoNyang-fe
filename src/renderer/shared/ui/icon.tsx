@@ -17,7 +17,7 @@ import ChartFillIcon from '@/shared/assets/svgs/chart-fill.svg';
 import ChartLineIcon from '@/shared/assets/svgs/chart-line.svg';
 import CheckIcon from '@/shared/assets/svgs/check.svg?react';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
-import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
+import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg?react';
 import CircleCheck from '@/shared/assets/svgs/circle-check.svg';
 import CircleUncheck from '@/shared/assets/svgs/circle-uncheck.svg';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';

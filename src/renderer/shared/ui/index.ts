@@ -13,3 +13,4 @@ export * from './guide';
 export * from './dialog';
 export * from './layouts';
 export * from './popover';
+export * from './calendar';

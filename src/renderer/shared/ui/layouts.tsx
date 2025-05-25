@@ -19,7 +19,7 @@ export const SimpleLayout = ({ children }: SimpleLayoutProps) => {
 };
 
 export type SidebarLayoutProps = {
-  title?: string;
+  title?: React.ReactNode;
   children: React.ReactNode;
 };
 
@@ -30,7 +30,13 @@ export const SidebarLayout = ({ title, children }: SidebarLayoutProps) => {
         <DesktopSidebar />
       </div>
       <div className="drag-region absolute left-[68px] right-0 top-0 h-[52px] bg-background-primary">
-        <h1 className="body-sb inline-flex h-full items-center pl-3 text-text-primary">{title}</h1>
+        {typeof title === 'string' ? (
+          <h1 className="body-sb inline-flex h-full items-center pl-3 text-text-primary">
+            {title}
+          </h1>
+        ) : (
+          title
+        )}
       </div>
       <div className="absolute bottom-0 left-[68px] right-0 top-[52px] bg-background-primary">
         {children}
