@@ -59,7 +59,12 @@ export const StatsTitle = ({ date, onDateChange }: StatsTitleProps) => {
             />
           }
         >
-          <button>{formatTitleDate(date)}</button>
+          <button className="flex min-w-[128px] items-center justify-center gap-1 p-1">
+            <span className="header-5 tabular-nums text-text-primary">{formatTitleDate(date)}</span>
+            <span className="rounded-full bg-background-secondary p-2">
+              <Icon name="chevronRight" className="rotate-90" />
+            </span>
+          </button>
         </Popover>
       </div>
       <button
