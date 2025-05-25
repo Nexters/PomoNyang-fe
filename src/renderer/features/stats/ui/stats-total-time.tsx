@@ -1,3 +1,5 @@
+import { msToTimeString } from 'shared/util';
+
 import { Icon } from '@/shared/ui';
 
 export type StatsTotalTimeProps = {
@@ -6,14 +8,11 @@ export type StatsTotalTimeProps = {
 
 export const StatsTotalTime = ({ totalTimeMs }: StatsTotalTimeProps) => {
   if (totalTimeMs) {
-    const hours = Math.floor(totalTimeMs / (1000 * 60 * 60));
-    const minutes = Math.floor((totalTimeMs % (1000 * 60 * 60)) / (1000 * 60));
-    const timeText = hours > 0 ? `${hours}시간 ${minutes}분` : `${minutes}분`;
     return (
       <div className="flex min-h-[100px] w-full items-center justify-between rounded-[16px] bg-background-accent-1 px-6">
         <div>
           <h3 className="text-text-inverse">
-            <span className="header-3 tabular-nums">{timeText}</span>
+            <span className="header-3 tabular-nums">{msToTimeString(totalTimeMs)}</span>
             <br />
             <span className="body-sb">집중했어요!</span>
           </h3>
