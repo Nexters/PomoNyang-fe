@@ -32,7 +32,7 @@ export const StatsTitle = ({ date, onDateChange }: StatsTitleProps) => {
   };
 
   return (
-    <div className="flex items-center justify-between px-3 py-2">
+    <div className="drag-region flex items-center justify-between px-3 py-2">
       <button
         className={cn(
           'rotate-180 p-2 text-icon-primary',
