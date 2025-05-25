@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
-import { StatsTitle } from '@/features/stats';
+import { StatsTitle, StatsTotalTime } from '@/features/stats';
 import { SidebarLayout } from '@/shared/ui';
 
 const StatsPage = () => {
   const [date, setDate] = useState<Date>(new Date());
+  const totalTimeMs = 12960000; // 예시로 3시간 36분을 밀리초로 표현
 
   return (
     <SidebarLayout title={<StatsTitle date={date} onDateChange={setDate} />}>
@@ -12,7 +13,7 @@ const StatsPage = () => {
         <div>
           <h2 className="header-4 px-4 py-5">총 집중시간</h2>
           <div className="px-4 pb-5">
-            <div className="h-[100px] w-full bg-slate-400">3시간 37분 집중했어요!</div>
+            <StatsTotalTime totalTimeMs={totalTimeMs} />
           </div>
         </div>
         <div>

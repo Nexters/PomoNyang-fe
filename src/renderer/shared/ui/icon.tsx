@@ -1,6 +1,7 @@
 import { cn } from '../utils';
 
 import BackIcon from '@/shared/assets/svgs/back.svg';
+import BubbleIcon from '@/shared/assets/svgs/bubble.svg';
 import CategoryAsteriskIcon from '@/shared/assets/svgs/category-asterisk.svg';
 import CategoryBoxPenIcon from '@/shared/assets/svgs/category-box-pen.svg';
 import CategoryBriefcaseIcon from '@/shared/assets/svgs/category-briefcase.svg';
@@ -90,6 +91,7 @@ const icons = {
   houseLine: HouseLineIcon,
   chartFill: ChartFillIcon,
   chartLine: ChartLineIcon,
+  bubble: BubbleIcon,
 } as const;
 const sizes = {
   xs: 16,
