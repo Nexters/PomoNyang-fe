@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { StatsTitle, StatsTotalTime } from '@/features/stats';
+import { StatsTimeLog, StatsTitle, StatsTotalTime } from '@/features/stats';
 import { SidebarLayout } from '@/shared/ui';
 
 const StatsPage = () => {
@@ -21,7 +21,7 @@ const StatsPage = () => {
             집중 기록 <span className="text-text-accent-1">5</span>
           </h2>
           <div className="px-4 pb-5">
-            <div className="h-[450px] w-full bg-slate-400">기록 영역</div>
+            <StatsTimeLog />
           </div>
         </div>
         <div>

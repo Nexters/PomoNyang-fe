@@ -21,6 +21,7 @@ import CheerIcon from '@/shared/assets/svgs/cheer.svg';
 import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg?react';
 import CircleCheck from '@/shared/assets/svgs/circle-check.svg';
 import CircleUncheck from '@/shared/assets/svgs/circle-uncheck.svg';
+import CircleIcon from '@/shared/assets/svgs/circle.svg?react';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
 import EllipsisIcon from '@/shared/assets/svgs/ellipsis.svg?react';
@@ -92,6 +93,7 @@ const icons = {
   chartFill: ChartFillIcon,
   chartLine: ChartLineIcon,
   bubble: BubbleIcon,
+  circle: CircleIcon,
 } as const;
 const sizes = {
   xs: 16,
