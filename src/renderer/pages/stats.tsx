@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { StatsTimeLog, StatsTitle, StatsTotalTime } from '@/features/stats';
+import { StatsTimeLog, StatsTitle, StatsTotalTime, StatsChart } from '@/features/stats';
 import { SidebarLayout } from '@/shared/ui';
 
 const StatsPage = () => {
@@ -27,7 +27,7 @@ const StatsPage = () => {
         <div>
           <h2 className="header-4 px-4 py-5">집중 추세</h2>
           <div className="px-4 pb-5">
-            <div className="h-[300px] w-full bg-slate-400">그래프 영역</div>
+            <StatsChart />
           </div>
         </div>
         <div>
