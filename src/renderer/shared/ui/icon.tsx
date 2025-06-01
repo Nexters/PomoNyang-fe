@@ -41,6 +41,9 @@ import PlayIcon from '@/shared/assets/svgs/play.svg';
 import PlusIcon from '@/shared/assets/svgs/plus.svg';
 import PlusSvgIcon from '@/shared/assets/svgs/plus.svg?react';
 import PositiveIcon from '@/shared/assets/svgs/positive.svg';
+import Rank1stIcon from '@/shared/assets/svgs/rank-1st.svg';
+import Rank2ndIcon from '@/shared/assets/svgs/rank-2nd.svg';
+import Rank3rdIcon from '@/shared/assets/svgs/rank-3rd.svg';
 import RestTimeIcon from '@/shared/assets/svgs/rest-time.svg';
 import StimulusIcon from '@/shared/assets/svgs/stimulus.svg';
 import TrashIcon from '@/shared/assets/svgs/trash.svg';
@@ -94,6 +97,9 @@ const icons = {
   chartLine: ChartLineIcon,
   bubble: BubbleIcon,
   circle: CircleIcon,
+  rank1st: Rank1stIcon,
+  rank2nd: Rank2ndIcon,
+  rank3rd: Rank3rdIcon,
 } as const;
 const sizes = {
   xs: 16,
