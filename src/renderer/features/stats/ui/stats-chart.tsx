@@ -11,6 +11,8 @@ import {
   Cell,
 } from 'recharts';
 
+import { cn } from '@/shared/utils';
+
 const data = [
   { date: '5/8', time: 15 },
   { date: '5/9', time: 30 },
@@ -62,10 +64,14 @@ export const StatsChart = () => {
             content={(data) => {
               const { active, payload } = data;
               if (!active || !payload || payload.length === 0) return null;
+              const noVisible = tooltipContent === '';
               return (
                 <div
                   ref={tooltipRef}
-                  className="caption-sb rounded-[8px] bg-icon-primary px-2 py-1 text-white"
+                  className={cn(
+                    'caption-sb rounded-[8px] bg-icon-primary px-2 py-1 text-white',
+                    noVisible && 'opacity-0',
+                  )}
                 >
                   {tooltipContent}
                 </div>
