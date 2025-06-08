@@ -105,6 +105,7 @@ export const StatsChart = () => {
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
+                cursor={'pointer'}
                 fill={entry.time === 0 ? '#DFD8D2' : entry.time === 348 ? '#F47A0A' : '#8F867E'} // 5시간 48분인 경우 빨간색
               />
             ))}
