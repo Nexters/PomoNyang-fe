@@ -41,7 +41,7 @@ const StatsPage = () => {
         <div>
           <h2 className="header-4 px-4 py-5">집중 추세</h2>
           <div className="px-4 pb-5">
-            <StatsChart />
+            <StatsChart chartData={stats.weaklyFocusTimeTrend} />
           </div>
         </div>
         <div>
@@ -50,7 +50,7 @@ const StatsPage = () => {
             <span className="subBody-r text-text-tertiary">5월 8일 - 5월 14일</span>
           </h2>
           <div className="px-4 pb-5">
-            <StatsRanks />
+            <StatsRanks rankingData={stats.categoryRanking} />
           </div>
         </div>
       </div>

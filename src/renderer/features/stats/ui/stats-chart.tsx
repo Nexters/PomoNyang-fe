@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import {
   BarChart,
@@ -10,27 +10,38 @@ import {
   CartesianGrid,
   Cell,
 } from 'recharts';
+import { msToTimeString } from 'shared/util';
 
-import { cn } from '@/shared/utils';
+import { Stats } from '@/entities/stats';
+import { cn, isoDurationToMs } from '@/shared/utils';
 
-const data = [
-  { date: '5/8', time: 15 },
-  { date: '5/9', time: 30 },
-  { date: '5/10', time: 0 },
-  { date: '5/11', time: 45 },
-  { date: '5/12', time: 0 },
-  { date: '5/13', time: 15 },
-  { date: '5/14', time: 348 }, // 5시간 48분을 분 단위로 변환 (5*60 + 48)
-];
+export type StatsChartProps = {
+  chartData: Stats['weaklyFocusTimeTrend'];
+};
 
-export const StatsChart = () => {
+export const StatsChart = ({ chartData }: StatsChartProps) => {
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [tooltipContent, setTooltipContent] = useState('');
   const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const data = useMemo(() => {
+    return chartData.dateToFocusTimeStatistics.map((item) => {
+      const date = new Date(item.date);
+      const formattedDate = `${date.getMonth() + 1}/${date.getDate()}`;
+      return {
+        date: formattedDate,
+        time: isoDurationToMs(item.totalFocusTime),
+      };
+    });
+  }, [chartData]);
+  const totalFocusTime = useMemo(() => {
+    const totalMs = data.reduce((acc, item) => acc + item.time, 0);
+    if (totalMs === 0) return '0분';
+    return msToTimeString(totalMs);
+  }, []);
 
   return (
     <div className="rounded-[16px] bg-white p-4">
-      <h3 className="header-4 mb-[50px] text-text-secondary">총 9시간 51분</h3>
+      <h3 className="header-4 mb-[50px] text-text-secondary">총 {totalFocusTime}</h3>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
