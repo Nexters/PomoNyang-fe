@@ -84,3 +84,17 @@ export const isoDurationToMs = (isoDuration?: string) => {
   const { hours, minutes, seconds } = parseIsoDuration(isoDuration);
   return hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000;
 };
+
+export const isoDurationToString = (isoDuration?: string, withSeconds = false) => {
+  const { years, months, days, hours, minutes, seconds } = parseIsoDuration(isoDuration);
+  const parts: string[] = [];
+
+  if (years > 0) parts.push(`${years}년`);
+  if (months > 0) parts.push(`${months}개월`);
+  if (days > 0) parts.push(`${days}일`);
+  if (hours > 0) parts.push(`${hours}시간`);
+  if (minutes > 0) parts.push(`${minutes}분`);
+  if (withSeconds && seconds > 0) parts.push(`${seconds}초`);
+
+  return parts.join(' ');
+};

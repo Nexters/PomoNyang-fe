@@ -1,12 +1,24 @@
 import { useState } from 'react';
 
+import { format } from 'date-fns';
+
 import { StatsTimeLog, StatsTitle, StatsTotalTime, StatsChart, StatsRanks } from '@/features/stats';
+import { useStats } from '@/features/stats/hooks/use-stats';
 import { SidebarLayout } from '@/shared/ui';
+import { isoDurationToMs } from '@/shared/utils';
 
 const StatsPage = () => {
   const [date, setDate] = useState<Date>(new Date());
-  const totalTimeMs = 12960000; // 예시로 3시간 36분을 밀리초로 표현
+  const { data: stats } = useStats(format(date, 'yyyy-MM-dd'));
+  const totalTimeMs = isoDurationToMs(stats?.totalFocusTime);
 
+  if (!stats) {
+    return (
+      <SidebarLayout title={<StatsTitle date={date} onDateChange={setDate} />}>
+        loading...
+      </SidebarLayout>
+    );
+  }
   return (
     <SidebarLayout title={<StatsTitle date={date} onDateChange={setDate} />}>
       <div className="flex h-full flex-col gap-5 overflow-y-auto pb-10 pt-3">
@@ -16,14 +28,16 @@ const StatsPage = () => {
             <StatsTotalTime totalTimeMs={totalTimeMs} />
           </div>
         </div>
-        <div>
-          <h2 className="header-4 px-4 py-5">
-            집중 기록 <span className="text-text-accent-1">5</span>
-          </h2>
-          <div className="px-4 pb-5">
-            <StatsTimeLog />
+        {stats.focusTimes.length > 0 && (
+          <div>
+            <h2 className="header-4 px-4 py-5">
+              집중 기록 <span className="text-text-accent-1">{stats.focusTimes.length}</span>
+            </h2>
+            <div className="px-4 pb-5">
+              <StatsTimeLog logs={stats.focusTimes} />
+            </div>
           </div>
-        </div>
+        )}
         <div>
           <h2 className="header-4 px-4 py-5">집중 추세</h2>
           <div className="px-4 pb-5">
