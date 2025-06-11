@@ -1,32 +1,25 @@
+import { Stats } from '@/entities/stats';
 import { Icon, IconName } from '@/shared/ui';
+import { isoDurationToString } from '@/shared/utils';
 
-const mockRanks = [
-  {
-    category: '집중',
-    time: '1시간 30분',
-  },
-  {
-    category: '휴식',
-    time: '1시간 15분',
-  },
-  {
-    category: '기타',
-    time: '45분',
-  },
-];
+const getRankIconName = (index: number): IconName | undefined => {
+  switch (index) {
+    case 0:
+      return 'rank1st';
+    case 1:
+      return 'rank2nd';
+    case 2:
+      return 'rank3rd';
+  }
+};
 
-export const StatsRanks = () => {
-  const getRankIconName = (index: number): IconName | undefined => {
-    switch (index) {
-      case 0:
-        return 'rank1st';
-      case 1:
-        return 'rank2nd';
-      case 2:
-        return 'rank3rd';
-    }
-  };
-  const noRank = mockRanks.length === 0;
+export type StatsRanksProps = {
+  rankingData: Stats['categoryRanking'];
+};
+
+export const StatsRanks = ({ rankingData }: StatsRanksProps) => {
+  const ranks = rankingData.rankingItems.sort((a, b) => a.rank - b.rank);
+  const noRank = ranks.length === 0;
 
   if (noRank) {
     return (
@@ -38,11 +31,13 @@ export const StatsRanks = () => {
   }
   return (
     <div className="flex flex-col gap-4 rounded-[16px] bg-white p-4">
-      {mockRanks.slice(0, 3).map((rank, index) => (
+      {ranks.slice(0, 3).map((rank, index) => (
         <div key={index} className="flex items-center justify-start gap-[10px]">
           <Icon name={getRankIconName(index)} size={28} />
-          <span className="body-sb flex-1 text-text-primary">{rank.category}</span>
-          <span className="body-r tabular-nums text-text-tertiary">{rank.time}</span>
+          <span className="body-sb flex-1 text-text-primary">{rank.category.title}</span>
+          <span className="body-r tabular-nums text-text-tertiary">
+            {isoDurationToString(rank.totalFocusTime)}
+          </span>
         </div>
       ))}
     </div>

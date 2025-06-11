@@ -47,7 +47,9 @@ const StatsPage = () => {
         <div>
           <h2 className="header-4 flex items-center gap-2 px-4 py-5">
             <span>카테고리 랭킹</span>
-            <span className="subBody-r text-text-tertiary">5월 8일 - 5월 14일</span>
+            <span className="subBody-r text-text-tertiary">
+              {`${format(stats.categoryRanking.startDate, 'M월 d일')} - ${format(stats.categoryRanking.endDate, 'M월 d일')}`}
+            </span>
           </h2>
           <div className="px-4 pb-5">
             <StatsRanks rankingData={stats.categoryRanking} />
