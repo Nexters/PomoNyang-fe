@@ -15,5 +15,6 @@ export const useStats = (date: string) => {
       return await authClient?.get<Stats>(`/api/v1/statistics/${date}`);
     },
     enabled: !!authClient && !!date,
+    staleTime: 0,
   });
 };
