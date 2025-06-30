@@ -7,7 +7,8 @@ export type Stats = {
     no: number;
     category: Pick<Category, 'no' | 'title' | 'iconType'>;
     totalFocusTime: string;
-    // FIXME: 집중 기간 (ex, 09:00 - 10:00) 추가 필요
+    startedAt: string;
+    doneAt: string;
   }>;
   weaklyFocusTimeTrend: {
     startDate: string;

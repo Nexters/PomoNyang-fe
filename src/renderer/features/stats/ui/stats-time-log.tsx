@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { format } from 'date-fns';
+
 import { Stats } from '@/entities/stats';
 import { Icon } from '@/shared/ui';
 import { getCategoryIconName, isoDurationToString } from '@/shared/utils';
@@ -20,10 +22,9 @@ export const StatsTimeLog = ({ logs }: StatsTimeLogProps) => {
   return (
     <div>
       {renderedLog.map((log, index) => {
-        // FIXME:
-        const startAt = '11:00'; // format(log.startAt, 'HH:mm');
-        const endAt = '12:00'; // format(log.endAt, 'HH:mm');
-        const duration = isoDurationToString(log.totalFocusTime, true); // log.endAt.getTime() - log.startAt.getTime();
+        const startAt = format(log.startedAt, 'HH:mm');
+        const endAt = format(log.doneAt, 'HH:mm');
+        const duration = isoDurationToString(log.totalFocusTime, true);
         return (
           <div key={index}>
             <div className="flex items-center gap-1">
