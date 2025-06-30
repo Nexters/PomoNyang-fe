@@ -1,5 +1,6 @@
 import { addDays, format, isAfter, isSameDay } from 'date-fns';
 
+import { useUser } from '@/features/user';
 import { Calendar, Icon, Popover } from '@/shared/ui';
 import { cn } from '@/shared/utils';
 
@@ -18,7 +19,8 @@ export type StatsTitleProps = {
 
 export const StatsTitle = ({ date, onDateChange }: StatsTitleProps) => {
   const today = new Date();
-  const userCreatedAt = addDays(today, -1); // FIXME: 유저 가입일
+  const { data: user } = useUser();
+  const userCreatedAt = new Date(user?.createdAt ?? ''); // FIXME: 유저 가입일
   const isDisabledPrev = !isAfter(date, userCreatedAt);
   const isDisabledNext = isSameDay(date, today) || isAfter(date, today);
 
