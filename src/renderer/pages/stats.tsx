@@ -15,7 +15,9 @@ const StatsPage = () => {
   if (!stats) {
     return (
       <SidebarLayout title={<StatsTitle date={date} onDateChange={setDate} />}>
-        loading...
+        <div className="flex h-full items-center justify-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-solid border-background-accent-1 border-t-transparent"></div>
+        </div>
       </SidebarLayout>
     );
   }
@@ -41,7 +43,7 @@ const StatsPage = () => {
         <div>
           <h2 className="header-4 px-4 py-5">집중 추세</h2>
           <div className="px-4 pb-5">
-            <StatsChart chartData={stats.weaklyFocusTimeTrend} />
+            <StatsChart dataFromServer={stats.weaklyFocusTimeTrend} />
           </div>
         </div>
         <div>
