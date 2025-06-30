@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { ComponentProps, useMemo, useState } from 'react';
 
 import {
   BarChart,
@@ -16,34 +16,148 @@ import { Stats } from '@/entities/stats';
 import { cn, isoDurationToMs } from '@/shared/utils';
 
 export type StatsChartProps = {
-  chartData: Stats['weaklyFocusTimeTrend'];
+  dataFromServer: Stats['weaklyFocusTimeTrend'];
 };
 
-export const StatsChart = ({ chartData }: StatsChartProps) => {
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  const [tooltipContent, setTooltipContent] = useState('');
-  const tooltipRef = useRef<HTMLDivElement | null>(null);
-  const data = useMemo(() => {
-    return chartData.dateToFocusTimeStatistics.map((item) => {
-      const date = new Date(item.date);
-      const formattedDate = `${date.getMonth() + 1}/${date.getDate()}`;
-      return {
-        date: formattedDate,
-        time: isoDurationToMs(item.totalFocusTime),
-      };
-    });
-  }, [chartData]);
+type YAxisProps = ComponentProps<typeof YAxis>;
+
+const oneMinute = 60 * 1000; // 1분을 ms로 변환
+const oneHour = 60 * oneMinute; // 1시간을 ms로 변환
+
+const toFormattedDate = (str: string) => {
+  const date = new Date(str);
+  return `${date.getMonth() + 1}/${date.getDate()}`;
+};
+const toFixed = (num: number, digit = 2) => Number(num.toFixed(digit));
+const toMinutes = (ms: number) => toFixed(ms / oneMinute);
+const toHours = (ms: number) => toFixed(ms / oneHour);
+
+const range = ({ start, step, count }: { start: number; step: number; count: number }) => {
+  return Array.from({ length: count + 1 }, (_, i) => start + i * step);
+};
+const minmax = (min: number, value: number, max: number) => {
+  return Math.min(Math.max(value, min), max);
+};
+
+export const StatsChart = ({ dataFromServer }: StatsChartProps) => {
+  const [activeIndex, setActiveIndex] = useState(6);
+  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | undefined>();
+
+  const dataWithMs = useMemo(() => {
+    return dataFromServer.dateToFocusTimeStatistics.map((item) => ({
+      date: item.date,
+      time: isoDurationToMs(item.totalFocusTime),
+    }));
+  }, [dataFromServer]);
+
   const totalFocusTime = useMemo(() => {
-    const totalMs = data.reduce((acc, item) => acc + item.time, 0);
+    const totalMs = dataWithMs.reduce((acc, item) => acc + item.time, 0);
     if (totalMs === 0) return '0분';
     return msToTimeString(totalMs);
   }, []);
 
+  const { data, ticks, tickUnit } = useMemo<{
+    ticks: YAxisProps['ticks'];
+    tickUnit: 'minute' | 'hour';
+    data: typeof dataWithMs;
+  }>(() => {
+    const maxTime = Math.max(...dataWithMs.map((item) => item.time));
+
+    if (maxTime === 0) {
+      return {
+        ticks: [0, 10],
+        tickUnit: 'minute',
+        data: dataWithMs.map((item) => ({
+          date: toFormattedDate(item.date),
+          time: toMinutes(item.time),
+        })),
+      };
+    }
+    if (maxTime < oneHour) {
+      return {
+        ticks: [0, 15, 30, 45, 60],
+        tickUnit: 'minute',
+        data: dataWithMs.map((item) => ({
+          date: toFormattedDate(item.date),
+          time: toMinutes(item.time),
+        })),
+      };
+    }
+    if (maxTime < oneHour * 5) {
+      // min: [0, 1, 2]
+      // max: [0, 1, 2, 3, 4, 5]
+      const ticks = range({
+        start: 0,
+        step: 1,
+        count: minmax(2, Math.ceil(maxTime / oneHour), 5),
+      });
+      return {
+        ticks: ticks,
+        tickUnit: 'hour',
+        data: dataWithMs.map((item) => ({
+          date: toFormattedDate(item.date),
+          time: toHours(item.time),
+        })),
+      };
+    }
+    if (maxTime < oneHour * 8) {
+      return {
+        // [0, 2, 4, 6, 8]
+        ticks: range({ start: 0, step: 2, count: 4 }),
+        tickUnit: 'hour',
+        data: dataWithMs.map((item) => ({
+          date: toFormattedDate(item.date),
+          time: toHours(item.time),
+        })),
+      };
+    }
+    if (maxTime < oneHour * 20) {
+      // min: [0, 5, 10]
+      // max: [0, 5, 10, 15, 20]
+      const ticks = range({
+        start: 0,
+        step: 5,
+        count: minmax(2, Math.ceil(maxTime / (5 * oneHour)), 5),
+      });
+      return {
+        ticks: ticks,
+        tickUnit: 'hour',
+        data: dataWithMs.map((item) => ({
+          date: toFormattedDate(item.date),
+          time: toHours(item.time),
+        })),
+      };
+    }
+    return {
+      // [0, 6, 12, 18, 24]
+      ticks: range({ start: 0, step: 6, count: 4 }),
+      tickUnit: 'hour',
+      data: dataWithMs.map((item) => ({
+        date: toFormattedDate(item.date),
+        time: toHours(item.time),
+      })),
+    };
+  }, [dataWithMs]);
+
   return (
     <div className="rounded-[16px] bg-white p-4">
       <h3 className="header-4 mb-[50px] text-text-secondary">총 {totalFocusTime}</h3>
-      <ResponsiveContainer width="100%" height={200}>
-        <BarChart data={data}>
+      <ResponsiveContainer width="100%" minHeight={240}>
+        <BarChart
+          data={data}
+          onMouseMove={(state) => {
+            if (state.isTooltipActive && state.activeTooltipIndex != null) {
+              setActiveIndex(state.activeTooltipIndex);
+
+              const barRects = document.querySelectorAll('.recharts-bar-rectangle');
+              const rect = barRects[state.activeTooltipIndex] as SVGGraphicsElement | undefined;
+              if (rect) {
+                const { x, y, width } = rect.getBBox();
+                setTooltipPosition({ x: x + width / 2, y: y - 8 });
+              }
+            }
+          }}
+        >
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
             dataKey="date"
@@ -54,70 +168,60 @@ export const StatsChart = ({ chartData }: StatsChartProps) => {
             axisLine={{ stroke: '#DFD8D2' }}
           />
           <YAxis
-            width={30}
+            width={36}
             tick={{
               fontSize: 11,
               fill: '#8F867E',
             }}
-            tickFormatter={(tick) => {
-              if (tick === 0) return '0';
-              if (tick < 60) return `${tick}m`;
-              const hours = Math.floor(tick / 60);
-              return `${hours}h`;
-            }}
+            domain={[0, 'dataMax']}
+            ticks={ticks}
+            tickFormatter={(tick) => `${tick}${tickUnit === 'minute' ? 'm' : 'h'}`}
             axisLine={false}
             tickLine={false}
             orientation="right"
           />
           <Tooltip
             cursor={false}
-            position={tooltipPosition}
+            wrapperStyle={{
+              pointerEvents: 'none',
+              top: tooltipPosition?.y,
+              left: tooltipPosition?.x,
+              transform: 'translate(-50%, -100%)',
+            }}
             content={(data) => {
               const { active, payload } = data;
               if (!active || !payload || payload.length === 0) return null;
-              const noVisible = tooltipContent === '';
+              const realPayload = payload[0].payload;
+              if (realPayload.time === 0) return null;
+              let content = '';
+              if (tickUnit === 'minute') {
+                content = `${realPayload.time}분`;
+              } else {
+                const hour = Math.floor(realPayload.time);
+                const minute = Math.round((realPayload.time - hour) * 60);
+                content = [hour > 0 ? `${hour}시간` : '', minute > 0 ? `${minute}분` : '']
+                  .filter(Boolean)
+                  .join('\n');
+              }
               return (
-                <div
-                  ref={tooltipRef}
-                  className={cn(
-                    'caption-sb rounded-[8px] bg-icon-primary px-2 py-1 text-white',
-                    noVisible && 'opacity-0',
-                  )}
-                >
-                  {tooltipContent}
+                <div className="flex flex-col items-center">
+                  <div
+                    className={cn(
+                      'caption-sb whitespace-pre-wrap rounded-[8px] bg-icon-primary px-2 py-1 text-center text-white',
+                    )}
+                  >
+                    {content}
+                  </div>
+                  <div className="-mt-[7px] h-0 w-0 border-l-[7px] border-r-[7px] border-t-[14px] border-l-transparent border-r-transparent border-t-icon-primary" />
                 </div>
               );
             }}
           />
-          <Bar
-            dataKey="time"
-            barSize={20}
-            radius={[6, 6, 0, 0]}
-            minPointSize={8}
-            onMouseOver={async (data) => {
-              if (!tooltipRef.current) return;
-              setTooltipContent(
-                `${data.payload.date} - ${data.payload.time === 0 ? '집중 시간 없음' : `${data.payload.time}분`}`,
-              );
-
-              // getBoundingClientRect 실행을 위해 렌더링이 완료될 때까지 기다림
-              await new Promise((resolve) => window.requestAnimationFrame(resolve));
-
-              const gap = 20;
-              const tooltipSize = tooltipRef.current.getBoundingClientRect();
-              const tooltipX = data.x + data.width / 2 - tooltipSize.width / 2; // 막대의 중앙 x 좌표
-              const tooltipY = data.y - gap - tooltipSize.height / 2; // 막대의 꼭대기 위치에서 약간 위로 올림
-              setTooltipPosition({
-                x: tooltipX,
-                y: tooltipY,
-              });
-            }}
-          >
+          <Bar dataKey="time" barSize={20} radius={[6, 6, 0, 0]} minPointSize={8}>
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                cursor={'pointer'}
-                fill={entry.time === 0 ? '#DFD8D2' : entry.time === 348 ? '#F47A0A' : '#8F867E'} // 5시간 48분인 경우 빨간색
+                fill={entry.time === 0 ? '#DFD8D2' : activeIndex === index ? '#F47A0A' : '#8F867E'}
               />
             ))}
           </Bar>
