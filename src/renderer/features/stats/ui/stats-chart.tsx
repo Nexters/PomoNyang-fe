@@ -54,7 +54,7 @@ export const StatsChart = ({ dataFromServer }: StatsChartProps) => {
     const totalMs = dataWithMs.reduce((acc, item) => acc + item.time, 0);
     if (totalMs === 0) return '0분';
     return msToTimeString(totalMs);
-  }, []);
+  }, [dataWithMs]);
 
   const { data, ticks, tickUnit } = useMemo<{
     ticks: YAxisProps['ticks'];

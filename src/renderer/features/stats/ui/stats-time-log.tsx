@@ -21,12 +21,12 @@ export const StatsTimeLog = ({ logs }: StatsTimeLogProps) => {
 
   return (
     <div>
-      {renderedLog.map((log, index) => {
+      {renderedLog.map((log) => {
         const startAt = format(log.startedAt, 'HH:mm');
         const endAt = format(log.doneAt, 'HH:mm');
         const duration = isoDurationToString(log.totalFocusTime, true);
         return (
-          <div key={index}>
+          <div key={log.no}>
             <div className="flex items-center gap-1">
               <Icon name="circle" size="sm" />
               <span className="subBody-r text-text-tertiary">
