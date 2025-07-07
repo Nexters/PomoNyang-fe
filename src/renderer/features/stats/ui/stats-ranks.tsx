@@ -18,7 +18,7 @@ export type StatsRanksProps = {
 };
 
 export const StatsRanks = ({ rankingData }: StatsRanksProps) => {
-  const ranks = rankingData.rankingItems.sort((a, b) => a.rank - b.rank);
+  const ranks = rankingData.rankingItems.toSorted((a, b) => a.rank - b.rank);
   const noRank = ranks.length === 0;
 
   if (noRank) {
