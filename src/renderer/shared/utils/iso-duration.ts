@@ -96,5 +96,8 @@ export const isoDurationToString = (isoDuration?: string, withSeconds = false) =
   if (minutes > 0) parts.push(`${minutes}분`);
   if (withSeconds && seconds > 0) parts.push(`${seconds}초`);
 
+  if (parts.length === 0) {
+    return withSeconds ? '0초' : '0분';
+  }
   return parts.join(' ');
 };

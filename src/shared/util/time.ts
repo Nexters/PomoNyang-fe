@@ -24,5 +24,8 @@ export const msToTimeString = (ms: number, withSeconds = false) => {
   if (withSeconds && seconds > 0) {
     array.push(`${seconds}초`);
   }
+  if (array.length === 0) {
+    return withSeconds ? '0초' : '0분';
+  }
   return array.join(' ');
 };
