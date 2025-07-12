@@ -87,6 +87,7 @@ jobs:
       - name: install dependencies
         run: yarn install
       - name: set api endpoint
+        shell: bash
         run: |
           if [[ "${{ github.event.inputs.tag }}" == *"qa"* ]]; then
             echo "VITE_API_SERVER_URL=${{ secrets.VITE_DEV_API_SERVER_URL }}" >> $GITHUB_ENV
