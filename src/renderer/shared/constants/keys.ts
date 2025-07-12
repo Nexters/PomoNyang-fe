@@ -5,6 +5,9 @@ export const QUERY_KEY = {
   // category
   CATEGORIES: ['category', 'all'],
 
+  // stats
+  STATS: ['stats', 'all'],
+
   // user
   ME: ['me'],
 

@@ -1,6 +1,7 @@
 import { cn } from '../utils';
 
 import BackIcon from '@/shared/assets/svgs/back.svg';
+import BubbleIcon from '@/shared/assets/svgs/bubble.svg';
 import CategoryAsteriskIcon from '@/shared/assets/svgs/category-asterisk.svg';
 import CategoryBoxPenIcon from '@/shared/assets/svgs/category-box-pen.svg';
 import CategoryBriefcaseIcon from '@/shared/assets/svgs/category-briefcase.svg';
@@ -13,18 +14,21 @@ import CategoryLightningIcon from '@/shared/assets/svgs/category-lightning.svg';
 import CategoryMoonIcon from '@/shared/assets/svgs/category-moon.svg';
 import CategoryOpenBookIcon from '@/shared/assets/svgs/category-open-book.svg';
 import CategorySunIcon from '@/shared/assets/svgs/category-sun.svg';
+import ChartFillIcon from '@/shared/assets/svgs/chart-fill.svg';
+import ChartLineIcon from '@/shared/assets/svgs/chart-line.svg';
 import CheckIcon from '@/shared/assets/svgs/check.svg?react';
 import CheerIcon from '@/shared/assets/svgs/cheer.svg';
-import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg';
+import ChevronRightIcon from '@/shared/assets/svgs/chevron-right.svg?react';
 import CircleCheck from '@/shared/assets/svgs/circle-check.svg';
 import CircleUncheck from '@/shared/assets/svgs/circle-uncheck.svg';
-import ClockLineIcon from '@/shared/assets/svgs/clock-line.svg?react';
+import CircleIcon from '@/shared/assets/svgs/circle.svg?react';
 import ClockIcon from '@/shared/assets/svgs/clock.svg';
 import CloseIcon from '@/shared/assets/svgs/close.svg';
 import EllipsisIcon from '@/shared/assets/svgs/ellipsis.svg?react';
 import FocusTimeIcon from '@/shared/assets/svgs/focus-time.svg';
+import HouseFillIcon from '@/shared/assets/svgs/house-fill.svg';
+import HouseLineIcon from '@/shared/assets/svgs/house-line.svg';
 import LockIcon from '@/shared/assets/svgs/lock.svg?react';
-import MenuIcon from '@/shared/assets/svgs/menu.svg?react';
 import MinimizeOff from '@/shared/assets/svgs/minimize-off.svg';
 import MinimizeOn from '@/shared/assets/svgs/minimize-on.svg';
 import MinusIcon from '@/shared/assets/svgs/minus.svg';
@@ -37,15 +41,18 @@ import PlayIcon from '@/shared/assets/svgs/play.svg';
 import PlusIcon from '@/shared/assets/svgs/plus.svg';
 import PlusSvgIcon from '@/shared/assets/svgs/plus.svg?react';
 import PositiveIcon from '@/shared/assets/svgs/positive.svg';
-import ReadyForStatIcon from '@/shared/assets/svgs/ready-for-stat.svg';
+import Rank1stIcon from '@/shared/assets/svgs/rank-1st.svg';
+import Rank2ndIcon from '@/shared/assets/svgs/rank-2nd.svg';
+import Rank3rdIcon from '@/shared/assets/svgs/rank-3rd.svg';
 import RestTimeIcon from '@/shared/assets/svgs/rest-time.svg';
 import StimulusIcon from '@/shared/assets/svgs/stimulus.svg';
 import TrashIcon from '@/shared/assets/svgs/trash.svg';
+import UserFillIcon from '@/shared/assets/svgs/user-fill.svg';
+import UserLineIcon from '@/shared/assets/svgs/user-line.svg';
 
 const icons = {
   placeholder: PlaceholderIcon,
   back: BackIcon,
-  menu: MenuIcon,
   categoryCat: CategoryCatIcon,
   categoryBoxPen: CategoryBoxPenIcon,
   categoryOpenBook: CategoryOpenBookIcon,
@@ -73,8 +80,6 @@ const icons = {
   stimulus: StimulusIcon,
   pen: PenIcon,
   clock: ClockIcon,
-  readyForStat: ReadyForStatIcon,
-  clockLine: ClockLineIcon,
   pinOff: PinOff,
   pinOn: PinOn,
   minimizeOff: MinimizeOff,
@@ -84,6 +89,17 @@ const icons = {
   lock: LockIcon,
   circleCheck: CircleCheck,
   circleUncheck: CircleUncheck,
+  userFill: UserFillIcon,
+  userLine: UserLineIcon,
+  houseFill: HouseFillIcon,
+  houseLine: HouseLineIcon,
+  chartFill: ChartFillIcon,
+  chartLine: ChartLineIcon,
+  bubble: BubbleIcon,
+  circle: CircleIcon,
+  rank1st: Rank1stIcon,
+  rank2nd: Rank2ndIcon,
+  rank3rd: Rank3rdIcon,
 } as const;
 const sizes = {
   xs: 16,

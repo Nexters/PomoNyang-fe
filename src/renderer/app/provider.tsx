@@ -33,7 +33,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     >
       {children}
       <Toaster />
-      <ReactQueryDevtools buttonPosition="bottom-left" initialIsOpen={false} />
+      <ReactQueryDevtools buttonPosition="bottom-right" initialIsOpen={false} />
     </PersistQueryClientProvider>
   );
 };

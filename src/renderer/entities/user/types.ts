@@ -9,4 +9,7 @@ export type User = {
 
   // 선택되어있는 고양이 정보
   cat: Cat | null;
+
+  // 가입일
+  createdAt: string;
 };
