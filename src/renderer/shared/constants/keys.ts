@@ -6,7 +6,7 @@ export const QUERY_KEY = {
   CATEGORIES: ['category', 'all'],
 
   // stats
-  STATS: ['stats', 'all'],
+  STATS: ['stat', 'all'],
 
   // user
   ME: ['me'],

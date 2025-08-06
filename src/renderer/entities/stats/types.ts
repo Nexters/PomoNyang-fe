@@ -10,7 +10,7 @@ export type Stats = {
     startedAt: string;
     doneAt: string;
   }>;
-  weaklyFocusTimeTrend: {
+  weeklyFocusTimeTrend: {
     startDate: string;
     endDate: string;
     dateToFocusTimeStatistics: Array<{

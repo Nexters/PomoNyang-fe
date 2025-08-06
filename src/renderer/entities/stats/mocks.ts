@@ -2,7 +2,7 @@ import { Stats } from './types';
 
 import { createIsoDuration } from '@/shared/utils';
 
-export const mockTrend: Stats['weaklyFocusTimeTrend'] = {
+export const mockTrend: Stats['weeklyFocusTimeTrend'] = {
   startDate: '2025-06-19',
   endDate: '2025-06-25',
   dateToFocusTimeStatistics: [

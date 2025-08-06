@@ -9,12 +9,15 @@ import { useAuthClient } from '@/shared/hooks';
  */
 export const useStats = (date: string) => {
   const authClient = useAuthClient();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const queryString = new URLSearchParams({ timezone }).toString();
   return useQuery({
-    queryKey: [...QUERY_KEY.STATS, date],
+    queryKey: [...QUERY_KEY.STATS, date, timezone],
     queryFn: async () => {
-      return await authClient?.get<Stats>(`/api/v1/statistics/${date}`);
+      return await authClient?.get<Stats>(`/api/v1/statistics/${date}?${queryString}`);
     },
     enabled: !!authClient && !!date,
     staleTime: 0,
+    gcTime: 0,
   });
 };

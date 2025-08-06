@@ -43,7 +43,7 @@ const StatsPage = () => {
         <div>
           <h2 className="header-4 px-4 py-5">집중 추세</h2>
           <div className="px-4 pb-5">
-            <StatsChart dataFromServer={stats.weaklyFocusTimeTrend} />
+            <StatsChart dataFromServer={stats.weeklyFocusTimeTrend} />
           </div>
         </div>
         <div>
