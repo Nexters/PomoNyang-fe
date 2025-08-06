@@ -27,6 +27,7 @@ export type Pomodoro = {
   categoryNo: number;
   focusedTime: string;
   restedTime: string;
+  startedAt: string;
   doneAt: string;
 };
 
