@@ -47,8 +47,8 @@ const Pomodoro = () => {
 
   const { currentCategory } = useCategories();
   const { data: user } = useUser();
-  const { mutate: updateCategory } = useUpdateCategory();
-  const { mutate: savePomodoro } = useAddPomodoro();
+  const { mutate: updateCategory, isPending: isUpdating } = useUpdateCategory();
+  const { mutate: savePomodoro, isPending: isSaving } = useAddPomodoro();
   const { minimized, setMinimized } = useMinimize();
   const { alwaysOnTop, setAlwaysOnTop } = useAlwaysOnTop();
 
@@ -92,7 +92,7 @@ const Pomodoro = () => {
           timeoutDialogProps.onOpen();
         }
 
-        if (currentCategory) {
+        if (currentCategory && !isSaving) {
           savePomodoro({
             body: [
               {
@@ -100,6 +100,7 @@ const Pomodoro = () => {
                 categoryNo: currentCategory.no,
                 focusedTime: msToIsoDuration(focusedTime),
                 restedTime: msToIsoDuration(restedTime),
+                startedAt: new Date(cycles[0].startAt).toISOString(),
                 doneAt: new Date().toISOString(),
               },
             ],
@@ -116,6 +117,7 @@ const Pomodoro = () => {
 
   const updateCategoryTime = (type: 'focusTime' | 'restTime', currentMinutes: number) => {
     if (!selectedNextAction || !currentCategory) return;
+    if (isUpdating) return;
 
     updateCategory({
       no: currentCategory.no,
