@@ -16,7 +16,7 @@ import { Stats } from '@/entities/stats';
 import { cn, isoDurationToMs } from '@/shared/utils';
 
 export type StatsChartProps = {
-  dataFromServer: Stats['weaklyFocusTimeTrend'];
+  dataFromServer: Stats['weeklyFocusTimeTrend'];
 };
 
 type YAxisProps = ComponentProps<typeof YAxis>;
