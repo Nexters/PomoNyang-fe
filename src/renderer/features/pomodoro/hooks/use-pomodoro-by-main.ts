@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { PomodoroCycle, PomodoroEndReason, PomodoroManagerConfig, PomodoroTime } from 'shared/type';
+import {
+  EndPomodoroCallback,
+  OnceExceedGoalTimeCallback,
+  PomodoroCycle,
+  PomodoroEndReason,
+  PomodoroManagerConfig,
+  PomodoroTime,
+  TickPomodoroCallback,
+} from 'shared/type';
 
 export type UsePomodoroParams = Omit<PomodoroManagerConfig, 'onTickPomodoro'>;
 
@@ -19,16 +27,20 @@ export const usePomodoroByMain = (params: UsePomodoroParams) => {
   callbacksRef.current = callbacks;
 
   useEffect(() => {
-    window.electronAPI.onTickPomodoro((cycles, time) => {
+    const tickPomodoroCallback: TickPomodoroCallback = (_, cycles, time) => {
       setPomodoroCycles(cycles);
       setPomodoroTime(time);
-    });
-    window.electronAPI.onEndPomodoro((cycles, reason) => {
+    };
+    const endPomodoroCallback: EndPomodoroCallback = (_, cycles, reason) => {
       callbacksRef.current.onEndPomodoro(cycles, reason);
-    });
-    window.electronAPI.onOnceExceedGoalTime((mode) => {
+    };
+    const onceExceedGoalTimeCallback: OnceExceedGoalTimeCallback = (_, mode) => {
       callbacksRef.current.onceExceedGoalTime?.(mode);
-    });
+    };
+
+    window.electronAPI.onTickPomodoro(tickPomodoroCallback);
+    window.electronAPI.onEndPomodoro(endPomodoroCallback);
+    window.electronAPI.onOnceExceedGoalTime(onceExceedGoalTimeCallback);
 
     window.electronAPI.setupPomodoro({
       focusTime,
@@ -37,6 +49,12 @@ export const usePomodoroByMain = (params: UsePomodoroParams) => {
       restTime,
       restExceedMaxTime,
     });
+
+    return () => {
+      window.electronAPI.offTickPomodoro(tickPomodoroCallback);
+      window.electronAPI.offEndPomodoro(endPomodoroCallback);
+      window.electronAPI.offOnceExceedGoalTime(onceExceedGoalTimeCallback);
+    };
   }, [focusTime, focusExceedMaxTime, restWaitExceedMaxTime, restTime, restExceedMaxTime]);
 
   const startFocus = () => {
