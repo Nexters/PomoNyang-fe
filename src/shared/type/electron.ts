@@ -6,6 +6,21 @@ import {
   PomodoroTime,
 } from './pomodoro';
 
+export type TickPomodoroCallback = (
+  event: Electron.IpcRendererEvent,
+  cycles: PomodoroCycle[],
+  time: PomodoroTime,
+) => void;
+export type EndPomodoroCallback = (
+  event: Electron.IpcRendererEvent,
+  cycles: PomodoroCycle[],
+  reason: PomodoroEndReason,
+) => void;
+export type OnceExceedGoalTimeCallback = (
+  event: Electron.IpcRendererEvent,
+  mode: PomodoroMode,
+) => void;
+
 // @see: https://www.electronjs.org/docs/latest/tutorial/context-isolation#usage-with-typescript
 export interface IElectronAPI {
   showWindow: () => void;
@@ -24,7 +39,10 @@ export interface IElectronAPI {
   startRest: () => Promise<void>;
   endPomodoro: (reason: PomodoroEndReason) => Promise<void>;
 
-  onTickPomodoro: (callback: (cycles: PomodoroCycle[], time: PomodoroTime) => void) => void;
-  onEndPomodoro: (callback: (cycles: PomodoroCycle[], reason: PomodoroEndReason) => void) => void;
-  onOnceExceedGoalTime: (callback: (mode: PomodoroMode) => void) => void;
+  onTickPomodoro: (callback: TickPomodoroCallback) => void;
+  offTickPomodoro: (callback: TickPomodoroCallback) => void;
+  onEndPomodoro: (callback: EndPomodoroCallback) => void;
+  offEndPomodoro: (callback: EndPomodoroCallback) => void;
+  onOnceExceedGoalTime: (callback: OnceExceedGoalTimeCallback) => void;
+  offOnceExceedGoalTime: (callback: OnceExceedGoalTimeCallback) => void;
 }

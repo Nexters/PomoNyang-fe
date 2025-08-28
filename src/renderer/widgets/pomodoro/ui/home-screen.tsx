@@ -108,6 +108,7 @@ export const HomeScreen = ({
           <div className="header-4 text-text-tertiary">{user?.cat?.name}</div>
           <div className="flex flex-col items-center gap-md p-lg">
             <CategoryChip
+              id="categoryButton"
               category={currentCategory}
               onClick={() => {
                 changeCategoryDrawerProps.onOpen();

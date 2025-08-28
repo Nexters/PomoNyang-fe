@@ -22,12 +22,14 @@ const electronAPI: IElectronAPI = {
   startRest: () => ipcRenderer.invoke('start-rest'),
   endPomodoro: (reason) => ipcRenderer.invoke('end-pomodoro', reason),
 
-  onTickPomodoro: (callback) =>
-    ipcRenderer.on('tick-pomodoro', (_, cycles, time) => callback(cycles, time)),
-  onEndPomodoro: (callback) =>
-    ipcRenderer.on('end-pomodoro', (_, cycles, reason) => callback(cycles, reason)),
-  onOnceExceedGoalTime: (callback) =>
-    ipcRenderer.on('once-exceed-goal-time', (_, mode) => callback(mode)),
+  onTickPomodoro: (callback) => ipcRenderer.on('tick-pomodoro', callback),
+  offTickPomodoro: (callback) => ipcRenderer.off('tick-pomodoro', callback),
+
+  onEndPomodoro: (callback) => ipcRenderer.on('end-pomodoro', callback),
+  offEndPomodoro: (callback) => ipcRenderer.off('end-pomodoro', callback),
+
+  onOnceExceedGoalTime: (callback) => ipcRenderer.on('once-exceed-goal-time', callback),
+  offOnceExceedGoalTime: (callback) => ipcRenderer.off('once-exceed-goal-time', callback),
 };
 
 contextBridge.exposeInMainWorld('electronAPI', electronAPI);
