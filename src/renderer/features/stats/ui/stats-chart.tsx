@@ -195,7 +195,7 @@ export const StatsChart = ({ dataFromServer }: StatsChartProps) => {
               if (realPayload.time === 0) return null;
               let content = '';
               if (tickUnit === 'minute') {
-                content = `${realPayload.time}분`;
+                content = `${Math.floor(realPayload.time)}분`;
               } else {
                 const hour = Math.floor(realPayload.time);
                 const minute = Math.round((realPayload.time - hour) * 60);
