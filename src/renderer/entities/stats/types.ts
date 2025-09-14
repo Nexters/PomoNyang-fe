@@ -1,7 +1,7 @@
 import { Category } from '../category';
 
 export type Stats = {
-  data: string;
+  date: string;
   totalFocusTime: string;
   focusTimes: Array<{
     no: number;
