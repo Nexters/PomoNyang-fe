@@ -2,7 +2,7 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 import { Category } from '@/entities/category';
 import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
-import { useAuthClient } from '@/shared/hooks';
+import * as db from '@/shared/utils/db';
 
 type SelectCategoryParams = {
   no: number;
@@ -10,14 +10,11 @@ type SelectCategoryParams = {
 
 export const useSelectCategory = () => {
   const queryClient = useQueryClient();
-  const authClient = useAuthClient();
+
   return useMutation({
     mutationKey: MUTATION_KEY.SELECT_CATEGORY,
     mutationFn: async ({ no }: SelectCategoryParams) => {
-      return await authClient?.patch<unknown, undefined>(
-        `/api/v1/categories/select/${no}`,
-        undefined,
-      );
+      return await db.selectCategory(no);
     },
     onMutate: ({ no }) => {
       queryClient.cancelQueries({ queryKey: QUERY_KEY.CATEGORIES });

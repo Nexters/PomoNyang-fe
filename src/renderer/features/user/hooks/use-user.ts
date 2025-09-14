@@ -2,15 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 
 import { User } from '@/entities/user';
 import { QUERY_KEY } from '@/shared/constants';
-import { useAuthClient } from '@/shared/hooks';
+import * as db from '@/shared/utils/db';
 
 export const useUser = () => {
-  const authClient = useAuthClient();
-  return useQuery({
+  return useQuery<User>({
     queryKey: QUERY_KEY.ME,
     queryFn: async () => {
-      return await authClient?.get<User>('/api/v1/users/me');
+      return await db.getUser();
     },
-    enabled: !!authClient,
   });
 };

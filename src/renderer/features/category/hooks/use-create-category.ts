@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Category, CategoryIconType } from '@/entities/category';
 import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
-import { useAuthClient } from '@/shared/hooks';
+import * as db from '@/shared/utils/db';
 
 type CreateCategoryBody = {
   title: string;
@@ -14,11 +14,10 @@ type CreateCategoryParams = {
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
-  const authClient = useAuthClient();
   return useMutation({
     mutationKey: MUTATION_KEY.CREATE_CATEGORY,
     mutationFn: async ({ body }: CreateCategoryParams) => {
-      return await authClient?.post<unknown, CreateCategoryBody>('/api/v1/categories', body);
+      return await db.createCategory(body);
     },
     onMutate: ({ body }) => {
       queryClient.cancelQueries({ queryKey: QUERY_KEY.CATEGORIES });

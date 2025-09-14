@@ -2,15 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 
 import { Cat } from '@/entities/cat';
 import { QUERY_KEY } from '@/shared/constants';
-import { useAuthClient } from '@/shared/hooks';
+import * as db from '@/shared/utils/db';
 
 export const useCats = () => {
-  const authClient = useAuthClient();
-  return useQuery({
+  return useQuery<Cat[]>({
     queryKey: QUERY_KEY.CATS,
     queryFn: async () => {
-      return await authClient?.get<Cat[]>('/api/v1/cats');
+      return await db.getCats();
     },
-    enabled: !!authClient,
   });
 };

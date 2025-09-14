@@ -2,15 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 
 import { Category } from '@/entities/category';
 import { QUERY_KEY } from '@/shared/constants';
-import { useAuthClient } from '@/shared/hooks';
+import * as db from '@/shared/utils/db';
 
 export const useCategory = (no?: number) => {
-  const authClient = useAuthClient();
-  return useQuery({
+  return useQuery<Category>({
     queryKey: [...QUERY_KEY.CATEGORIES, no],
     queryFn: async () => {
-      return await authClient?.get<Category>(`/api/v1/categories/${no}`);
+      return await db.getCategory(no!);
     },
-    enabled: !!authClient && no != null,
+    enabled: no != null,
   });
 };
