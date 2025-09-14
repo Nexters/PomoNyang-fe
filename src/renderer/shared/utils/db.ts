@@ -19,11 +19,11 @@ class LocalDB extends Dexie {
 
   constructor() {
     super('localDB');
-    this.version(1).stores({
-      user: 'registeredDeviceNo, isPushEnabled, cat, createdAt',
-      cat: 'no, type, name',
-      category: 'no, title, focusTime, restTime, position, iconType, isSelected',
-      pomodoro: 'clientFocusTimeId, categoryNo, focusedTime, restedTime, startedAt, doneAt',
+    this.version(2).stores({
+      user: 'registeredDeviceNo',
+      cat: 'no',
+      category: 'no, title, isSelected',
+      pomodoro: 'clientFocusTimeId, categoryNo, startedAt',
     });
     this.insertDefaultData();
   }
