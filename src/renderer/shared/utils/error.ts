@@ -10,3 +10,11 @@ export const isErrorResponse = (error: unknown): error is ErrorResponse => {
   }
   return 'type' in error && 'message' in error && 'errorTraceId' in error;
 };
+
+export const createErrorResponse = (message: string): ErrorResponse => {
+  return {
+    type: 'error',
+    message,
+    errorTraceId: 'mock-trace-id',
+  };
+};

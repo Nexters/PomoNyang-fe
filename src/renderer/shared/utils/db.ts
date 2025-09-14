@@ -1,13 +1,15 @@
 import Dexie, { Table } from 'dexie';
 import { Pomodoro } from 'shared/type';
 
+import { createErrorResponse } from './error';
 import { pick } from './object';
 
 import { Cat } from '@/entities/cat';
 import { Category } from '@/entities/category';
 import { User } from '@/entities/user';
 
-export const USER_ID = 1;
+const USER_ID = 1;
+const DEFAULT_CATEGORY_ID = 1;
 
 class LocalDB extends Dexie {
   user!: Table<User>;
@@ -54,7 +56,7 @@ class LocalDB extends Dexie {
       },
     ]);
     await this.category.add({
-      no: 1,
+      no: DEFAULT_CATEGORY_ID,
       title: '기본',
       focusTime: 'PT25M',
       restTime: 'PT10M',
@@ -106,6 +108,11 @@ export const getCategory = async (no: Category['no']) => {
 };
 
 export const createCategory = async (body: Pick<Category, 'title' | 'iconType'>) => {
+  const sameTitleCount = await localDB.category.where('title').equals(body.title).count();
+  if (sameTitleCount > 0) {
+    throw createErrorResponse('동일한 카테고리 이름이 존재합니다.');
+  }
+
   const count = await localDB.category.count();
   const category: Category = {
     no: Date.now(),
@@ -128,7 +135,13 @@ export const updateCategory = async (
 };
 
 export const deleteCategories = async (nos: Category['no'][]) => {
-  return await localDB.category.bulkDelete(nos);
+  await localDB.category.bulkDelete(nos);
+
+  // 선택된 게 사라졌다면 기본 카테고리 선택되도록
+  const categories = await getCategories();
+  if (categories.every((c) => !c.isSelected)) {
+    await localDB.category.update(DEFAULT_CATEGORY_ID, { isSelected: true });
+  }
 };
 
 export const selectCategory = async (selectNo: Category['no']) => {
