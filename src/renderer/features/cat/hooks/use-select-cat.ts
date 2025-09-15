@@ -3,16 +3,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Cat } from '@/entities/cat';
 import { User } from '@/entities/user';
 import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
-import { useAuthClient } from '@/shared/hooks';
+import * as db from '@/shared/utils/db';
 
 export const useSelectCat = () => {
   const queryClient = useQueryClient();
-  const authClient = useAuthClient();
 
   return useMutation({
     mutationKey: MUTATION_KEY.SELECT_CAT,
     mutationFn: async (catNo: Cat['no']) => {
-      return await authClient?.put<unknown>('/api/v1/users/cats', { catNo });
+      return await db.selectCat(catNo);
     },
     onMutate: (catNo) => {
       // cancel current queries

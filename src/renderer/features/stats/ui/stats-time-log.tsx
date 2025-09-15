@@ -1,22 +1,32 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { format } from 'date-fns';
 
 import { Stats } from '@/entities/stats';
 import { Icon } from '@/shared/ui';
-import { getCategoryIconName, isoDurationToString } from '@/shared/utils';
+import { cn, getCategoryIconName, isoDurationToString } from '@/shared/utils';
 
 export type StatsTimeLogProps = {
   logs: Stats['focusTimes'];
 };
 
+const MIN_LOG_ITEM = 3;
+
 export const StatsTimeLog = ({ logs }: StatsTimeLogProps) => {
-  const [renderedLog, setRenderedLog] = useState(logs.slice(0, 3));
-  const isShowMoreButton = logs.length > renderedLog.length;
+  const sortedLogs = useMemo(
+    () =>
+      logs.toSorted((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime()),
+    [],
+  );
+  const [renderedLog, setRenderedLog] = useState(sortedLogs.slice(0, MIN_LOG_ITEM));
+  const isShowButton = sortedLogs.length > MIN_LOG_ITEM;
+  const isExpanded = isShowButton && renderedLog.length === sortedLogs.length;
 
   const showMore = () => {
-    const nextLogs = logs.slice(renderedLog.length, renderedLog.length + 3);
-    setRenderedLog((prev) => [...prev, ...nextLogs]);
+    setRenderedLog(sortedLogs);
+  };
+  const foldLog = () => {
+    setRenderedLog(sortedLogs.slice(0, MIN_LOG_ITEM));
   };
 
   return (
@@ -53,13 +63,17 @@ export const StatsTimeLog = ({ logs }: StatsTimeLogProps) => {
         );
       })}
 
-      {isShowMoreButton && (
+      {isShowButton && (
         <button
           className="mx-auto flex items-center gap-2 px-4 py-2 text-text-tertiary"
-          onClick={showMore}
+          onClick={isExpanded ? foldLog : showMore}
         >
-          <span className="body-sb">더 보기</span>
-          <Icon name="chevronRight" size="sm" className="rotate-90" />
+          <span className="body-sb">{isExpanded ? '접기' : '더 보기'}</span>
+          <Icon
+            name="chevronRight"
+            size="sm"
+            className={cn(isExpanded ? '-rotate-90' : 'rotate-90')}
+          />
         </button>
       )}
     </div>

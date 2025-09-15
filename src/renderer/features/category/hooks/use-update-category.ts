@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Category } from '@/entities/category';
 import { MUTATION_KEY, QUERY_KEY } from '@/shared/constants';
-import { useAuthClient } from '@/shared/hooks';
+import * as db from '@/shared/utils/db';
 
 type UpdateCategoryBody = Partial<Pick<Category, 'title' | 'iconType' | 'focusTime' | 'restTime'>>;
 
@@ -13,14 +13,11 @@ type UpdateCategoryParams = {
 
 export const useUpdateCategory = () => {
   const queryClient = useQueryClient();
-  const authClient = useAuthClient();
+
   return useMutation({
     mutationKey: MUTATION_KEY.UPDATE_CATEGORY,
     mutationFn: async ({ no, body }: UpdateCategoryParams) => {
-      return await authClient?.patch<Category[], UpdateCategoryBody>(
-        `/api/v1/categories/${no}`,
-        body,
-      );
+      return await db.updateCategory(no, body);
     },
     onMutate: ({ no, body }) => {
       queryClient.cancelQueries({ queryKey: QUERY_KEY.CATEGORIES });

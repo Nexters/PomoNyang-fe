@@ -23,13 +23,13 @@ const electronAPI: IElectronAPI = {
   endPomodoro: (reason) => ipcRenderer.invoke('end-pomodoro', reason),
 
   onTickPomodoro: (callback) => ipcRenderer.on('tick-pomodoro', callback),
-  offTickPomodoro: (callback) => ipcRenderer.off('tick-pomodoro', callback),
+  offTickPomodoro: () => ipcRenderer.removeAllListeners('tick-pomodoro'),
 
   onEndPomodoro: (callback) => ipcRenderer.on('end-pomodoro', callback),
-  offEndPomodoro: (callback) => ipcRenderer.off('end-pomodoro', callback),
+  offEndPomodoro: () => ipcRenderer.removeAllListeners('end-pomodoro'),
 
   onOnceExceedGoalTime: (callback) => ipcRenderer.on('once-exceed-goal-time', callback),
-  offOnceExceedGoalTime: (callback) => ipcRenderer.off('once-exceed-goal-time', callback),
+  offOnceExceedGoalTime: () => ipcRenderer.removeAllListeners('once-exceed-goal-time'),
 };
 
 contextBridge.exposeInMainWorld('electronAPI', electronAPI);

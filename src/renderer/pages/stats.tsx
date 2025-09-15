@@ -25,7 +25,7 @@ const StatsPage = () => {
     <SidebarLayout title={<StatsTitle date={date} onDateChange={setDate} />}>
       <div className="flex h-full flex-col gap-5 overflow-y-auto pb-10 pt-3">
         <div>
-          <h2 className="header-4 px-4 py-5">총 집중시간</h2>
+          <h2 className="header-4 px-4 py-5">오늘 총 집중시간</h2>
           <div className="px-4 pb-5">
             <StatsTotalTime totalTimeMs={totalTimeMs} />
           </div>
@@ -33,7 +33,7 @@ const StatsPage = () => {
         {stats.focusTimes.length > 0 && (
           <div>
             <h2 className="header-4 px-4 py-5">
-              집중 기록 <span className="text-text-accent-1">{stats.focusTimes.length}</span>
+              오늘 집중 기록 <span className="text-text-accent-1">{stats.focusTimes.length}</span>
             </h2>
             <div className="px-4 pb-5">
               <StatsTimeLog logs={stats.focusTimes} />
@@ -41,7 +41,7 @@ const StatsPage = () => {
           </div>
         )}
         <div>
-          <h2 className="header-4 px-4 py-5">집중 추세</h2>
+          <h2 className="header-4 px-4 py-5">주간 집중 추세</h2>
           <div className="px-4 pb-5">
             <StatsChart dataFromServer={stats.weeklyFocusTimeTrend} />
           </div>
